@@ -5,6 +5,7 @@
 
 import { SmartAssistant, smartQuery } from '@/lib/openai-client';
 const configuredModel = process.env.OPENAI_MODEL || 'gpt-5.4';
+type ExampleConversationHistory = Array<{ role: 'user' | 'assistant'; content: string }>;
 
 /**
  * Example 1: Multi-turn conversation with state.
@@ -86,7 +87,7 @@ Include type definitions and one example usage.`;
 /**
  * Example 6: Load and continue conversation from DB/cache.
  */
-async function resumeConversation(savedHistory: any) {
+async function resumeConversation(savedHistory: ExampleConversationHistory) {
   const assistant = new SmartAssistant({ model: configuredModel });
   assistant.loadHistory(savedHistory);
 

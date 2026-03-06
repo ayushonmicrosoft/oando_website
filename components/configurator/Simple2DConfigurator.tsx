@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -306,11 +306,6 @@ export function Simple2DConfigurator({
     () => layoutOptions.find((layout) => layout.id === form.layoutId) ?? layoutOptions[0],
     [layoutOptions, form.layoutId],
   );
-
-  useEffect(() => {
-    if (!activeLayout || form.layoutId === activeLayout.id) return;
-    setForm((prev) => ({ ...prev, layoutId: activeLayout.id }));
-  }, [activeLayout, form.layoutId]);
 
   const moduleCount = clampInteger(form.moduleCount, 1, 80);
   const modulesPerRow = clampInteger(form.modulesPerRow, 1, 10);
@@ -833,10 +828,20 @@ export function Simple2DConfigurator({
                     <select
                       value={form.workstationSeries}
                       onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          workstationSeries: event.target.value as WorkstationSeries,
-                        }))
+                        setForm((prev) => {
+                          const workstationSeries = event.target.value as WorkstationSeries;
+                          const nextLayoutOptions = WORKSTATION_LAYOUTS.filter((layout) =>
+                            layout.supportedSeries.includes(workstationSeries),
+                          );
+                          const layoutId = nextLayoutOptions.some((layout) => layout.id === prev.layoutId)
+                            ? prev.layoutId
+                            : (nextLayoutOptions[0]?.id ?? prev.layoutId);
+                          return {
+                            ...prev,
+                            workstationSeries,
+                            layoutId,
+                          };
+                        })
                       }
                       className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
                     >

@@ -26,7 +26,6 @@ const HERO_PRODUCTS = [
 export function FeaturedCarousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", loop: false });
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
 
@@ -39,11 +38,11 @@ export function FeaturedCarousel() {
 
   useEffect(() => {
     if (!emblaApi) return;
-    setScrollSnaps(emblaApi.scrollSnapList());
-    onSelect();
     emblaApi.on("select", onSelect);
     emblaApi.on("reInit", onSelect);
+    const frameId = window.requestAnimationFrame(onSelect);
     return () => {
+      window.cancelAnimationFrame(frameId);
       emblaApi.off("select", onSelect);
       emblaApi.off("reInit", onSelect);
     };
@@ -134,9 +133,9 @@ export function FeaturedCarousel() {
 
         <div className="mt-8 flex items-center justify-between sm:hidden">
           <div className="flex items-center gap-2">
-            {scrollSnaps.map((_, index) => (
+            {HERO_PRODUCTS.map((product, index) => (
               <button
-                key={index}
+                key={product.id}
                 type="button"
                 data-testid={`featured-dot-${index}`}
                 aria-label={`Go to slide ${index + 1}`}

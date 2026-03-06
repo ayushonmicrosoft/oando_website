@@ -342,14 +342,14 @@ export function UnifiedAssistant() {
     await submitAiQuery(query);
   }
 
-  function useStarter(text: string) {
+  function applyStarter(text: string) {
     setQuery(text);
     setAiError("");
   }
 
   function useSurprisePrompt() {
     const index = Math.floor(Math.random() * AI_STARTERS.length);
-    useStarter(AI_STARTERS[index]);
+    applyStarter(AI_STARTERS[index]);
   }
 
   return (
@@ -618,7 +618,7 @@ export function UnifiedAssistant() {
                   <button
                     key={starter}
                     type="button"
-                    onClick={() => useStarter(starter)}
+                    onClick={() => applyStarter(starter)}
                     className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs text-neutral-700 transition-colors hover:border-primary/50 hover:text-primary"
                   >
                     {starter}
