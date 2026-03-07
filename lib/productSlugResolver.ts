@@ -11,6 +11,11 @@ type ProductSlugAliasRow = {
   canonical_slug?: string | null;
 };
 
+const ALIAS_TABLE_CANDIDATES = ["catalog_product_slug_aliases", "product_slug_aliases"] as const;
+let preferredAliasTable: (typeof ALIAS_TABLE_CANDIDATES)[number] | null = null;
+let aliasLookupDisabled = false;
+let aliasLookupDisabledLogged = false;
+
 export type ProductSlugResolution<T> = {
   row: T | null;
   requestedSlug: string;
@@ -32,10 +37,18 @@ function isNoRowsError(error: SupabaseErrorLike): boolean {
 
 function isMissingAliasTableError(error: SupabaseErrorLike): boolean {
   const code = String(error?.code || "");
-  if (code === "42P01") return true;
+  if (code === "42P01" || code === "PGRST205") return true;
   const msg = String(error?.message || "").toLowerCase();
   if (msg.includes("schema cache") && msg.includes("product_slug_aliases")) return true;
+  if (msg.includes("could not find the table") && msg.includes("product_slug_aliases")) return true;
   return msg.includes("relation") && msg.includes("product_slug_aliases") && msg.includes("does not exist");
+}
+
+function disableAliasLookupOnce(reason: string): void {
+  aliasLookupDisabled = true;
+  if (aliasLookupDisabledLogged) return;
+  aliasLookupDisabledLogged = true;
+  console.warn(`[slug-resolver] alias lookup disabled: ${reason}`);
 }
 
 async function fetchProductBySlug<T>(slug: string, selectClause: string): Promise<T | null> {
@@ -55,19 +68,40 @@ async function fetchProductBySlug<T>(slug: string, selectClause: string): Promis
 }
 
 async function fetchAliasMapping(slug: string): Promise<ProductSlugAliasRow | null> {
-  const { data, error } = await supabase
-    .from("product_slug_aliases")
-    .select("alias_slug, canonical_slug")
-    .eq("alias_slug", slug)
-    .eq("is_active", true)
-    .single();
+  if (aliasLookupDisabled) return null;
 
-  if (error) {
-    if (isNoRowsError(error) || isMissingAliasTableError(error)) return null;
-    console.error(`[slug-resolver] alias lookup failed for "${slug}": ${summarizeSupabaseError(error)}`);
+  const tryTables = preferredAliasTable
+    ? [preferredAliasTable, ...ALIAS_TABLE_CANDIDATES.filter((t) => t !== preferredAliasTable)]
+    : [...ALIAS_TABLE_CANDIDATES];
+
+  for (const tableName of tryTables) {
+    const { data, error } = await supabase
+      .from(tableName)
+      .select("alias_slug, canonical_slug")
+      .eq("alias_slug", slug)
+      .eq("is_active", true)
+      .single();
+
+    if (!error) {
+      preferredAliasTable = tableName;
+      return (data as ProductSlugAliasRow) ?? null;
+    }
+
+    if (isNoRowsError(error)) {
+      preferredAliasTable = tableName;
+      return null;
+    }
+
+    if (isMissingAliasTableError(error)) continue;
+
+    console.error(
+      `[slug-resolver] alias lookup failed for "${slug}" on "${tableName}": ${summarizeSupabaseError(error)}`,
+    );
     return null;
   }
-  return (data as ProductSlugAliasRow) ?? null;
+
+  disableAliasLookupOnce("alias table not found in schema cache (checked catalog + legacy names)");
+  return null;
 }
 
 export async function resolveProductByUrlKey<T>(
