@@ -71,3 +71,5 @@ backup/
 supabase/.temp/
 
 .vercel
+.wrangler/
+oando_website/.DONOTDELETE/keys/raw-values-*/

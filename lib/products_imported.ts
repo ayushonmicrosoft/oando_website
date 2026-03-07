@@ -34,9 +34,9 @@ export const PRODUCTS: Product[] = [
             { icon: Info, title: "Organization", text: "Integrated cable management and sliding top options." },
         ],
         gallery: [
-            "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=2000",
-            "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=2000",
-            "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=2000"
+            "/images/hero/hero-1.webp",
+            "/images/hero/hero-2.webp",
+            "/images/hero/hero-3.webp"
         ],
         specs: [
             { label: "Dimensions", value: "Width: 80-240cm | Depth: 80-100cm" },
@@ -57,8 +57,8 @@ export const PRODUCTS: Product[] = [
             { icon: Info, title: "Smart", text: "App control and occupancy sensors available." },
         ],
         gallery: [
-            "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=2000",
-            "https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?auto=format&fit=crop&q=80&w=2000"
+            "/images/hero/hero-4.webp",
+            "/images/hero/hero-5.webp"
         ],
         specs: [
             { label: "Dimensions", value: "Width: 160-200cm | Depth: 80-90cm" },
@@ -79,8 +79,8 @@ export const PRODUCTS: Product[] = [
             { icon: Info, title: "Diversity", text: "Available as closet, sideboard, or pedestal." },
         ],
         gallery: [
-            "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=80&w=2000",
-            "https://images.unsplash.com/photo-1497215842964-2229243e8a01?auto=format&fit=crop&q=80&w=2000"
+            "/images/hero/workstations.webp",
+            "/images/hero/chairs.webp"
         ],
         specs: [
             { label: "Grid Heights", value: "2OH, 3OH, 4OH, 5OH, 6OH" },
@@ -91,10 +91,10 @@ export const PRODUCTS: Product[] = [
 ];
 
 export const CATEGORIES = [
-    { id: "desks", title: "Desks", image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=2000" },
-    { id: "storage", title: "Storage", image: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&q=80&w=2000" },
-    { id: "meeting", title: "Meeting", image: "https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&q=80&w=2000" },
-    { id: "acoustics", title: "Room Acoustics", image: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=2000" },
-    { id: "reception", title: "Reception", image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=2000" },
-    { id: "seating", title: "Seating", image: "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?auto=format&fit=crop&q=80&w=2000" }
+    { id: "desks", title: "Desks", image: "/images/hero/hero-1.webp" },
+    { id: "storage", title: "Storage", image: "/images/hero/workstations.webp" },
+    { id: "meeting", title: "Meeting", image: "/images/hero/hero-2.webp" },
+    { id: "acoustics", title: "Room Acoustics", image: "/images/hero/hero-4.webp" },
+    { id: "reception", title: "Reception", image: "/images/hero/hero-3.webp" },
+    { id: "seating", title: "Seating", image: "/images/hero/chairs.webp" }
 ];

@@ -43,6 +43,7 @@
     "chat-logs",
     "reports",
     "coverage",
-    "data"
+    "data",
+    "superb_codex_supabase"
   ]
 }

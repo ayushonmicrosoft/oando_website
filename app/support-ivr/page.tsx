@@ -9,7 +9,7 @@ export default function SupportPage() {
         title="Support Center"
         subtitle="How can we help you today? Navigate our visual menu to find the right contact."
         showButton={false}
-        backgroundImage="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=1200"
+        backgroundImage="/images/hero/hero-3.webp"
       />
       <section className="container px-6 2xl:px-0 py-12 md:py-20">
         <VisualIVR />

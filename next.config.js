@@ -3,6 +3,23 @@ const resolvedSiteUrl =
   process.env.SITE_URL ||
   process.env.URL ||
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+const firstPartyAssetHost = process.env.NEXT_PUBLIC_ASSET_HOSTNAME?.trim();
+
+const imageRemotePatterns = [
+  {
+    protocol: "https",
+    hostname: "*.supabase.co",
+    pathname: "/storage/v1/object/public/**",
+  },
+];
+
+if (firstPartyAssetHost) {
+  imageRemotePatterns.push({
+    protocol: "https",
+    hostname: firstPartyAssetHost,
+    pathname: "/**",
+  });
+}
 
 const nextConfig = {
   env: {
@@ -105,17 +122,7 @@ const nextConfig = {
   },
   images: {
     qualities: [75, 95, 100],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "*.supabase.co",
-        pathname: "/storage/v1/object/public/**",
-      },
-      { protocol: "https", hostname: "images.unsplash.com" },
-      { protocol: "https", hostname: "catalogindia.in" },
-      { protocol: "https", hostname: "static.wixstatic.com" },
-      { protocol: "https", hostname: "res.cloudinary.com" },
-    ],
+    remotePatterns: imageRemotePatterns,
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],

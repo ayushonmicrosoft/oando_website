@@ -14,6 +14,7 @@ import {
   fetchProductImagesMap,
   fetchProductSpecsMap,
 } from "@/lib/productDataTables";
+import { resolveProductByUrlKey } from "@/lib/productSlugResolver";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -95,18 +96,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { category: categoryId, product: productUrlKey } = await params;
 
-  const product = await fetchWithSupabaseRetry<CategoryResolutionRow>(
-    "product-metadata",
-    async () =>
-      supabase
-        .from("products")
-        .select(
-          "id, slug, name, description, category_id, metadata, series_name, images, flagship_image",
-        )
-        .eq("slug", productUrlKey)
-        .single(),
-    null,
+  const productResolution = await resolveProductByUrlKey<CategoryResolutionRow>(
+    productUrlKey,
+    "id, slug, name, description, category_id, metadata, series_name, images, flagship_image",
   );
+  const product = productResolution.row;
 
   if (!product) return {};
   const resolvedCategoryId = resolveRequestedCategoryId(
@@ -123,7 +117,8 @@ export async function generateMetadata({
     normalizeAssetPath(images.length > 0 ? images[0] : null) ||
     normalizeAssetPath(product.flagship_image) ||
     "/images/fallback/category.webp";
-  const url = `${BASE_URL}/products/${resolvedCategoryId}/${productUrlKey}`;
+  const canonicalProductUrlKey = productResolution.canonicalSlug || productUrlKey;
+  const url = `${BASE_URL}/products/${resolvedCategoryId}/${canonicalProductUrlKey}`;
 
   return {
     title,
@@ -166,11 +161,11 @@ async function ProductContent({
   productUrlKey: string;
   fromQuery?: string;
 }) {
-  const rawProduct = await fetchWithSupabaseRetry<Product>(
-    "product-content",
-    async () => supabase.from("products").select("*").eq("slug", productUrlKey).single(),
-    null,
-  );
+  const productResolution = await resolveProductByUrlKey<Product>(productUrlKey, "*");
+  const rawProduct = productResolution.row;
+  const canonicalProductUrlKey = productResolution.canonicalSlug || productUrlKey;
+  const needsSlugRedirect =
+    productResolution.resolvedViaAlias && canonicalProductUrlKey !== productUrlKey;
 
   if (!rawProduct) {
     notFound();
@@ -228,8 +223,9 @@ async function ProductContent({
     p as CategoryResolutionRow,
     categoryId,
   );
-  if (categoryId !== resolvedCategoryId) {
-    redirect(`/products/${resolvedCategoryId}/${productUrlKey}`);
+  if (categoryId !== resolvedCategoryId || needsSlugRedirect) {
+    const base = `/products/${resolvedCategoryId}/${canonicalProductUrlKey}`;
+    redirect(fromQuery ? `${base}?${fromQuery}` : base);
   }
   const aiOverview = p.alt_text || p.metadata?.ai_alt_text || p.description || "";
   const deterministicAlt =
@@ -288,7 +284,7 @@ async function ProductContent({
     ? `/products/${resolvedCategoryId}?${fromQuery}`
     : `/products/${resolvedCategoryId}`;
 
-  const url = `${BASE_URL}/products/${resolvedCategoryId}/${p.slug}`;
+  const url = `${BASE_URL}/products/${resolvedCategoryId}/${canonicalProductUrlKey}`;
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",

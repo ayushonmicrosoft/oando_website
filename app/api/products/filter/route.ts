@@ -90,6 +90,48 @@ function uniqueSorted(values: string[]): string[] {
   ).sort((a, b) => a.localeCompare(b));
 }
 
+function getPrimaryImage(product: Pick<CompatProduct, "images" | "flagshipImage">): string {
+  if (Array.isArray(product.images) && product.images.length > 0) {
+    return String(product.images[0] || "").trim();
+  }
+  return String(product.flagshipImage || "").trim();
+}
+
+function dedupePriority(product: FlatProduct): number {
+  const slug = String(product.slug || "").trim();
+  let score = 0;
+  if (slug.startsWith("oando-")) score += 4;
+  if (slug.includes("--")) score += 2;
+  if (product.metadata?.source === "oando.co.in") score += 1;
+  return score;
+}
+
+function dedupeKey(product: FlatProduct): string {
+  const normalizedName = normalizeOptionValue(product.name);
+  const normalizedSubcategory = normalizeOptionValue(product.metadata?.subcategory || "");
+  const normalizedImage = normalizeOptionValue(getPrimaryImage(product));
+  return `${normalizedName}|${normalizedSubcategory}|${normalizedImage}`;
+}
+
+function dedupeProducts(products: FlatProduct[]): FlatProduct[] {
+  const bestByKey = new Map<string, FlatProduct>();
+
+  for (const product of products) {
+    const key = dedupeKey(product);
+    const existing = bestByKey.get(key);
+    if (!existing) {
+      bestByKey.set(key, product);
+      continue;
+    }
+
+    if (dedupePriority(product) > dedupePriority(existing)) {
+      bestByKey.set(key, product);
+    }
+  }
+
+  return Array.from(bestByKey.values());
+}
+
 function parseAppliedFilters(request: NextRequest): AppliedFilters {
   const sp = request.nextUrl.searchParams;
   const sub = Array.from(new Set(sp.getAll("sub").map((v) => v.trim()).filter(Boolean)));
@@ -296,9 +338,10 @@ export async function GET(request: NextRequest) {
         toFlatProduct(category.name, series.id, series.name, product),
       ),
     );
+    const uniqueProducts = dedupeProducts(allProducts);
 
-    const facets = buildFacets(category.id, allProducts);
-    const filtered = applyFilters(category.id, allProducts, filters);
+    const facets = buildFacets(category.id, uniqueProducts);
+    const filtered = applyFilters(category.id, uniqueProducts, filters);
 
     return NextResponse.json(
       {
@@ -308,7 +351,7 @@ export async function GET(request: NextRequest) {
         meta: {
           categoryId: category.id,
           applied: filters,
-          catalogTotal: allProducts.length,
+          catalogTotal: uniqueProducts.length,
         },
       } satisfies FilterResponse,
       { status: 200 },

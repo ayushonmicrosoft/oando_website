@@ -25,7 +25,8 @@
     "alt:sync:dry": "tsx scripts/sync-missing-alt-text.ts",
     "alt:sync:apply": "tsx scripts/sync-missing-alt-text.ts --apply",
     "supabase:backup": "npx tsx scripts/backup_supabase.ts",
-    "nhost:sync": "npx tsx scripts/sync_nhost_backup.ts"
+    "nhost:sync": "npx tsx scripts/sync_nhost_backup.ts",
+    "assets:audit:thirdparty": "python scripts/audit_external_asset_hosts.py --fail-on-hit"
   },
   "dependencies": {
     "@fancyapps/ui": "^6.1.12",
@@ -92,7 +93,7 @@
     "autoprefixer": "^10.4.27",
     "axe-core": "^4.11.1",
     "dotenv": "^17.3.1",
-    "eslint": "^9.39.3",
+    "eslint": "^10.0.2",
     "eslint-config-next": "16.1.6",
     "eslint-plugin-react-hooks": "^7.0.1",
     "jest": "^30.2.0",

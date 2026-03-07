@@ -48,6 +48,105 @@ interface FlatProduct extends Product {
   altText?: string;
 }
 
+function normalizeToken(value?: string | null): string {
+  return String(value || "").trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+function getPrimaryImagePath(product: Pick<FlatProduct, "images" | "flagshipImage">): string {
+  if (Array.isArray(product.images) && product.images.length > 0) {
+    return String(product.images[0] || "").trim();
+  }
+  return String(product.flagshipImage || "").trim();
+}
+
+function dedupePriority(product: FlatProduct): number {
+  const slug = String(product.slug || "").trim();
+  let score = 0;
+  if (slug.startsWith("oando-")) score += 4;
+  if (slug.includes("--")) score += 2;
+  if (product.metadata?.source === "oando.co.in") score += 1;
+  return score;
+}
+
+function dedupeFlatProducts(products: FlatProduct[]): FlatProduct[] {
+  const bestByKey = new Map<string, FlatProduct>();
+
+  for (const product of products) {
+    const key = `${normalizeToken(product.name)}|${normalizeToken(product.metadata?.subcategory || "")}|${normalizeToken(getPrimaryImagePath(product))}`;
+    const existing = bestByKey.get(key);
+    if (!existing) {
+      bestByKey.set(key, product);
+      continue;
+    }
+
+    if (dedupePriority(product) > dedupePriority(existing)) {
+      bestByKey.set(key, product);
+    }
+  }
+
+  return Array.from(bestByKey.values());
+}
+
+const IMAGE_PLACEHOLDER_PATTERNS = [
+  /assets_placeholder/i,
+  /fallback\/category\.webp$/i,
+  /\.svg$/i,
+];
+
+function isUsableImagePath(path: string): boolean {
+  const value = path.trim();
+  if (!value) return false;
+  if (IMAGE_PLACEHOLDER_PATTERNS.some((pattern) => pattern.test(value))) {
+    return false;
+  }
+  return true;
+}
+
+function buildImageCandidates(product: Pick<FlatProduct, "images" | "flagshipImage">): string[] {
+  const raw = [
+    String(product.flagshipImage || "").trim(),
+    ...(Array.isArray(product.images) ? product.images.map((image) => String(image || "").trim()) : []),
+  ].filter(Boolean);
+
+  const unique = Array.from(new Set(raw));
+  const preferred = unique.filter(isUsableImagePath);
+  return preferred.length > 0 ? preferred : unique;
+}
+
+function toTextList(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.map((item) => String(item || "").trim()).filter(Boolean);
+}
+
+function toInlineSpec(value: string, max = 72): string {
+  const normalized = value.replace(/\s+/g, " ").trim();
+  if (!normalized) return "";
+  return normalized.length > max ? `${normalized.slice(0, max)}...` : normalized;
+}
+
+function getDisplayDimensions(product: FlatProduct): string {
+  const detailed = typeof product.detailedInfo?.dimensions === "string"
+    ? product.detailedInfo.dimensions
+    : "";
+  if (detailed.trim()) return toInlineSpec(detailed, 68);
+
+  const specs = product.specs && typeof product.specs === "object" && !Array.isArray(product.specs)
+    ? (product.specs as Record<string, unknown>)
+    : {};
+  return toInlineSpec(typeof specs.dimensions === "string" ? specs.dimensions : "", 68);
+}
+
+function getDisplayMaterials(product: FlatProduct): string {
+  const detailed = toTextList(product.detailedInfo?.materials);
+  if (detailed.length > 0) return toInlineSpec(detailed.slice(0, 2).join(", "), 68);
+
+  const specs = product.specs && typeof product.specs === "object" && !Array.isArray(product.specs)
+    ? (product.specs as Record<string, unknown>)
+    : {};
+  const fallback = toTextList(specs.materials);
+  return toInlineSpec(fallback.slice(0, 2).join(", "), 68);
+}
+
 // â”€â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface FilterResponse {
   products: FlatProduct[];
@@ -94,7 +193,7 @@ function useDebouncedValue<T>(value: T, delayMs: number): T {
 }
 
 function flattenCategoryProducts(category: Category): FlatProduct[] {
-  return category.series.flatMap((series) =>
+  const flattened = category.series.flatMap((series) =>
     series.products.map((product) => ({
       ...product,
       seriesId: series.id,
@@ -107,6 +206,7 @@ function flattenCategoryProducts(category: Category): FlatProduct[] {
         fallbackAltText(product.name, category.name),
     })),
   );
+  return dedupeFlatProducts(flattened);
 }
 
 function buildFallbackFacets(
@@ -367,14 +467,9 @@ function ProductCard({
   const addItem = useQuoteCart((state) => state.addItem);
   const compareItems = useProductCompare((state) => state.items);
   const toggleCompareItem = useProductCompare((state) => state.toggleItem);
-  const firstImage =
-    product.images && product.images.length > 0
-      ? product.images[0]
-      : product.flagshipImage;
-
-  const [imgSrc, setImgSrc] = useState(
-    firstImage || "/images/fallback/category.webp",
-  );
+  const imageCandidates = buildImageCandidates(product);
+  const [imgIndex, setImgIndex] = useState(0);
+  const imgSrc = imageCandidates[imgIndex] || "/images/fallback/category.webp";
   const displayName = product.name;
   const ecoScore = product.metadata?.sustainabilityScore || 0;
   const routeKey = getProductRouteKey(product);
@@ -389,15 +484,16 @@ function ProductCard({
     (product.metadata as Record<string, unknown> | undefined)?.ai_alt_text?.toString() ||
     (product.metadata as Record<string, unknown> | undefined)?.aiAltText?.toString() ||
     fallbackAltText(displayName, categoryName);
-  const specsObject =
-    product.specs && typeof product.specs === "object" && !Array.isArray(product.specs)
-      ? (product.specs as Record<string, unknown>)
-      : {};
-  const dimensions =
-    typeof specsObject.dimensions === "string" ? specsObject.dimensions.trim() : "";
-  const materials = Array.isArray(specsObject.materials)
-    ? specsObject.materials.map((item) => String(item).trim()).filter(Boolean)
-    : [];
+  const subcategory = toInlineSpec(
+    String(product.metadata?.subcategory || product.metadata?.category || "General"),
+    40,
+  );
+  const dimensions = getDisplayDimensions(product) || "Specs available on request";
+  const materials = getDisplayMaterials(product) || "Material options available";
+
+  useEffect(() => {
+    setImgIndex(0);
+  }, [product.id, product.slug, product.flagshipImage, product.images]);
 
   return (
     <article className="group bg-white border border-neutral-100 hover:border-neutral-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
@@ -408,8 +504,12 @@ function ProductCard({
             alt={imageAlt}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-contain p-4 transition-transform duration-500 group-hover:scale-103"
-            onError={() => setImgSrc("/images/fallback/category.webp")}
+            className="object-contain p-3 sm:p-4 transition-transform duration-500 group-hover:scale-103"
+            onError={() =>
+              setImgIndex((current) =>
+                current + 1 < imageCandidates.length ? current + 1 : current,
+              )
+            }
           />
           {product.metadata?.bifmaCertified && (
             <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-[10px] sm:text-xs font-bold uppercase tracking-widest text-neutral-600 px-2.5 py-1.5 rounded-sm shadow-sm">
@@ -434,7 +534,7 @@ function ProductCard({
             </div>
           )}
         </div>
-        <div className="p-4">
+        <div className="min-h-[13.5rem] p-4">
           <p className="text-[10px] uppercase tracking-widest text-neutral-400 font-medium mb-1">
             {product.seriesName}
           </p>
@@ -449,33 +549,20 @@ function ProductCard({
           <p className="text-xs text-neutral-500 mt-1 line-clamp-2 leading-relaxed">
             {product.description}
           </p>
-          {(dimensions || materials.length > 0) && (
-            <div className="mt-2 space-y-1">
-              {dimensions ? (
-                <p className="text-[11px] text-neutral-600">
-                  <span className="font-semibold text-neutral-700">Size:</span> {dimensions}
-                </p>
-              ) : null}
-              {materials.length > 0 ? (
-                <p className="text-[11px] text-neutral-600 line-clamp-1">
-                  <span className="font-semibold text-neutral-700">Material:</span>{" "}
-                  {materials.slice(0, 2).join(", ")}
-                </p>
-              ) : null}
+          <div className="mt-3 space-y-1 border-t border-neutral-100 pt-2.5">
+            <p className="text-xs text-neutral-600 leading-relaxed line-clamp-1">
+              <span className="font-semibold text-neutral-500 mr-1">Type:</span>
+              {subcategory}
+            </p>
+            <p className="text-xs text-neutral-600 leading-relaxed line-clamp-1">
+              <span className="font-semibold text-neutral-500 mr-1">Size:</span>
+              {dimensions}
+            </p>
+            <p className="text-xs text-neutral-600 leading-relaxed line-clamp-1">
+              <span className="font-semibold text-neutral-500 mr-1">Material:</span>
+              {materials}
+            </p>
             </div>
-          )}
-          {product.metadata?.useCase && product.metadata.useCase.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-2">
-              {product.metadata.useCase.slice(0, 2).map((uc) => (
-                <span
-                  key={uc}
-                  className="text-[9px] uppercase tracking-wider font-medium text-neutral-400 bg-neutral-50 px-1.5 py-0.5 rounded-sm"
-                >
-                  {uc}
-                </span>
-              ))}
-            </div>
-          )}
         </div>
       </Link>
       <div className="px-4 pb-4">
@@ -650,6 +737,7 @@ function AdvancedFilterGridInner({
     () => buildFilterParams(effectiveFilters).toString(),
     [effectiveFilters],
   );
+  const hasFilterQuery = filterQueryString.length > 0;
 
   const apiQueryString = useMemo(() => {
     const params = new URLSearchParams(filterQueryString);
@@ -673,13 +761,19 @@ function AdvancedFilterGridInner({
     gcTime: 300_000,
   });
 
-  const filteredProducts = data?.products ?? fallbackProducts;
+  const shouldUseFallbackData = !hasFilterQuery || Boolean(data) || Boolean(error);
+  const filteredProducts = shouldUseFallbackData
+    ? (data?.products ?? fallbackProducts)
+    : [];
   const navigableProducts = useMemo(
     () => filteredProducts.filter((product) => getProductRouteKey(product).length > 0),
     [filteredProducts],
   );
-  const options = data?.facets ?? fallbackFacets;
-  const allProducts = data?.meta.catalogTotal ?? fallbackProducts.length;
+  const options = shouldUseFallbackData ? (data?.facets ?? fallbackFacets) : fallbackFacets;
+  const allProducts = shouldUseFallbackData
+    ? (data?.meta.catalogTotal ?? fallbackProducts.length)
+    : fallbackProducts.length;
+  const isInitialFilteredLoad = isLoading && hasFilterQuery && !data && !error;
 
   const showFeatureFilters =
     categoryId === "seating" &&
@@ -1009,7 +1103,9 @@ function AdvancedFilterGridInner({
                 aria-atomic="true"
                 className="text-xs text-neutral-500 font-medium whitespace-nowrap"
               >
-                {navigableProducts.length} / {allProducts} products
+                {isInitialFilteredLoad
+                  ? "Filtering products..."
+                  : `${navigableProducts.length} / ${allProducts} products`}
               </span>
               <select
                 aria-label="Sort products"
