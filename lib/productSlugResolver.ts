@@ -34,6 +34,7 @@ function isMissingAliasTableError(error: SupabaseErrorLike): boolean {
   const code = String(error?.code || "");
   if (code === "42P01") return true;
   const msg = String(error?.message || "").toLowerCase();
+  if (msg.includes("schema cache") && msg.includes("product_slug_aliases")) return true;
   return msg.includes("relation") && msg.includes("product_slug_aliases") && msg.includes("does not exist");
 }
 
