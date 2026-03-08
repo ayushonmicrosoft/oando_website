@@ -1,18 +1,8 @@
-<<<<<<< ours
 {
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
   "git.ignoreLimitWarning": true,
   "markdown.validate.enabled": true,
-  "chatgpt.openOnStartup": true
+  "chatgpt.openOnStartup": true,
+  "accessibility.openChatEditedFiles": true
 }
-=======
-{
-  "css.lint.unknownAtRules": "ignore",
-  "scss.lint.unknownAtRules": "ignore",
-  "git.ignoreLimitWarning": true,
-  "markdown.validate.enabled": true,
-  "chatgpt.model": "gpt-5.4",
-  "openai.chat.model": "gpt-5.4"
-}
->>>>>>> theirs
