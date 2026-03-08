@@ -1083,6 +1083,8 @@ function AdvancedFilterGridInner({
               onClick={() => setDrawerOpen(true)}
               className="lg:hidden flex items-center gap-2 h-10 px-3 bg-white border border-neutral-200 rounded-sm text-sm text-neutral-700 hover:border-neutral-400 transition-colors shrink-0"
               aria-label="Open filters"
+              aria-expanded={drawerOpen}
+              aria-controls="mobile-filter-drawer"
             >
               <SlidersHorizontal className="w-4 h-4" />
               Filters
@@ -1229,8 +1231,9 @@ function AdvancedFilterGridInner({
           {/* Panel */}
           <div
             ref={drawerRef}
+            id="mobile-filter-drawer"
             tabIndex={-1}
-            className="fixed inset-y-0 left-0 w-80 max-w-full bg-neutral-50 z-50 overflow-y-auto lg:hidden shadow-2xl"
+            className="fixed inset-y-0 left-0 z-[65] flex w-[88vw] max-w-sm flex-col overflow-y-auto bg-neutral-50 shadow-2xl lg:hidden"
             role="dialog"
             aria-modal="true"
             aria-label="Filter products"
@@ -1305,4 +1308,3 @@ export function FilterGrid({
     </Suspense>
   );
 }
-
