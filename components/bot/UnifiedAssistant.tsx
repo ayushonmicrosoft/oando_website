@@ -361,8 +361,8 @@ export function UnifiedAssistant() {
     applyStarter(AI_STARTERS[index]);
   }
 
-  const mobileLauncherOffset = consentChosen ? "bottom-4" : "bottom-28";
-  const mobilePanelOffset = consentChosen ? "bottom-20" : "bottom-44";
+  const mobileLauncherOffset = consentChosen ? "bottom-4" : "bottom-36";
+  const mobilePanelOffset = consentChosen ? "bottom-20" : "bottom-52";
 
   return (
     <>

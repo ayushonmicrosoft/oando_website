@@ -17,8 +17,8 @@ export function WhatsAppCTA() {
     return () => window.removeEventListener("oando-cookie-consent", handleConsent as EventListener);
   }, []);
 
-  const buttonOffset = consentChosen ? "bottom-4 sm:bottom-24" : "bottom-28 sm:bottom-24";
-  const panelOffset = consentChosen ? "bottom-20 sm:bottom-40" : "bottom-44 sm:bottom-40";
+  const buttonOffset = consentChosen ? "bottom-4 sm:bottom-24" : "bottom-36 sm:bottom-24";
+  const panelOffset = consentChosen ? "bottom-20 sm:bottom-40" : "bottom-52 sm:bottom-40";
 
   return (
     <>
