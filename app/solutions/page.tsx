@@ -77,7 +77,7 @@ export default function SolutionsPage() {
 
       <section className="w-full border-y border-neutral-200 bg-neutral-50 py-16">
         <div className="container px-6 2xl:px-0">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="stats-block grid grid-cols-2 gap-4 md:grid-cols-4">
             {STATS.map((item) => (
               <div key={item.label} className="rounded-xl border border-neutral-200 bg-white p-5 text-center">
                 <p className="typ-stat text-primary">{item.value}</p>

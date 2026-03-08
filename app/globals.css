@@ -314,7 +314,7 @@
 
   /* ─── Shared page hero ─── */
   .page-hero {
-    @apply py-16 md:py-24 border-b border-neutral-200;
+    @apply border-b border-neutral-200;
   }
 
   /* ─── Stats block ─── */

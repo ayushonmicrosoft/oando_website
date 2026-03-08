@@ -88,7 +88,7 @@ export default async function ProjectsPage() {
 
       <section className="container-wide py-16 md:py-24">
         {/* Stats row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16 border-b border-neutral-100 pb-16">
+        <div className="stats-block grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16 border-b border-neutral-100 pb-16">
           {[
             { id: "client-organisations", value: clientsValue, label: "Client Organisations" },
             { id: "projects-delivered", value: projectsValue, label: "Projects Delivered" },

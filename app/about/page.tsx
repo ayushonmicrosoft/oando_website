@@ -51,7 +51,7 @@ export default function AboutPage() {
 
       <section className="w-full border-y border-neutral-200 bg-neutral-50 py-16">
         <div className="container px-6 2xl:px-0">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="stats-block grid grid-cols-2 gap-4 md:grid-cols-4">
             {TRUSTED_BY_STATS.map((item) => (
               <div
                 key={item.label}
