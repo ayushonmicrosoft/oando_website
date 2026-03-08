@@ -67,7 +67,7 @@ export function SolutionsGrid() {
 
               <Link
                 href={cap.href}
-                className="relative block aspect-[16/10] w-full overflow-hidden bg-neutral-100"
+                className="relative block aspect-16/10 w-full overflow-hidden bg-neutral-100"
                 aria-label={`Open ${cap.title}`}
               >
                 <Image

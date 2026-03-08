@@ -307,7 +307,7 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef }: MobileNavDraw
 
                             {groupedCategories.map((group) => (
                               <div key={group.groupId}>
-                                <p className="px-3 pb-1 pt-2 text-[10px] font-bold uppercase tracking-[0.14em] text-neutral-400">
+                                <p className="typ-label px-3 pb-1 pt-2 text-neutral-400">
                                   {group.groupLabel}
                                 </p>
                                 <ul className="space-y-1">
@@ -377,7 +377,7 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef }: MobileNavDraw
               <a
                 href="tel:+919835630940"
                 onClick={handleClose}
-                className="mb-3 flex min-h-12 items-center justify-center rounded-full border border-primary/30 bg-primary/5 text-sm font-bold uppercase tracking-[0.1em] text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="mb-3 flex min-h-12 items-center justify-center rounded-lg border border-neutral-200 text-sm font-semibold tracking-[0.06em] text-primary transition-colors hover:border-primary hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 aria-label="Call +91 98356 30940"
               >
                 Call +91 98356 30940
@@ -389,10 +389,8 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef }: MobileNavDraw
                     href={cta.href}
                     onClick={handleClose}
                     className={cn(
-                      "flex min-h-12 items-center justify-center rounded-full text-sm font-bold uppercase tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-                      cta.variant === "primary"
-                        ? "bg-primary text-white hover:bg-primary/90"
-                        : "border border-neutral-300 text-neutral-800 hover:bg-neutral-50",
+                      cta.variant === "primary" ? "btn-primary" : "btn-outline",
+                      "w-full justify-center",
                     )}
                   >
                     {cta.label}
