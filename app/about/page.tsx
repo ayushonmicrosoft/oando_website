@@ -55,12 +55,10 @@ export default function AboutPage() {
             {TRUSTED_BY_STATS.map((item) => (
               <div
                 key={item.label}
-                className="rounded-2xl border border-neutral-300 bg-white p-6 text-center"
+                className="rounded-2xl border border-neutral-200 bg-white p-6 text-center"
               >
-                <p className="text-3xl text-primary md:text-4xl">{item.value}</p>
-                <p className="mt-2 text-sm uppercase tracking-[0.12em] text-neutral-700">
-                  {item.label}
-                </p>
+                <p className="typ-stat text-primary">{item.value}</p>
+                <p className="stats-block__label mt-2">{item.label}</p>
               </div>
             ))}
           </div>

@@ -79,9 +79,9 @@ export default function SolutionsPage() {
         <div className="container px-6 2xl:px-0">
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {STATS.map((item) => (
-              <div key={item.label} className="rounded-xl border border-neutral-300 bg-white p-5 text-center">
-                <p className="text-3xl text-primary md:text-4xl">{item.value}</p>
-                <p className="mt-2 text-sm font-medium text-neutral-800">{item.label}</p>
+              <div key={item.label} className="rounded-xl border border-neutral-200 bg-white p-5 text-center">
+                <p className="typ-stat text-primary">{item.value}</p>
+                <p className="stats-block__label mt-2">{item.label}</p>
               </div>
             ))}
           </div>
@@ -96,8 +96,8 @@ export default function SolutionsPage() {
           </div>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             {DELIVERY_STEPS.map((step) => (
-              <article key={step.title} className="overflow-hidden rounded-xl border border-neutral-300 bg-neutral-50">
-                <div className="relative aspect-[16/10] border-b border-neutral-300">
+              <article key={step.title} className="overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50">
+                <div className="relative aspect-16/10 border-b border-neutral-200">
                   <Image
                     src={step.image}
                     alt={step.title}
@@ -107,8 +107,8 @@ export default function SolutionsPage() {
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-2xl font-light tracking-tight text-neutral-950">{step.title}</h3>
-                  <p className="mt-3 text-base leading-relaxed text-neutral-800">{step.detail}</p>
+                  <h3 className="typ-h3 text-neutral-950">{step.title}</h3>
+                  <p className="mt-3 text-base leading-relaxed text-neutral-700">{step.detail}</p>
                 </div>
               </article>
             ))}

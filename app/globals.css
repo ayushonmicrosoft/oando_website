@@ -51,10 +51,19 @@
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: #1434CB;
-  --color-primary-hover: #0f2db2;
+  --color-primary: #0d2db4;
+  --color-primary-hover: #0a2499;
   --color-accent1: #fdbb0a;
   --color-accent2: #faaa13;
+
+  /* Footer dark theme */
+  --color-footer-bg: #16202f;
+  --color-footer-muted: #8a96b0;
+  --color-footer-subtle: #6b778f;
+  --color-footer-link: #b3bfd8;
+  --color-footer-hover: #e8edf8;
+  --color-footer-border: #1e2c3d;
+  --color-footer-dim: #74809e;
 
   --font-sans: "Cisco Sans", sans-serif;
 
@@ -144,7 +153,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid #1434cb;
+    outline: 2px solid #0d2db4;
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -301,6 +310,34 @@
     font-weight: 250;
     letter-spacing: -0.035em;
     line-height: 1;
+  }
+
+  /* ─── Shared page hero ─── */
+  .page-hero {
+    @apply py-16 md:py-24 border-b border-neutral-200;
+  }
+
+  /* ─── Stats block ─── */
+  .stats-block {
+    @apply grid gap-8;
+  }
+
+  .stats-block__value {
+    font-size: clamp(2.5rem, 4.5vw, 3.75rem);
+    font-weight: 250;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--color-neutral-900);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stats-block__label {
+    margin-top: 0.25rem;
+    font-size: 0.84375rem;
+    font-weight: 550;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-neutral-500);
   }
 
   .nav-shell {

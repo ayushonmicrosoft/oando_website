@@ -45,7 +45,7 @@ export function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-[#1a2030] text-[#aeb8ce]">
+    <footer className="w-full bg-footer-bg text-footer-muted">
       {/* Main grid */}
       <div className="container px-6 2xl:px-0 py-12 md:py-14">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-8">
@@ -56,20 +56,20 @@ export function SiteFooter() {
               <OneAndOnlyLogo variant="orange" className="h-10" />
             </Link>
 
-            <address className="not-italic text-base leading-8 text-[#aeb8ce]">
+            <address className="not-italic text-base leading-8 text-footer-muted">
               Patna, Bihar & Jharkhand, India
             </address>
 
             <div className="space-y-1.5 text-base">
               <a
                 href="tel:+919031022875"
-                className="block transition-colors hover:text-[#f2f6ff]"
+                className="block transition-colors hover:text-footer-hover"
               >
                 +91 90310 22875
               </a>
               <a
                 href="mailto:sales@oando.co.in"
-                className="block transition-colors hover:text-[#f2f6ff]"
+                className="block transition-colors hover:text-footer-hover"
               >
                 sales@oando.co.in
               </a>
@@ -86,7 +86,7 @@ export function SiteFooter() {
                     aria-label={social.label}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded text-[#7f8ba8] transition-colors hover:text-[#f2f6ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    className="rounded text-footer-subtle transition-colors hover:text-footer-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                   >
                     {Icon ? <Icon /> : null}
                   </a>
@@ -99,7 +99,7 @@ export function SiteFooter() {
           <div className="md:col-span-4 grid grid-cols-2 sm:grid-cols-4 gap-8 md:gap-6">
             {SITE_FOOTER_NAV.map((col) => (
               <div key={col.heading}>
-                <p className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-[#7f8ba8]">
+                <p className="typ-label mb-4 text-footer-subtle">
                   {col.heading}
                 </p>
                 <ul className="flex flex-col gap-2.5">
@@ -108,7 +108,7 @@ export function SiteFooter() {
                       <Link
                         href={href}
                         prefetch={false}
-                        className="rounded text-base text-[#b3bfd8] transition-colors hover:text-[#f2f6ff] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        className="rounded text-base text-footer-link transition-colors hover:text-footer-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                       >
                         {label}
                       </Link>
@@ -122,16 +122,16 @@ export function SiteFooter() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-[#20283b]">
-        <div className="container flex flex-col items-center justify-between gap-4 px-6 py-5 text-sm text-[#74809e] sm:flex-row 2xl:px-0">
+      <div className="border-t border-footer-border">
+        <div className="container flex flex-col items-center justify-between gap-4 px-6 py-5 text-sm text-footer-dim sm:flex-row 2xl:px-0">
           <div className="flex gap-6">
-            <Link href="/refund-and-return-policy" prefetch={false} className="rounded transition-colors hover:text-[#d2d9ea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            <Link href="/refund-and-return-policy" prefetch={false} className="rounded transition-colors hover:text-footer-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
               Refund Policy
             </Link>
-            <Link href="/privacy" prefetch={false} className="rounded transition-colors hover:text-[#d2d9ea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            <Link href="/privacy" prefetch={false} className="rounded transition-colors hover:text-footer-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
               Privacy Policy
             </Link>
-            <Link href="/terms" prefetch={false} className="rounded transition-colors hover:text-[#d2d9ea] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            <Link href="/terms" prefetch={false} className="rounded transition-colors hover:text-footer-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
               Terms
             </Link>
           </div>

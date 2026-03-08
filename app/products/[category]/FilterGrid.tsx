@@ -507,7 +507,32 @@ function ProductCard({
   }, [product.id, product.slug, product.flagshipImage, product.images]);
 
   return (
-    <article className="group bg-white border border-neutral-100 hover:border-neutral-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+    <article className="group relative bg-white border border-neutral-100 hover:border-neutral-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+      {/* Compare toggle — visible on hover or when active */}
+      <button
+        type="button"
+        onClick={() =>
+          toggleCompareItem({
+            id: compareId,
+            productUrlKey: routeKey,
+            categoryId,
+            name: displayName,
+            image: imgSrc,
+            href: productHref,
+          })
+        }
+        aria-label={inCompare ? "Remove from compare" : "Add to compare"}
+        className={clsx(
+          "absolute top-2 right-2 z-10 flex items-center gap-1 rounded-sm border px-2 py-1 text-[10px] font-bold uppercase tracking-wider transition-all duration-200",
+          inCompare
+            ? "border-primary bg-primary text-white opacity-100"
+            : "border-neutral-300 bg-white/90 text-neutral-600 opacity-0 group-hover:opacity-100",
+        )}
+      >
+        <GitCompareArrows className="h-3 w-3" />
+        {inCompare ? "Added" : "Compare"}
+      </button>
+
       <Link href={productHref} className="block">
         <div className="relative w-full aspect-square bg-stone-50 rounded-md overflow-hidden">
           <Image
@@ -528,7 +553,7 @@ function ProductCard({
             </div>
           )}
           {product.metadata?.priceRange && (
-            <div className="absolute top-2 right-2 bg-neutral-900/75 text-white text-[10px] sm:text-xs font-semibold uppercase tracking-wider px-2.5 py-1.5 rounded-sm shadow-sm">
+            <div className="absolute bottom-2 right-2 bg-neutral-900/75 text-white text-[10px] sm:text-xs font-semibold uppercase tracking-wider px-2.5 py-1.5 rounded-sm shadow-sm">
               {product.metadata.priceRange}
             </div>
           )}
@@ -546,10 +571,10 @@ function ProductCard({
           )}
         </div>
         <div className="min-h-[13.5rem] p-4">
-          <p className="text-[10px] uppercase tracking-widest text-neutral-400 font-medium mb-1">
+          <p className="typ-label text-neutral-400 mb-1">
             {sanitizeDisplayText(product.seriesName)}
           </p>
-          <h3 className="text-sm font-semibold text-neutral-900 group-hover:text-neutral-700 transition-colors leading-tight">
+          <h3 className="text-sm font-semibold text-neutral-900 group-hover:text-primary transition-colors leading-tight">
             {displayName}
           </h3>
           {product.metadata?.priceRange && (
@@ -573,50 +598,34 @@ function ProductCard({
               <span className="font-semibold text-neutral-500 mr-1">Material:</span>
               {materials}
             </p>
-            </div>
+          </div>
         </div>
       </Link>
-      <div className="px-4 pb-4">
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          <button
-            type="button"
-            onClick={() =>
-              addItem({
-                id: `quote-${product.slug || product.id}`,
-                name: displayName,
-                image: imgSrc,
-                href: productHref,
-                qty: 1,
-              })
-            }
-            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-sm border border-neutral-200 px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-700 transition-colors hover:border-primary hover:text-primary"
-          >
-            <ShoppingCart className="h-4 w-4" />
-            Add To Quote
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              toggleCompareItem({
-                id: compareId,
-                productUrlKey: routeKey,
-                categoryId,
-                name: displayName,
-                image: imgSrc,
-                href: productHref,
-              })
-            }
-            className={clsx(
-              "inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-sm border px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-colors",
-              inCompare
-                ? "border-primary bg-primary text-white hover:bg-primary-hover hover:border-primary-hover"
-                : "border-neutral-200 text-neutral-700 hover:border-primary hover:text-primary",
-            )}
-          >
-            <GitCompareArrows className="h-4 w-4" />
-            {inCompare ? "Added" : "Compare"}
-          </button>
-        </div>
+
+      {/* Actions: primary CTA + secondary quote */}
+      <div className="px-4 pb-4 flex flex-col gap-2">
+        <Link
+          href={productHref}
+          className="btn-primary w-full text-center text-xs"
+        >
+          View Details
+        </Link>
+        <button
+          type="button"
+          onClick={() =>
+            addItem({
+              id: `quote-${product.slug || product.id}`,
+              name: displayName,
+              image: imgSrc,
+              href: productHref,
+              qty: 1,
+            })
+          }
+          className="inline-flex min-h-10 w-full items-center justify-center gap-1.5 rounded-sm border border-neutral-200 px-3 py-1.5 text-xs font-semibold tracking-[0.1em] text-neutral-600 transition-colors hover:border-neutral-400 hover:text-neutral-900"
+        >
+          <ShoppingCart className="h-3.5 w-3.5" />
+          Add to Quote
+        </button>
       </div>
     </article>
   );

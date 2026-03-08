@@ -96,7 +96,7 @@ export function CustomerQueryForm() {
         either email or phone and we will respond within 1 business day.
       </p>
       <div>
-        <label htmlFor="name" className="mb-2 block text-sm font-medium text-neutral-700">
+        <label htmlFor="name" className="mb-2 block typ-label text-neutral-500">
           Name <span className="text-primary">*</span>
         </label>
         <input
@@ -105,12 +105,12 @@ export function CustomerQueryForm() {
           placeholder="Your Name"
           value={form.name}
           onChange={(event) => setForm({ ...form, name: event.target.value })}
-          className="w-full border border-neutral-200 bg-white px-4 py-3 outline-none transition-colors focus:border-primary"
+          className="w-full border-0 border-b border-neutral-300 bg-transparent px-0 py-3 outline-none transition-colors focus:border-primary placeholder:text-neutral-400"
           required
         />
       </div>
       <div>
-        <label htmlFor="company" className="mb-2 block text-sm font-medium text-neutral-700">
+        <label htmlFor="company" className="mb-2 block typ-label text-neutral-500">
           Company
         </label>
         <input
@@ -119,12 +119,12 @@ export function CustomerQueryForm() {
           placeholder="Company Name (optional)"
           value={form.company}
           onChange={(event) => setForm({ ...form, company: event.target.value })}
-          className="w-full border border-neutral-200 bg-white px-4 py-3 outline-none transition-colors focus:border-primary"
+          className="w-full border-0 border-b border-neutral-300 bg-transparent px-0 py-3 outline-none transition-colors focus:border-primary placeholder:text-neutral-400"
         />
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
-          <label htmlFor="email" className="mb-2 block text-sm font-medium text-neutral-700">
+          <label htmlFor="email" className="mb-2 block typ-label text-neutral-500">
             Email
           </label>
           <input
@@ -133,11 +133,11 @@ export function CustomerQueryForm() {
             placeholder="your@email.com"
             value={form.email}
             onChange={(event) => setForm({ ...form, email: event.target.value })}
-            className="w-full border border-neutral-200 bg-white px-4 py-3 outline-none transition-colors focus:border-primary"
+            className="w-full border-0 border-b border-neutral-300 bg-transparent px-0 py-3 outline-none transition-colors focus:border-primary placeholder:text-neutral-400"
           />
         </div>
         <div>
-          <label htmlFor="phone" className="mb-2 block text-sm font-medium text-neutral-700">
+          <label htmlFor="phone" className="mb-2 block typ-label text-neutral-500">
             Phone / WhatsApp
           </label>
           <input
@@ -146,14 +146,14 @@ export function CustomerQueryForm() {
             placeholder="+91..."
             value={form.phone}
             onChange={(event) => setForm({ ...form, phone: event.target.value })}
-            className="w-full border border-neutral-200 bg-white px-4 py-3 outline-none transition-colors focus:border-primary"
+            className="w-full border-0 border-b border-neutral-300 bg-transparent px-0 py-3 outline-none transition-colors focus:border-primary placeholder:text-neutral-400"
           />
         </div>
       </div>
       <div>
         <label
           htmlFor="preferredContact"
-          className="mb-2 block text-sm font-medium text-neutral-700"
+          className="mb-2 block typ-label text-neutral-500"
         >
           Preferred Contact
         </label>
@@ -166,7 +166,7 @@ export function CustomerQueryForm() {
               preferredContact: event.target.value as PreferredContact,
             })
           }
-          className="w-full border border-neutral-200 bg-white px-4 py-3 outline-none transition-colors focus:border-primary"
+          className="w-full border-0 border-b border-neutral-300 bg-transparent px-0 py-3 outline-none transition-colors focus:border-primary placeholder:text-neutral-400"
         >
           <option value="any">Any</option>
           <option value="email">Email</option>
@@ -175,7 +175,7 @@ export function CustomerQueryForm() {
         </select>
       </div>
       <div>
-        <label htmlFor="message" className="mb-2 block text-sm font-medium text-neutral-700">
+        <label htmlFor="message" className="mb-2 block typ-label text-neutral-500">
           Message <span className="text-primary">*</span>
         </label>
         <textarea
@@ -184,7 +184,7 @@ export function CustomerQueryForm() {
           rows={4}
           value={form.message}
           onChange={(event) => setForm({ ...form, message: event.target.value })}
-          className="w-full border border-neutral-200 bg-white px-4 py-3 outline-none transition-colors focus:border-primary"
+          className="w-full border-0 border-b border-neutral-300 bg-transparent px-0 py-3 outline-none transition-colors focus:border-primary placeholder:text-neutral-400"
           required
         />
       </div>
@@ -227,7 +227,7 @@ export function CustomerQueryForm() {
         <button
           type="submit"
           disabled={!canSubmit || isSubmitting}
-          className="w-full bg-primary px-8 py-3 text-sm font-medium uppercase tracking-wide text-white transition-colors hover:bg-neutral-900 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+          className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? "Sending..." : "Send - we respond within 1 business day"}
         </button>

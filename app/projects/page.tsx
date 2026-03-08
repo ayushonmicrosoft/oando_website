@@ -95,26 +95,33 @@ export default async function ProjectsPage() {
             { id: "sectors-served", value: sectorsValue, label: "Sectors Served" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
-              <p data-testid={`kpi-${stat.id}-projects`} className="text-3xl md:text-4xl font-light text-neutral-900 mb-1">
+              <p data-testid={`kpi-${stat.id}-projects`} className="typ-stat text-neutral-900 mb-1">
                 {stat.value}
               </p>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">
-                {stat.label}
-              </p>
+              <p className="stats-block__label">{stat.label}</p>
             </div>
           ))}
         </div>
 
-        <p data-testid="kpi-as-of-projects" className="-mt-10 mb-12 text-center text-xs font-medium text-neutral-500 tracking-wide">
+        <p data-testid="kpi-as-of-projects" className="-mt-10 mb-16 text-center text-xs font-medium text-neutral-500 tracking-wide">
           {asOfLabel}
         </p>
-        {/* All clients grid */}
-        <div className="mb-8">
-          <p className="text-xs font-bold tracking-[0.25em] uppercase text-neutral-400 mb-8">
-            All Clients
-          </p>
+
+        {/* Featured clients — first 12, larger display */}
+        <div className="mb-12">
+          <p className="typ-label text-neutral-400 mb-6">Featured organisations</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {ALL_CLIENTS.slice(0, 12).map((client) => (
+              <ClientBadge key={client.name} {...client} />
+            ))}
+          </div>
+        </div>
+
+        {/* All clients — remaining, compact grid */}
+        <div className="border-t border-neutral-200 pt-12">
+          <p className="typ-label text-neutral-400 mb-6">All organisations</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-            {ALL_CLIENTS.map((client) => (
+            {ALL_CLIENTS.slice(12).map((client) => (
               <ClientBadge key={client.name} {...client} />
             ))}
           </div>

@@ -27,7 +27,7 @@ export default function SustainabilityPage() {
 
         <div className="grid grid-cols-1 gap-16 md:grid-cols-3">
           <div className="group space-y-6">
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/5 transition-colors group-hover:bg-primary/10">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/8 transition-colors group-hover:bg-primary/15">
               <Leaf className="h-10 w-10 text-primary" />
             </div>
             <h3 className="typ-h3 border-l-2 border-primary pl-4 text-neutral-900">
@@ -40,7 +40,7 @@ export default function SustainabilityPage() {
           </div>
 
           <div className="group space-y-6">
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/5 transition-colors group-hover:bg-primary/10">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/8 transition-colors group-hover:bg-primary/15">
               <Recycle className="h-10 w-10 text-primary" />
             </div>
             <h3 className="typ-h3 border-l-2 border-primary pl-4 text-neutral-900">
@@ -53,7 +53,7 @@ export default function SustainabilityPage() {
           </div>
 
           <div className="group space-y-6">
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/5 transition-colors group-hover:bg-primary/10">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/8 transition-colors group-hover:bg-primary/15">
               <Lightbulb className="h-10 w-10 text-primary" />
             </div>
             <h3 className="typ-h3 border-l-2 border-primary pl-4 text-neutral-900">

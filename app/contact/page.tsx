@@ -12,7 +12,7 @@ export default function ContactPage() {
         showButton={false}
         backgroundImage="/images/hero/tvs-patna-enhanced.webp"
       />
-      <section className="container px-6 2xl:px-0 py-20">
+      <section className="container px-6 2xl:px-0 py-16 md:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
           <div className="space-y-8">
             <h3 className="typ-section text-neutral-950">Office and support contacts</h3>
@@ -66,7 +66,7 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="border border-neutral-300 bg-neutral-50 p-8">
+          <div className="border-t border-neutral-200 pt-8 md:border-t-0 md:border-l md:pl-16 md:pt-0">
             <CustomerQueryForm />
           </div>
         </div>
