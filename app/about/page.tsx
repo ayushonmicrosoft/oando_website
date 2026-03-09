@@ -3,7 +3,8 @@ import Link from "next/link";
 import { Hero } from "@/components/home/Hero";
 import { ClientBadge } from "@/components/ClientBadge";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
-import { TRUSTED_BY_CLIENTS, TRUSTED_BY_STATS } from "@/lib/trustedBy";
+import { ABOUT_PAGE_COPY } from "@/data/site/routeCopy";
+import { TRUSTED_BY_CLIENTS, TRUSTED_BY_STATS } from "@/data/site/proof";
 
 export default function AboutPage() {
   const featuredClients = TRUSTED_BY_CLIENTS.slice(0, 8);
@@ -12,8 +13,8 @@ export default function AboutPage() {
     <section className="flex min-h-screen flex-col items-center bg-white">
       <Hero
         variant="small"
-        title="About One and Only Furniture"
-        subtitle="We design and deliver workspace systems that stay practical, durable, and scalable as teams grow."
+        title={ABOUT_PAGE_COPY.heroTitle}
+        subtitle={ABOUT_PAGE_COPY.heroSubtitle}
         showButton={false}
         backgroundImage="/images/hero/hero-1.webp"
       />
@@ -31,20 +32,13 @@ export default function AboutPage() {
           </div>
 
           <div className="space-y-5">
-            <p className="typ-label text-neutral-700">Who we are</p>
-            <h2 className="typ-section text-neutral-950">A planning-first furniture partner for modern offices.</h2>
-            <p className="text-base leading-relaxed text-neutral-800 md:text-lg">
-              We combine workplace planning, product selection, and execution support so teams can
-              move from concept to handover with fewer delays and better outcomes.
-            </p>
-            <p className="text-base leading-relaxed text-neutral-800 md:text-lg">
-              Our projects cover ergonomic seating, modular workstations, meeting environments,
-              storage, and support services tailored to enterprise and institutional needs.
-            </p>
-            <p className="text-base leading-relaxed text-neutral-800 md:text-lg">
-              Every engagement is managed for clarity: documented scope, practical timelines, and
-              accountable after-sales support.
-            </p>
+            <p className="typ-label text-neutral-700">{ABOUT_PAGE_COPY.sectionKicker}</p>
+            <h2 className="typ-section text-neutral-950">{ABOUT_PAGE_COPY.sectionTitle}</h2>
+            {ABOUT_PAGE_COPY.paragraphs.map((paragraph) => (
+              <p key={paragraph} className="text-base leading-relaxed text-neutral-800 md:text-lg">
+                {paragraph}
+              </p>
+            ))}
           </div>
         </div>
       </section>
@@ -68,11 +62,11 @@ export default function AboutPage() {
       <section className="container px-6 py-18 2xl:px-0 md:py-22">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
           <div>
-            <p className="typ-label mb-3 text-neutral-700">Client confidence</p>
-            <h2 className="typ-section text-neutral-950">Trusted by enterprise and institutional teams.</h2>
+            <p className="typ-label mb-3 text-neutral-700">{ABOUT_PAGE_COPY.confidenceKicker}</p>
+            <h2 className="typ-section text-neutral-950">{ABOUT_PAGE_COPY.confidenceTitle}</h2>
           </div>
           <Link href="/trusted-by" className="btn-outline">
-            View all clients
+            {ABOUT_PAGE_COPY.confidenceCta}
           </Link>
         </div>
 

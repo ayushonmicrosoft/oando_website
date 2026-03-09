@@ -3,63 +3,13 @@ import path from "node:path";
 import Image from "next/image";
 import { Hero } from "@/components/home/Hero";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
+import { PORTFOLIO_CLIENTS, PORTFOLIO_PAGE_COPY } from "@/data/site/routeCopy";
 
-type ClientPortfolio = {
-  id: string;
-  folder: string;
-  name: string;
-  location: string;
-  summary: string;
-};
+type ClientPortfolio = (typeof PORTFOLIO_CLIENTS)[number];
 
 type ClientPortfolioWithPhotos = ClientPortfolio & {
   photos: string[];
 };
-
-const CLIENT_PORTFOLIO: ClientPortfolio[] = [
-  {
-    id: "titan",
-    folder: "Titan",
-    name: "Titan",
-    location: "Patna, Bihar",
-    summary: "Collaborative office zones with modular seating and meeting layouts.",
-  },
-  {
-    id: "tvs",
-    folder: "TVS",
-    name: "TVS",
-    location: "Patna, Bihar",
-    summary: "Workspace planning across leadership cabins, desking, and collaboration bays.",
-  },
-  {
-    id: "usha",
-    folder: "Usha",
-    name: "Usha",
-    location: "Patna, Bihar",
-    summary: "End-to-end supply and on-site setup with execution-ready furniture systems.",
-  },
-  {
-    id: "dmrc",
-    folder: "DMRC",
-    name: "DMRC",
-    location: "New Delhi",
-    summary: "Operational office furniture delivery built for high-use enterprise teams.",
-  },
-  {
-    id: "franklin-templeton",
-    folder: "FranklinTempleton",
-    name: "Franklin Templeton",
-    location: "India",
-    summary: "Formal workspace setups with consistent finishes and executive-ready detailing.",
-  },
-  {
-    id: "government",
-    folder: "Govenment",
-    name: "Government",
-    location: "Patna, Bihar",
-    summary: "Durable institutional deployments with practical day-to-day usability.",
-  },
-];
 
 function encodePathForNextImage(pathname: string): string {
   return encodeURI(pathname);
@@ -76,13 +26,12 @@ async function getClientPhotos(folder: string): Promise<string[]> {
 
 async function buildPortfolioData(): Promise<ClientPortfolioWithPhotos[]> {
   const items = await Promise.all(
-    CLIENT_PORTFOLIO.map(async (client) => {
+    PORTFOLIO_CLIENTS.map(async (client) => {
       const photos = await getClientPhotos(client.folder);
       return { ...client, photos };
     }),
   );
 
-  // Keep only client groups that have at least 2 photos.
   return items.filter((item) => item.photos.length >= 2);
 }
 
@@ -94,20 +43,22 @@ export default async function PortfolioPage() {
     <section className="flex min-h-screen flex-col items-center bg-white">
       <Hero
         variant="small"
-        title="Portfolio"
-        subtitle="Real delivery photos grouped by client projects."
+        title={PORTFOLIO_PAGE_COPY.heroTitle}
+        subtitle={PORTFOLIO_PAGE_COPY.heroSubtitle}
         showButton={false}
         backgroundImage="/projects/titan-gallery.webp"
       />
 
-      <section className="container px-6 py-16 2xl:px-0 md:py-20">
+      <section className="container px-6 py-16 md:py-20 2xl:px-0">
         <div className="mb-10 flex items-end justify-between gap-6">
           <div>
-            <p className="typ-eyebrow">Project gallery</p>
-            <h2 className="typ-h1 mt-2 text-neutral-900">Client portfolio snapshots</h2>
+            <p className="typ-eyebrow">{PORTFOLIO_PAGE_COPY.eyebrow}</p>
+            <h2 className="typ-h1 mt-2 text-neutral-900">{PORTFOLIO_PAGE_COPY.title}</h2>
           </div>
           <p className="hidden text-sm text-neutral-500 md:block">
-            {portfolio.length} clients · {totalPhotos} photos
+            {PORTFOLIO_PAGE_COPY.totalTemplate
+              .replace("{clients}", String(portfolio.length))
+              .replace("{photos}", String(totalPhotos))}
           </p>
         </div>
 

@@ -1,15 +1,16 @@
 import { Hero } from "@/components/home/Hero";
 import { ClientBadge } from "@/components/ClientBadge";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
-import { TRUSTED_BY_CLIENTS, TRUSTED_BY_STATS } from "@/lib/trustedBy";
+import { TRUSTED_BY_PAGE_COPY } from "@/data/site/routeCopy";
+import { TRUSTED_BY_CLIENTS, TRUSTED_BY_STATS } from "@/data/site/proof";
 
 export default function TrustedByPage() {
   return (
     <section className="flex min-h-screen flex-col items-center bg-white">
       <Hero
         variant="small"
-        title="Trusted by"
-        subtitle="Trusted by industry leaders across government, manufacturing, finance, automotive, IT, and institutional sectors."
+        title={TRUSTED_BY_PAGE_COPY.heroTitle}
+        subtitle={TRUSTED_BY_PAGE_COPY.heroSubtitle}
         showButton={false}
         backgroundImage="/hero/franklin-hero.webp"
       />
