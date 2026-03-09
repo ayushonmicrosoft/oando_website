@@ -81,6 +81,17 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActiveMenu(null);
+        setIsSearchOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <>
       <header
@@ -153,7 +164,7 @@ export function Header() {
               >
                 <OneAndOnlyLogo
                   className="h-8 md:h-10 lg:h-[52px]"
-                  variant={isScrolled ? "orange" : "orange"}
+                  variant="orange"
                 />
               </Link>
             </div>
@@ -183,6 +194,14 @@ export function Header() {
                       "text-neutral-700 hover:text-primary",
                       activeMenu === item.label && "text-primary",
                     )}
+                    onKeyDown={(e) => {
+                      if (item.hasMegaMenu && (e.key === "Enter" || e.key === " ")) {
+                        e.preventDefault();
+                        setActiveMenu(activeMenu === item.label ? null : item.label);
+                      }
+                    }}
+                    aria-expanded={item.hasMegaMenu ? activeMenu === item.label : undefined}
+                    aria-haspopup={item.hasMegaMenu ? "true" : undefined}
                   >
                     {item.label}
                     {item.hasMegaMenu && (

@@ -35,17 +35,6 @@ interface ProductViewerProps {
   categoryId?: string;
 }
 
-function sanitizeDisplayText(value: string): string {
-  return String(value || "")
-    .replace(/[�]+/g, "")
-    .replace(/â€”/g, "—")
-    .replace(/â€“/g, "–")
-    .replace(/â€˜|â€™/g, "'")
-    .replace(/â€œ|â€\u009d|â€"/g, "\"")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 function sanitizeDisplayList(values: string[]): string[] {
   return values.map((item) => normalizeDisplayText(item)).filter(Boolean);
 }
@@ -762,12 +751,6 @@ export function ProductViewer({
         <Reviews productId={product.id} />
       </div>
       <CompareDock />
-
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `.scrollbar-hide::-webkit-scrollbar{display:none}.scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}`,
-        }}
-      />
     </section>
   );
 }

@@ -31,7 +31,7 @@ export function TrustStrip({ stats, asOfLabel }: TrustStripProps) {
       <div className="container px-6 2xl:px-0">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
           <p className="typ-label text-neutral-700">
-            120 organisations trust us - from DMRC to Tata Steel
+            {formatKpiValuePlus(stats.clientOrganisations)} organisations trust us &mdash; from DMRC to Tata Steel
           </p>
           <p data-testid="kpi-as-of-home" className="typ-label text-neutral-700">
             {asOfLabel}

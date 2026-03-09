@@ -101,10 +101,10 @@ export default async function CategoryPage({
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-8 text-center bg-white">
         <h1 className="text-2xl font-light mb-4 text-neutral-900">
-          Workspace Engineering Engine - Offline
+          Products temporarily unavailable
         </h1>
         <p className="max-w-md text-neutral-500 mb-8">
-          Product data is temporarily unavailable while the database reconnects.
+          We&apos;re refreshing our catalog. Please try again in a moment.
         </p>
       </div>
     );

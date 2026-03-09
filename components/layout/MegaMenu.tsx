@@ -28,24 +28,27 @@ export function MegaMenu({ isOpen, items, cards, onClose }: MegaMenuProps) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 10 }}
-          transition={{ duration: 0.2 }}
+          exit={{ opacity: 0, y: 8 }}
+          transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
           className="absolute top-full left-0 w-full bg-white shadow-lg border-t border-neutral-100 z-[998]"
           onMouseLeave={onClose}
+          role="menu"
+          aria-label="Product categories"
         >
           <div className="container px-6 2xl:px-0 py-10">
             <div className="flex gap-12">
               {/* Left Column: Link List */}
               <div className="w-1/4 pt-2">
-                <ul className="flex flex-col gap-3">
+                <ul className="flex flex-col gap-3" role="none">
                   {items.map((item) => (
-                    <li key={item.label}>
+                    <li key={item.label} role="none">
                       <Link
                         href={item.href}
                         prefetch={false}
-                        className="text-[15px] font-normal text-neutral-800 hover:text-primary transition-colors block"
+                        role="menuitem"
+                        className="text-[15px] font-normal text-neutral-800 hover:text-primary transition-colors block py-1 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                       >
                         {item.label}
                       </Link>
@@ -62,7 +65,8 @@ export function MegaMenu({ isOpen, items, cards, onClose }: MegaMenuProps) {
                       key={card.title}
                       href={card.href}
                       prefetch={false}
-                      className="group block"
+                      role="menuitem"
+                      className="group block focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                     >
                       <div className="relative aspect-[16/9] bg-neutral-100 mb-3 overflow-hidden">
                         {card.image && (
