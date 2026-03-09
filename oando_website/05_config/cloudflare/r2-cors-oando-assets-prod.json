@@ -1,0 +1,27 @@
+{
+  "rules": [
+    {
+      "allowed": {
+        "origins": [
+          "https://oando.co.in",
+          "https://www.oando.co.in"
+        ],
+        "methods": [
+          "GET",
+          "HEAD"
+        ],
+        "headers": [
+          "*"
+        ]
+      },
+      "expose": [
+        "ETag",
+        "Content-Length",
+        "Content-Type",
+        "Last-Modified",
+        "Cache-Control"
+      ],
+      "maxAgeSeconds": 86400
+    }
+  ]
+}

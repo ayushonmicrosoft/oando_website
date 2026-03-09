@@ -1,0 +1,191 @@
+{
+  "generatedAt": "2026-03-07T14:44:10",
+  "source": "supabase_live",
+  "totalProducts": 145,
+  "categoryCounts": {
+    "education": 13,
+    "seating": 44,
+    "soft-seating": 48,
+    "storages": 9,
+    "tables": 23,
+    "workstations": 8
+  },
+  "duplicateNamesWithinCategory": [
+    {
+      "category_id": "seating",
+      "name": "fluid x",
+      "slugs": [
+        "fluid-x",
+        "oando-seating--fluid-x"
+      ]
+    },
+    {
+      "category_id": "storages",
+      "name": "prelam",
+      "slugs": [
+        "oando-storage--prelam-storage",
+        "oando-storage--pedestal"
+      ]
+    }
+  ],
+  "duplicateSlugs": [],
+  "missingCoreSpecsCount": 0,
+  "missingCoreSpecsSample": [],
+  "missingMediaCount": 1,
+  "missingMediaSample": [
+    {
+      "slug": "oando-soft-seating--luna",
+      "name": "Luna",
+      "category_id": "soft-seating"
+    }
+  ],
+  "seatingMeshProducts": [
+    {
+      "name": "Breeze",
+      "slug": "oando-seating--breeze",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Casca",
+      "slug": "oando-seating--casca",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Crox",
+      "slug": "oando-seating--crox",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Flex",
+      "slug": "oando-seating--flex",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Fluid",
+      "slug": "oando-seating--fluid",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Fluid X",
+      "slug": "fluid-x",
+      "subcategory": "Mesh chairs",
+      "images_count": 0,
+      "scene_count": 0
+    },
+    {
+      "name": "Fluid X",
+      "slug": "oando-seating--fluid-x",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Halo",
+      "slug": "oando-seating--halo",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Logica",
+      "slug": "oando-seating--logica",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Myel",
+      "slug": "oando-seating--myel",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Nuvic",
+      "slug": "oando-seating--nuvic",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Orbit",
+      "slug": "oando-seating--orbit",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Phoenix",
+      "slug": "oando-seating--phoenix",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Revoq",
+      "slug": "oando-seating--revoq",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Rock",
+      "slug": "oando-seating--rock",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Solace",
+      "slug": "oando-seating--solace",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Spino",
+      "slug": "oando-seating--spino",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Sullion",
+      "slug": "oando-seating--sullion",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Sway",
+      "slug": "oando-seating--sway",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "Toro",
+      "slug": "oando-seating--toro",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    },
+    {
+      "name": "X Mesh",
+      "slug": "oando-seating--x-mesh",
+      "subcategory": "Mesh chairs",
+      "images_count": 7,
+      "scene_count": 3
+    }
+  ]
+}

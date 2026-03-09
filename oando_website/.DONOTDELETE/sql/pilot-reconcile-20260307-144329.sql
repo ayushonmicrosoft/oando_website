@@ -1,0 +1,2 @@
+-- DRY-RUN PREVIEW ONLY (do not execute blindly)
+-- generated_at: 2026-03-07T14:43:29

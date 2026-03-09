@@ -1,0 +1,251 @@
+{
+  "generatedAt": "2026-03-07T14:43:29",
+  "mode": "dry-run",
+  "slugs": [
+    "oando-seating--fluid-x",
+    "fluid-x",
+    "oando-seating--halo",
+    "oando-seating--logica",
+    "oando-seating--x-mesh"
+  ],
+  "found": 5,
+  "missing": [],
+  "results": [
+    {
+      "slug": "oando-seating--fluid-x",
+      "name": "Fluid X",
+      "category_id": "seating",
+      "overrideApplied": true,
+      "overrideSource": "seating-manual-20260228193939.json",
+      "metadataDiff": {},
+      "currentMetadata": {
+        "category": "Seating",
+        "ai_alt_text": "Fluid X ergonomic office chair",
+        "subcategory": "Mesh chairs",
+        "subcategory_slug": "mesh-chair"
+      },
+      "proposedMetadata": {
+        "category": "Seating",
+        "ai_alt_text": "Fluid X ergonomic office chair",
+        "subcategory": "Mesh chairs",
+        "subcategory_slug": "mesh-chair"
+      },
+      "specsCheck": {
+        "requiredProfile": [
+          "dimensions",
+          "materials",
+          "features"
+        ],
+        "recommendedProfile": [
+          "mechanism",
+          "ergonomics",
+          "warranty"
+        ],
+        "dimensionsValue": "W600D600H9001000mm (seat height adj. via gas lift)",
+        "materialsCount": 3,
+        "featuresCount": 3,
+        "missingRequired": [],
+        "profilePass": true
+      },
+      "mediaCheck": {
+        "flagship_image": "/images/afc/oando-seating--fluid-x/image-1.webp",
+        "images_count": 7,
+        "scene_images_count": 3
+      }
+    },
+    {
+      "slug": "fluid-x",
+      "name": "Fluid X",
+      "category_id": "seating",
+      "overrideApplied": true,
+      "overrideSource": "seating-manual-20260228193939.json",
+      "metadataDiff": {},
+      "currentMetadata": {
+        "category": "Seating",
+        "priceRange": "premium",
+        "ai_alt_text": "Fluid X ergonomic office chair",
+        "subcategory": "Mesh chairs",
+        "warrantyYears": 5,
+        "bifmaCertified": true,
+        "subcategory_slug": "mesh-chair",
+        "sustainabilityScore": 8
+      },
+      "proposedMetadata": {
+        "category": "Seating",
+        "priceRange": "premium",
+        "ai_alt_text": "Fluid X ergonomic office chair",
+        "subcategory": "Mesh chairs",
+        "warrantyYears": 5,
+        "bifmaCertified": true,
+        "subcategory_slug": "mesh-chair",
+        "sustainabilityScore": 8
+      },
+      "specsCheck": {
+        "requiredProfile": [
+          "dimensions",
+          "materials",
+          "features"
+        ],
+        "recommendedProfile": [
+          "mechanism",
+          "ergonomics",
+          "warranty"
+        ],
+        "dimensionsValue": "W650 x D650 x H900-1050mm",
+        "materialsCount": 3,
+        "featuresCount": 3,
+        "missingRequired": [],
+        "profilePass": true
+      },
+      "mediaCheck": {
+        "flagship_image": "/images/afc/oando-seating--fluid-x/image-1.webp",
+        "images_count": 0,
+        "scene_images_count": 0
+      }
+    },
+    {
+      "slug": "oando-seating--halo",
+      "name": "Halo",
+      "category_id": "seating",
+      "overrideApplied": true,
+      "overrideSource": "seating-manual-20260228193939.json",
+      "metadataDiff": {},
+      "currentMetadata": {
+        "source": "oando.co.in",
+        "category": "Seating",
+        "ai_alt_text": "Halo ergonomic office chair",
+        "subcategory": "Mesh chairs",
+        "warrantyYears": 5,
+        "bifmaCertified": true,
+        "subcategory_slug": "mesh-chair"
+      },
+      "proposedMetadata": {
+        "source": "oando.co.in",
+        "category": "Seating",
+        "ai_alt_text": "Halo ergonomic office chair",
+        "subcategory": "Mesh chairs",
+        "warrantyYears": 5,
+        "bifmaCertified": true,
+        "subcategory_slug": "mesh-chair"
+      },
+      "specsCheck": {
+        "requiredProfile": [
+          "dimensions",
+          "materials",
+          "features"
+        ],
+        "recommendedProfile": [
+          "mechanism",
+          "ergonomics",
+          "warranty"
+        ],
+        "dimensionsValue": "W600D600H9001000mm (seat height adj. via gas lift)",
+        "materialsCount": 3,
+        "featuresCount": 3,
+        "missingRequired": [],
+        "profilePass": true
+      },
+      "mediaCheck": {
+        "flagship_image": "/images/afc/oando-seating--halo/image-1.webp",
+        "images_count": 7,
+        "scene_images_count": 3
+      }
+    },
+    {
+      "slug": "oando-seating--logica",
+      "name": "Logica",
+      "category_id": "seating",
+      "overrideApplied": true,
+      "overrideSource": "seating-manual-20260228193939.json",
+      "metadataDiff": {},
+      "currentMetadata": {
+        "source": "oando.co.in",
+        "category": "Seating",
+        "ai_alt_text": "Logica ergonomic office chair",
+        "subcategory": "Mesh chairs",
+        "warrantyYears": 5,
+        "bifmaCertified": true,
+        "subcategory_slug": "mesh-chair"
+      },
+      "proposedMetadata": {
+        "source": "oando.co.in",
+        "category": "Seating",
+        "ai_alt_text": "Logica ergonomic office chair",
+        "subcategory": "Mesh chairs",
+        "warrantyYears": 5,
+        "bifmaCertified": true,
+        "subcategory_slug": "mesh-chair"
+      },
+      "specsCheck": {
+        "requiredProfile": [
+          "dimensions",
+          "materials",
+          "features"
+        ],
+        "recommendedProfile": [
+          "mechanism",
+          "ergonomics",
+          "warranty"
+        ],
+        "dimensionsValue": "W600D600H9001000mm (seat height adj. via gas lift)",
+        "materialsCount": 3,
+        "featuresCount": 2,
+        "missingRequired": [],
+        "profilePass": true
+      },
+      "mediaCheck": {
+        "flagship_image": "/images/afc/oando-seating--logica/image-1.webp",
+        "images_count": 7,
+        "scene_images_count": 3
+      }
+    },
+    {
+      "slug": "oando-seating--x-mesh",
+      "name": "X Mesh",
+      "category_id": "seating",
+      "overrideApplied": true,
+      "overrideSource": "seating-manual-20260228193939.json",
+      "metadataDiff": {},
+      "currentMetadata": {
+        "source": "oando.co.in",
+        "category": "Seating",
+        "ai_alt_text": "X Mesh ergonomic office chair",
+        "subcategory": "Mesh chairs",
+        "warrantyYears": 5,
+        "bifmaCertified": true,
+        "subcategory_slug": "mesh-chair"
+      },
+      "proposedMetadata": {
+        "source": "oando.co.in",
+        "category": "Seating",
+        "ai_alt_text": "X Mesh ergonomic office chair",
+        "subcategory": "Mesh chairs",
+        "warrantyYears": 5,
+        "bifmaCertified": true,
+        "subcategory_slug": "mesh-chair"
+      },
+      "specsCheck": {
+        "requiredProfile": [
+          "dimensions",
+          "materials",
+          "features"
+        ],
+        "recommendedProfile": [
+          "mechanism",
+          "ergonomics",
+          "warranty"
+        ],
+        "dimensionsValue": "W600D600H9001000mm (seat height adj. via gas lift)",
+        "materialsCount": 3,
+        "featuresCount": 3,
+        "missingRequired": [],
+        "profilePass": true
+      },
+      "mediaCheck": {
+        "flagship_image": "/images/afc/oando-seating--x-mesh/image-1.webp",
+        "images_count": 7,
+        "scene_images_count": 3
+      }
+    }
+  ]
+}
