@@ -1,3 +1,4 @@
+import { Playfair_Display } from "next/font/google";
 import localFont from "next/font/local";
 
 export const ciscoSans = localFont({
@@ -25,4 +26,10 @@ export const ciscoSans = localFont({
   ],
   variable: "--font-cisco",
   display: "swap",
+});
+export const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });

@@ -6,7 +6,7 @@ import { CookieConsentBar } from "@/components/site/CookieConsentBar";
 import dynamic from "next/dynamic";
 import QueryProvider from "@/app/providers/QueryProvider";
 import { WhatsAppCTA } from "@/components/ui/WhatsAppCTA";
-import { ciscoSans } from "@/lib/fonts";
+import { ciscoSans, playfair } from "@/lib/fonts";
 import { SITE_URL } from "@/lib/siteUrl";
 import { buildLocalBusinessJsonLd, buildSiteMetadata } from "@/data/site/seo";
 
@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-IN" className={`${ciscoSans.variable} scroll-smooth`}>
+    <html lang="en-IN" className={`${ciscoSans.variable} ${playfair.variable} scroll-smooth`}>
       <head>
         <script
           type="application/ld+json"

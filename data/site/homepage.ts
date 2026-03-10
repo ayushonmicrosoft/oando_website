@@ -3,7 +3,7 @@ export const HOMEPAGE_HERO_CONTENT = {
   eyebrowSecondary: "",
   imageAlt:
     "Ergonomic seating and workstations expertly installed at Titan Patna HQ by One and Only Furniture",
-  title: ["Precisely planned.", "Expertly delivered."],
+  title: ["Workspace Design,", "Reimagined."],
   description: "",
   primaryCta: { label: "Plan project", href: "/contact" },
   secondaryCta: { label: "Browse products", href: "/products" },
