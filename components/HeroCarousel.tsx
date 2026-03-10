@@ -29,7 +29,7 @@ const slides: Slide[] = [
     ctas: [
       {
         label: "Configure in 3D",
-        href: "/workstations/configurator",
+        href: "/planning?type=workstations",
         variant: "primary",
       },
       {
@@ -47,7 +47,7 @@ const slides: Slide[] = [
     ctas: [
       {
         label: "Configure in 3D",
-        href: "/workstations/configurator",
+        href: "/planning?type=workstations",
         variant: "primary",
       },
       {

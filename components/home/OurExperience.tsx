@@ -29,7 +29,7 @@ export function OurExperience({ clientCount }: OurExperienceProps) {
 
         <div className="grid grid-cols-1 gap-7 xl:grid-cols-[0.95fr_1.05fr]">
           <Reveal>
-            <div className="home-panel border-neutral-300 bg-white/90 p-6 shadow-[0_28px_70px_-42px_rgba(15,23,42,0.38)] md:p-8">
+            <div className="home-panel home-panel--light home-panel--elevated p-6 md:p-8">
               <p className="home-kicker mb-6 text-neutral-700">
                 {HOMEPAGE_EXPERIENCE_CONTENT.trustedByLabel}
               </p>
@@ -65,8 +65,8 @@ export function OurExperience({ clientCount }: OurExperienceProps) {
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     />
                     <div className="home-media-card__overlay" />
-                    <div className="absolute bottom-0 left-0 p-5">
-                      <p className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-white/75">
+                    <div className="home-media-card__caption">
+                      <p className="home-media-card__eyebrow">
                         Project
                       </p>
                       <p className="text-2xl font-light tracking-tight text-white">

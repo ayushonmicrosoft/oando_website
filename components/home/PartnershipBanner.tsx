@@ -5,9 +5,9 @@ import { HOMEPAGE_PARTNERSHIP_CONTENT } from "@/data/site/homepage";
 
 export function PartnershipBanner() {
   return (
-    <section className="border-y border-neutral-200 bg-white py-12 md:py-14">
-      <div className="container mx-auto px-6 lg:px-12">
-        <div className="flex flex-col items-center justify-between gap-12 md:flex-row">
+    <section className="home-section home-section--soft border-y border-neutral-200 py-12 md:py-14">
+      <div className="home-shell">
+        <div className="flex flex-col items-center justify-between gap-12 rounded-[2rem] border border-[rgba(194,178,149,0.36)] bg-white px-6 py-8 shadow-[0_28px_80px_-56px_rgba(53,40,22,0.28)] md:flex-row md:px-10">
           <div className="shrink-0">
             <Image
               src={HOMEPAGE_PARTNERSHIP_CONTENT.image.src}

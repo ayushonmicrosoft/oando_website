@@ -1,10 +1,11 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ArrowRight, Cable, Grid3X3, Layers3, ShieldCheck } from "lucide-react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { ArrowRight, Cable, Grid3X3, Layers3, ShieldCheck, Target, X } from "lucide-react";
+import { CONFIGURATOR_PAGE_COPY } from "@/data/site/routeCopy";
 
 type ProjectType = "workstations" | "storages";
 type WorkstationSeries = "Desking Series" | "Panel Series" | "Height Adjustable Series";
@@ -13,9 +14,11 @@ type ScreenId = "none" | "acrylic" | "fabric" | "glass";
 type ModestyId = "none" | "metal" | "perforated" | "fabric";
 type RacewayId = "none" | "tray" | "spine" | "full-power-beam";
 type StorageModeId = "none" | "shared-pedestal" | "individual-pedestal" | "overhead";
+type PlanningGoal = "density" | "privacy" | "ergonomics" | "storage";
 
 type ConfigForm = {
   projectType: ProjectType;
+  planningGoal: PlanningGoal;
   workstationSeries: WorkstationSeries;
   layoutId: LayoutId;
   moduleCount: number;
@@ -223,11 +226,21 @@ const SERIES_SUGGESTIONS: Record<WorkstationSeries, SuggestedSystem[]> = {
   ],
 };
 
+const PLANNING_GOALS: { id: PlanningGoal; supportedTypes: ProjectType[] }[] = [
+  { id: "density", supportedTypes: ["workstations", "storages"] },
+  { id: "privacy", supportedTypes: ["workstations"] },
+  { id: "ergonomics", supportedTypes: ["workstations"] },
+  { id: "storage", supportedTypes: ["workstations", "storages"] },
+];
+
 const CURRENCY_FORMATTER = new Intl.NumberFormat("en-IN", {
   style: "currency",
   currency: "INR",
   maximumFractionDigits: 0,
 });
+
+const PLANNER_STORAGE_KEY = "workspace-planning-configurator-v1";
+const PLANNER_STEP_KEY = "workspace-planning-configurator-step";
 
 function clampInteger(value: number, min: number, max: number): number {
   if (Number.isNaN(value)) return min;
@@ -249,17 +262,55 @@ function normalizePatternWidth(pattern: number[][]): number {
   return pattern.reduce((max, row) => Math.max(max, row.length), 0);
 }
 
-export function Simple2DConfigurator({
-  defaultType = "workstations",
-}: {
-  defaultType?: ProjectType;
-}) {
-  const pathname = usePathname();
+function isProjectType(value: string | null): value is ProjectType {
+  return value === "workstations" || value === "storages";
+}
 
-  const [form, setForm] = useState<ConfigForm>({
-    projectType: defaultType,
-    workstationSeries: "Desking Series",
-    layoutId: "linear-bench",
+function isPlanningGoal(value: string | null): value is PlanningGoal {
+  return value === "density" || value === "privacy" || value === "ergonomics" || value === "storage";
+}
+
+function isWorkstationSeries(value: string | null): value is WorkstationSeries {
+  return Boolean(value && WORKSTATION_SERIES.includes(value as WorkstationSeries));
+}
+
+function isLayoutId(value: string | null): value is LayoutId {
+  return Boolean(value && WORKSTATION_LAYOUTS.some((layout) => layout.id === value));
+}
+
+function buildInitialForm(
+  defaultType: ProjectType,
+  searchParams: ReturnType<typeof useSearchParams>,
+): ConfigForm {
+  const requestedType = searchParams.get("type");
+  const projectType = isProjectType(requestedType) ? requestedType : defaultType;
+  const requestedSeries = searchParams.get("series");
+  const workstationSeries = isWorkstationSeries(requestedSeries) ? requestedSeries : "Desking Series";
+  const supportedLayoutOptions = WORKSTATION_LAYOUTS.filter((layout) =>
+    layout.supportedSeries.includes(workstationSeries),
+  );
+  const requestedLayout = searchParams.get("layout");
+  const layoutId =
+    isLayoutId(requestedLayout) && supportedLayoutOptions.some((layout) => layout.id === requestedLayout)
+      ? requestedLayout
+      : (supportedLayoutOptions[0]?.id ?? "linear-bench");
+  const supportedGoals = PLANNING_GOALS.filter((goal) => goal.supportedTypes.includes(projectType));
+  const requestedGoal = searchParams.get("goal");
+  const planningGoal =
+    isPlanningGoal(requestedGoal) && supportedGoals.some((goal) => goal.id === requestedGoal)
+      ? requestedGoal
+      : projectType === "storages"
+        ? "storage"
+        : "density";
+  const requestedRoomWidth = Number(searchParams.get("roomWidth"));
+  const requestedRoomLength = Number(searchParams.get("roomLength"));
+  const requestedRoomClearance = Number(searchParams.get("roomClearance"));
+
+  return {
+    projectType,
+    planningGoal,
+    workstationSeries,
+    layoutId,
     moduleCount: 6,
     modulesPerRow: 3,
     deskWidth: 1200,
@@ -277,9 +328,18 @@ export function Simple2DConfigurator({
     storageColumns: 4,
     storageUnits: 10,
     finish: "Warm Oak",
-    roomWidth: 9000,
-    roomLength: 14000,
-    roomClearance: 450,
+    roomWidth:
+      Number.isFinite(requestedRoomWidth) && requestedRoomWidth > 0
+        ? clampInteger(requestedRoomWidth, 3000, 50000)
+        : 9000,
+    roomLength:
+      Number.isFinite(requestedRoomLength) && requestedRoomLength > 0
+        ? clampInteger(requestedRoomLength, 3000, 50000)
+        : 14000,
+    roomClearance:
+      Number.isFinite(requestedRoomClearance) && requestedRoomClearance >= 0
+        ? clampInteger(requestedRoomClearance, 0, 1500)
+        : 450,
     clientName: "",
     projectName: "",
     siteLocation: "",
@@ -288,6 +348,31 @@ export function Simple2DConfigurator({
     phone: "",
     company: "",
     notes: "",
+  };
+}
+
+export function Simple2DConfigurator({
+  defaultType = "workstations",
+}: {
+  defaultType?: ProjectType;
+}) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const hasPrefillParams = searchParams.toString().length > 0;
+  const [form, setForm] = useState<ConfigForm>(() => {
+    const initial = buildInitialForm(defaultType, searchParams);
+    if (typeof window === "undefined" || hasPrefillParams) return initial;
+    try {
+      const saved = window.localStorage.getItem(PLANNER_STORAGE_KEY);
+      if (!saved) return initial;
+      return {
+        ...initial,
+        ...(JSON.parse(saved) as Partial<ConfigForm>),
+      };
+    } catch {
+      return initial;
+    }
   });
 
   const [submit, setSubmit] = useState<SubmitState>({
@@ -295,6 +380,64 @@ export function Simple2DConfigurator({
     error: "",
     queryId: "",
   });
+  const [restoredDraft, setRestoredDraft] = useState<boolean>(() => {
+    if (typeof window === "undefined" || hasPrefillParams) return false;
+    try {
+      return Boolean(window.localStorage.getItem(PLANNER_STORAGE_KEY));
+    } catch {
+      return false;
+    }
+  });
+  const [currentStep, setCurrentStep] = useState<number>(() => {
+    if (typeof window === "undefined" || hasPrefillParams) return 0;
+    try {
+      const savedStep = Number(window.localStorage.getItem(PLANNER_STEP_KEY));
+      return Number.isFinite(savedStep) ? clampInteger(savedStep, 0, 5) : 0;
+    } catch {
+      return 0;
+    }
+  });
+  const [stepError, setStepError] = useState("");
+  const [shareStatus, setShareStatus] = useState<"" | "brief" | "link">("");
+  const [mobileSummaryOpen, setMobileSummaryOpen] = useState(false);
+  const mobileSummaryButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileSummaryDialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    window.localStorage.setItem(PLANNER_STORAGE_KEY, JSON.stringify(form));
+  }, [form]);
+
+  useEffect(() => {
+    window.localStorage.setItem(PLANNER_STEP_KEY, String(currentStep));
+  }, [currentStep]);
+
+  useEffect(() => {
+    if (!mobileSummaryOpen) {
+      mobileSummaryButtonRef.current?.focus();
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const focusTimer = window.setTimeout(() => {
+      const firstFocusable = mobileSummaryDialogRef.current?.querySelector<HTMLElement>(
+        "button:not([disabled]), a[href], input, select, textarea, [tabindex]:not([tabindex='-1'])",
+      );
+      firstFocusable?.focus();
+    }, 0);
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileSummaryOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.clearTimeout(focusTimer);
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [mobileSummaryOpen]);
 
   const layoutOptions = useMemo(
     () =>
@@ -473,6 +616,105 @@ export function Simple2DConfigurator({
 
   const suggestedSystems = SERIES_SUGGESTIONS[form.workstationSeries];
   const canSubmit = form.name.trim() && form.email.trim();
+  const supportedGoals = PLANNING_GOALS.filter((goal) => goal.supportedTypes.includes(form.projectType));
+  const planningGoalCopy = CONFIGURATOR_PAGE_COPY.planningGoals[form.planningGoal];
+  const fitStatusDetail =
+    fitOrientation === "overflow"
+      ? `The current plan exceeds the usable room zone by ${Math.round(overflowWidthMm / 10) / 100}m x ${Math.round(overflowDepthMm / 10) / 100}m.`
+      : fitOrientation === "rotated"
+        ? "The current plan fits if the layout is rotated inside the room."
+        : "The current plan fits within the usable room zone as configured.";
+  const recommendationTitle =
+    form.projectType === "storages"
+      ? form.planningGoal === "storage"
+        ? "Storage-heavy layout for admin teams"
+        : "Compact storage layout with balanced access"
+      : form.workstationSeries === "Height Adjustable Series"
+        ? "Suitable for premium ergonomic deployment"
+        : form.workstationSeries === "Panel Series"
+          ? "Better privacy, higher cost"
+          : activeLayout?.id === "cluster-6" || form.planningGoal === "density"
+            ? "Best for dense operations floors"
+            : "Balanced modular planning for daily team use";
+  const recommendationDetail =
+    form.projectType === "storages"
+      ? `Use a ${form.storageLayout.toLowerCase()} setup when the brief prioritises filing volume and quick aisle access.`
+      : `${form.workstationSeries} with ${activeLayout?.label.toLowerCase() || "the selected layout"} is the strongest match for the current goal: ${planningGoalCopy.label.toLowerCase()}.`;
+  const planningTradeoff =
+    form.projectType === "storages"
+      ? "Increasing storage density reduces aisle flexibility. Keep clearance realistic for access and movement."
+      : form.workstationSeries === "Height Adjustable Series"
+        ? "Higher ergonomic value increases budget per seat and reduces peak density."
+        : form.workstationSeries === "Panel Series"
+          ? "More privacy and zoning adds cost and reduces maximum seat density."
+          : "Dense layouts improve seat count, but wider aisles and added storage improve long-term usability.";
+  const stepStates = [
+    {
+      index: 0,
+      title: CONFIGURATOR_PAGE_COPY.steps[0],
+      complete: form.projectType === "workstations" ? Boolean(activeLayout) : Boolean(form.storageLayout),
+      requirement:
+        form.projectType === "workstations"
+          ? "Select a workstation series and layout before continuing."
+          : "Select a storage layout before continuing.",
+    },
+    {
+      index: 1,
+      title: CONFIGURATOR_PAGE_COPY.steps[1],
+      complete: supportedGoals.some((goal) => goal.id === form.planningGoal),
+      requirement: "Choose a planning goal before continuing.",
+    },
+    {
+      index: 2,
+      title: CONFIGURATOR_PAGE_COPY.steps[2],
+      complete: totalSeatsOrUnits > 0 && roomWidthMm > 0 && roomLengthMm > 0,
+      requirement: "Add room dimensions and capacity inputs before continuing.",
+    },
+    {
+      index: 3,
+      title: CONFIGURATOR_PAGE_COPY.steps[3],
+      complete: form.projectType === "workstations" ? Boolean(form.raceway) : Boolean(form.finish),
+      requirement: "Finish the key system options before continuing.",
+    },
+    {
+      index: 4,
+      title: CONFIGURATOR_PAGE_COPY.steps[4],
+      complete: Boolean(recommendationTitle),
+      requirement: "Review the recommendation before continuing.",
+    },
+    {
+      index: 5,
+      title: CONFIGURATOR_PAGE_COPY.steps[5],
+      complete: canSubmit,
+      requirement: "Add your name and work email to send the planning brief.",
+    },
+  ] as const;
+  const furthestUnlockedStep = stepStates.findIndex((step) => !step.complete);
+  const maxAccessibleStep = furthestUnlockedStep === -1 ? stepStates.length - 1 : Math.min(stepStates.length - 1, furthestUnlockedStep + 1);
+
+  function goToStep(stepIndex: number) {
+    if (stepIndex > maxAccessibleStep) {
+      setStepError(stepStates[Math.max(0, stepIndex - 1)].requirement);
+      return;
+    }
+    setStepError("");
+    setCurrentStep(stepIndex);
+  }
+
+  function goToNextStep() {
+    const current = stepStates[currentStep];
+    if (!current.complete) {
+      setStepError(current.requirement);
+      return;
+    }
+    setStepError("");
+    setCurrentStep((prev) => Math.min(stepStates.length - 1, prev + 1));
+  }
+
+  function goToPreviousStep() {
+    setStepError("");
+    setCurrentStep((prev) => Math.max(0, prev - 1));
+  }
 
   const screenLabel = SCREEN_OPTIONS.find((option) => option.id === form.screen)?.label ?? "No screens";
   const modestyLabel =
@@ -480,22 +722,12 @@ export function Simple2DConfigurator({
   const racewayLabel =
     RACEWAY_OPTIONS.find((option) => option.id === form.raceway)?.label ?? "No raceway";
 
-  async function submitEnquiry(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!canSubmit) {
-      setSubmit((prev) => ({
-        ...prev,
-        error: "Please add name and email to submit this configuration.",
-      }));
-      return;
-    }
-
-    setSubmit({ loading: true, error: "", queryId: "" });
-
-    const summaryLines =
+  function buildPlannerSummaryLines(): string[] {
+    const lines =
       form.projectType === "workstations"
         ? [
             "Full workstation module enquiry",
+            `Planning goal: ${planningGoalCopy.label}`,
             `Series: ${form.workstationSeries}`,
             `Layout: ${activeLayout?.label || form.layoutId}`,
             `Modules: ${moduleCount}`,
@@ -518,9 +750,13 @@ export function Simple2DConfigurator({
             `Area per seat: ${areaPerSeatOrUnit.toFixed(2)} sq m`,
             `Finish: ${form.finish}`,
             `Estimated budget: ${CURRENCY_FORMATTER.format(pricing.low)} to ${CURRENCY_FORMATTER.format(pricing.high)}`,
+            `Recommendation: ${recommendationTitle}`,
+            `Planning note: ${recommendationDetail}`,
+            `Tradeoff: ${planningTradeoff}`,
           ]
         : [
             "2D storage module enquiry",
+            `Planning goal: ${planningGoalCopy.label}`,
             `Layout: ${form.storageLayout}`,
             `Rows x columns: ${storageRows} x ${storageColumns}`,
             `Units: ${storageUnits}`,
@@ -532,13 +768,104 @@ export function Simple2DConfigurator({
             `Area per unit: ${areaPerSeatOrUnit.toFixed(2)} sq m`,
             `Finish: ${form.finish}`,
             `Estimated budget: ${CURRENCY_FORMATTER.format(pricing.low)} to ${CURRENCY_FORMATTER.format(pricing.high)}`,
+            `Recommendation: ${recommendationTitle}`,
+            `Planning note: ${recommendationDetail}`,
+            `Tradeoff: ${planningTradeoff}`,
           ];
 
-    if (form.clientName.trim()) summaryLines.push(`End client: ${form.clientName.trim()}`);
-    if (form.projectName.trim()) summaryLines.push(`Project name: ${form.projectName.trim()}`);
-    if (form.siteLocation.trim()) summaryLines.push(`Site location: ${form.siteLocation.trim()}`);
-    if (form.company.trim()) summaryLines.push(`Company: ${form.company.trim()}`);
-    if (form.notes.trim()) summaryLines.push(`Notes: ${form.notes.trim()}`);
+    if (form.clientName.trim()) lines.push(`End client: ${form.clientName.trim()}`);
+    if (form.projectName.trim()) lines.push(`Project name: ${form.projectName.trim()}`);
+    if (form.siteLocation.trim()) lines.push(`Site location: ${form.siteLocation.trim()}`);
+    if (form.company.trim()) lines.push(`Company: ${form.company.trim()}`);
+    if (form.notes.trim()) lines.push(`Notes: ${form.notes.trim()}`);
+
+    return lines;
+  }
+
+  function buildPlannerStateHref(): string {
+    const params = new URLSearchParams({
+      type: form.projectType,
+      goal: form.planningGoal,
+      roomWidth: String(roomWidthMm),
+      roomLength: String(roomLengthMm),
+      roomClearance: String(roomClearanceMm),
+    });
+
+    if (form.projectType === "workstations") {
+      params.set("series", form.workstationSeries);
+      params.set("layout", form.layoutId);
+    }
+
+    return `/planning?${params.toString()}`;
+  }
+
+  function buildMatchingProductsHref(): string {
+    if (form.projectType === "workstations") {
+      const params = new URLSearchParams({
+        series: form.workstationSeries,
+      });
+      return `/products/workstations?${params.toString()}`;
+    }
+
+    return "/products/storages";
+  }
+
+  async function copyPlannerBrief() {
+    await navigator.clipboard.writeText(buildPlannerSummaryLines().join("\n"));
+    setShareStatus("brief");
+  }
+
+  async function copyPlannerLink() {
+    await navigator.clipboard.writeText(`${window.location.origin}${buildPlannerStateHref()}`);
+    setShareStatus("link");
+  }
+
+  function downloadPlannerBrief() {
+    const fileNameBase = (form.projectName || form.clientName || "workspace-planning-brief")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || "workspace-planning-brief";
+    const blob = new Blob([plannerSummaryText], { type: "text/plain;charset=utf-8" });
+    const blobUrl = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = blobUrl;
+    anchor.download = `${fileNameBase}.txt`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(blobUrl);
+  }
+
+  function resetPlanner() {
+    setForm(buildInitialForm(defaultType, searchParams));
+    setCurrentStep(0);
+    setStepError("");
+    setSubmit({ loading: false, error: "", queryId: "" });
+    setShareStatus("");
+    setRestoredDraft(false);
+    window.localStorage.removeItem(PLANNER_STORAGE_KEY);
+    window.localStorage.removeItem(PLANNER_STEP_KEY);
+  }
+
+  const plannerSummaryText = buildPlannerSummaryLines().join("\n");
+  const plannerMailtoUrl = `mailto:sales@oando.co.in?subject=${encodeURIComponent(
+    "Workspace Planning Brief",
+  )}&body=${encodeURIComponent(plannerSummaryText)}`;
+  const plannerWhatsappUrl = `https://wa.me/919031022875?text=${encodeURIComponent(plannerSummaryText)}`;
+  const matchingProductsHref = buildMatchingProductsHref();
+
+  async function submitEnquiry(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!canSubmit) {
+      setSubmit((prev) => ({
+        ...prev,
+        error: "Please add name and email to submit this configuration.",
+      }));
+      return;
+    }
+
+    setSubmit({ loading: true, error: "", queryId: "" });
+    const summaryLines = buildPlannerSummaryLines();
 
     try {
       const response = await fetch("/api/customer-queries", {
@@ -571,6 +898,9 @@ export function Simple2DConfigurator({
       }
 
       setSubmit({ loading: false, error: "", queryId: json.queryId });
+      setRestoredDraft(false);
+      window.localStorage.removeItem(PLANNER_STORAGE_KEY);
+      window.localStorage.removeItem(PLANNER_STEP_KEY);
     } catch {
       setSubmit({
         loading: false,
@@ -591,32 +921,50 @@ export function Simple2DConfigurator({
         : "Fits within room";
   const fitStatusTone =
     fitOrientation === "overflow"
-      ? "text-rose-200 border-rose-300/60 bg-rose-500/20"
-      : "text-emerald-100 border-emerald-300/50 bg-emerald-500/15";
+      ? "border-rose-200 bg-rose-50 text-rose-700"
+      : "border-emerald-200 bg-emerald-50 text-emerald-700";
+  const mobileSummaryCards = [
+    {
+      label: CONFIGURATOR_PAGE_COPY.outcomeLabels.capacity,
+      value: `${totalSeatsOrUnits} ${form.projectType === "workstations" ? "seats" : "units"}`,
+    },
+    {
+      label: CONFIGURATOR_PAGE_COPY.outcomeLabels.fit,
+      value: fitStatusText,
+    },
+    {
+      label: CONFIGURATOR_PAGE_COPY.outcomeLabels.budget,
+      value: `${CURRENCY_FORMATTER.format(pricing.low)} - ${CURRENCY_FORMATTER.format(pricing.high)}`,
+    },
+  ];
+  const summaryPreviewLine =
+    currentStep < 4
+      ? `${stepStates[currentStep]?.title}: ${fitStatusText}`
+      : `${recommendationTitle}. ${planningTradeoff}`;
 
   return (
-    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-      <section className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-950 p-5 text-white md:p-7">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(20,52,203,0.42),transparent_40%),radial-gradient(circle_at_100%_100%,rgba(29,78,216,0.22),transparent_45%)]" />
-        <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:26px_26px]" />
+    <div className="pb-24 xl:pb-0">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+      <section className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-[linear-gradient(180deg,#fbfcfe_0%,#f5f7fb_100%)] p-5 text-neutral-950 shadow-[0_32px_80px_-56px_rgba(15,23,42,0.26)] md:p-7 xl:sticky xl:top-28 xl:h-fit">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(20,57,129,0.08),transparent_42%),radial-gradient(circle_at_100%_100%,rgba(15,23,42,0.06),transparent_46%)]" />
+        <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(148,163,184,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.12)_1px,transparent_1px)] [background-size:26px_26px]" />
 
         <div className="relative z-10 mb-5 flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="typ-label mb-2 text-white/70">Planning studio</p>
-            <h2 className="text-2xl font-light tracking-tight text-white">
-              {form.projectType === "workstations" ? "Live workstation module map" : "Live storage module map"}
+            <p className="typ-label mb-2 text-neutral-600">{CONFIGURATOR_PAGE_COPY.eyebrow}</p>
+            <h2 className="text-2xl font-light tracking-tight text-neutral-950">
+              {form.projectType === "workstations" ? "Live workstation planning map" : "Live storage planning map"}
             </h2>
-            <p className="mt-2 text-sm text-white/70">
-              Rough drawing updates instantly as you change layout, room size, screens, modesty, and raceway
-              selections.
+            <p className="mt-2 text-sm text-neutral-700">
+              {CONFIGURATOR_PAGE_COPY.introDescription}
             </p>
           </div>
-          <span className="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-white">
+          <span className="rounded-full border border-neutral-300 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-neutral-700">
             {totalSeatsOrUnits} {form.projectType === "workstations" ? "seats" : "units"}
           </span>
         </div>
 
-        <div className="relative z-10 overflow-hidden rounded-2xl border border-white/20 bg-[#0e1424] p-4 shadow-[0_32px_80px_-36px_rgba(0,0,0,0.65)]">
+        <div className="relative z-10 overflow-hidden rounded-[24px] border border-neutral-200 bg-[#10203f] p-4 shadow-[0_32px_80px_-44px_rgba(15,23,42,0.38)]">
           <svg
             viewBox={`0 0 ${svgWidth} ${svgHeight}`}
             className="h-auto w-full"
@@ -691,26 +1039,26 @@ export function Simple2DConfigurator({
         </div>
 
         <div className="relative z-10 mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-xl border border-white/20 bg-white/[0.08] px-4 py-3">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-white/70">Total seats/units</p>
-            <p className="mt-1 text-2xl font-light text-white">{totalSeatsOrUnits}</p>
+          <div className="rounded-2xl border border-neutral-200 bg-white px-4 py-3">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">{CONFIGURATOR_PAGE_COPY.outcomeLabels.capacity}</p>
+            <p className="mt-1 text-2xl font-light text-neutral-950">{totalSeatsOrUnits}</p>
           </div>
-          <div className="rounded-xl border border-white/20 bg-white/[0.08] px-4 py-3">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-white/70">Rough footprint</p>
-            <p className="mt-1 text-2xl font-light text-white">
+          <div className="rounded-2xl border border-neutral-200 bg-white px-4 py-3">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">{CONFIGURATOR_PAGE_COPY.outcomeLabels.footprint}</p>
+            <p className="mt-1 text-2xl font-light text-neutral-950">
               {Math.round(roughWidthMm / 1000)}m x {Math.round(roughDepthMm / 1000)}m
             </p>
           </div>
-          <div className="rounded-xl border border-white/20 bg-white/[0.08] px-4 py-3">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-white/70">Room fit check</p>
-            <p className="mt-1 text-sm font-semibold text-white">{fitStatusText}</p>
-            <p className="mt-1 text-xs text-white/70">
+          <div className="rounded-2xl border border-neutral-200 bg-white px-4 py-3">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">{CONFIGURATOR_PAGE_COPY.outcomeLabels.fit}</p>
+            <p className="mt-1 text-sm font-semibold text-neutral-950">{fitStatusText}</p>
+            <p className="mt-1 text-xs text-neutral-600">
               Room {Math.round(roomWidthMm / 1000)}m x {Math.round(roomLengthMm / 1000)}m
             </p>
           </div>
-          <div className="rounded-xl border border-white/20 bg-white/[0.08] px-4 py-3">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-white/70">Budget range</p>
-            <p className="mt-1 text-lg font-medium text-white">
+          <div className="rounded-2xl border border-neutral-200 bg-white px-4 py-3">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">{CONFIGURATOR_PAGE_COPY.outcomeLabels.budget}</p>
+            <p className="mt-1 text-lg font-medium text-neutral-950">
               {CURRENCY_FORMATTER.format(pricing.low)} - {CURRENCY_FORMATTER.format(pricing.high)}
             </p>
           </div>
@@ -720,40 +1068,59 @@ export function Simple2DConfigurator({
           <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${fitStatusTone}`}>
             {fitStatusText}
           </span>
-          <span className="rounded-full border border-white/25 bg-white/[0.08] px-3 py-1 text-xs font-semibold text-white/80">
+          <span className="rounded-full border border-neutral-300 bg-white px-3 py-1 text-xs font-semibold text-neutral-700">
             Coverage {Math.round(planCoveragePercent)}%
           </span>
-          <span className="rounded-full border border-white/25 bg-white/[0.08] px-3 py-1 text-xs font-semibold text-white/80">
+          <span className="rounded-full border border-neutral-300 bg-white px-3 py-1 text-xs font-semibold text-neutral-700">
             {areaPerSeatOrUnit.toFixed(2)} sq m / {form.projectType === "workstations" ? "seat" : "unit"}
           </span>
+          <span className="inline-flex items-center gap-1 rounded-full border border-neutral-300 bg-white px-3 py-1 text-xs font-semibold text-neutral-700">
+            <Target className="h-3.5 w-3.5 text-primary" />
+            {planningGoalCopy.label}
+          </span>
+        </div>
+
+        <div className="relative z-10 mt-4 rounded-[24px] border border-neutral-200 bg-white p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">Recommendation</p>
+              <p className="mt-1 text-lg font-medium text-neutral-950">{recommendationTitle}</p>
+            </div>
+            <span className="rounded-full border border-neutral-300 bg-neutral-50 px-3 py-1 text-[11px] font-semibold text-neutral-700">
+              {CONFIGURATOR_PAGE_COPY.outcomeLabels.efficiency}: {areaPerSeatOrUnit.toFixed(2)} sqm
+            </span>
+          </div>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-700">{recommendationDetail}</p>
+          <p className="mt-2 text-sm leading-relaxed text-neutral-600">{planningTradeoff}</p>
+          <p className="mt-2 text-xs uppercase tracking-[0.12em] text-neutral-500">{fitStatusDetail}</p>
         </div>
 
         {form.projectType === "workstations" ? (
           <>
             <div className="relative z-10 mt-4 flex flex-wrap gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full border border-white/30 bg-white/[0.12] px-3 py-1 text-xs font-semibold text-white">
-                <ShieldCheck className="h-3.5 w-3.5 text-cyan-300" />
+              <span className="inline-flex items-center gap-1 rounded-full border border-neutral-300 bg-white px-3 py-1 text-xs font-semibold text-neutral-700">
+                <ShieldCheck className="h-3.5 w-3.5 text-primary" />
                 {screenLabel}
               </span>
-              <span className="rounded-full border border-white/30 bg-white/[0.12] px-3 py-1 text-xs font-semibold text-white">
+              <span className="rounded-full border border-neutral-300 bg-white px-3 py-1 text-xs font-semibold text-neutral-700">
                 {modestyLabel}
               </span>
-              <span className="inline-flex items-center gap-1 rounded-full border border-white/30 bg-white/[0.12] px-3 py-1 text-xs font-semibold text-white">
-                <Cable className="h-3.5 w-3.5 text-cyan-300" />
+              <span className="inline-flex items-center gap-1 rounded-full border border-neutral-300 bg-white px-3 py-1 text-xs font-semibold text-neutral-700">
+                <Cable className="h-3.5 w-3.5 text-primary" />
                 {racewayLabel}
               </span>
             </div>
 
             <div className="relative z-10 mt-6">
-              <p className="typ-label mb-3 text-white/70">Suggested workstation systems</p>
+              <p className="typ-label mb-3 text-neutral-600">Suggested workstation systems</p>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {suggestedSystems.map((system) => (
                   <Link
                     key={system.name}
                     href={system.href}
-                    className="group overflow-hidden rounded-xl border border-white/20 bg-white/[0.08]"
+                    className="group overflow-hidden rounded-2xl border border-neutral-200 bg-white transition-colors hover:border-neutral-300"
                   >
-                    <div className="relative aspect-[16/10] bg-neutral-800">
+                    <div className="relative aspect-[16/10] bg-neutral-100">
                       <Image
                         src={system.image}
                         alt={system.name}
@@ -763,8 +1130,8 @@ export function Simple2DConfigurator({
                       />
                     </div>
                     <div className="p-3">
-                      <p className="text-base font-medium text-white">{system.name}</p>
-                      <p className="mt-1 text-sm leading-relaxed text-white/75">{system.hint}</p>
+                      <p className="text-base font-medium text-neutral-950">{system.name}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-neutral-600">{system.hint}</p>
                     </div>
                   </Link>
                 ))}
@@ -778,50 +1145,91 @@ export function Simple2DConfigurator({
         <form className="space-y-5" onSubmit={submitEnquiry}>
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <p className="typ-label mb-2 text-neutral-700">Configuration setup</p>
-              <h3 className="text-2xl font-light tracking-tight text-neutral-950">Full modular configurator</h3>
+              <p className="typ-label mb-2 text-neutral-700">{CONFIGURATOR_PAGE_COPY.eyebrow}</p>
+              <h3 className="text-2xl font-light tracking-tight text-neutral-950">{CONFIGURATOR_PAGE_COPY.introTitle}</h3>
               <p className="mt-2 text-sm text-neutral-600">
-                Select module logic, add room and client context, then send a quote-ready requirement.
+                Select planning intent, test room fit, tune system options, then send a quote-ready requirement.
               </p>
             </div>
             <div className="hidden rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600 sm:block">
-              5-stage flow
+              {CONFIGURATOR_PAGE_COPY.steps.length}-step flow
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 rounded-xl border border-neutral-200 bg-neutral-50 p-1">
-            {(["workstations", "storages"] as ProjectType[]).map((type) => (
+          <div className="grid grid-cols-2 gap-2 rounded-2xl border border-neutral-200 bg-neutral-50 p-2 md:grid-cols-3">
+            {stepStates.map((step) => (
               <button
-                key={type}
+                key={step.title}
                 type="button"
-                onClick={() =>
-                  setForm((prev) => ({
-                    ...prev,
-                    projectType: type,
-                  }))
-                }
-                className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border text-xs font-semibold uppercase tracking-[0.12em] transition-colors ${
-                  form.projectType === type
-                    ? "border-primary bg-primary text-white shadow-sm"
-                    : "border-transparent bg-transparent text-neutral-700 hover:border-neutral-300 hover:bg-white"
+                onClick={() => goToStep(step.index)}
+                className={`rounded-xl border px-3 py-3 text-left transition-colors ${
+                  currentStep === step.index
+                    ? "border-primary bg-white shadow-sm"
+                    : step.complete
+                      ? "border-neutral-300 bg-white"
+                      : "border-neutral-200 bg-neutral-50 hover:border-neutral-300"
                 }`}
               >
-                {type === "workstations" ? (
-                  <Grid3X3 className="h-4 w-4" />
-                ) : (
-                  <Layers3 className="h-4 w-4" />
-                )}
-                {type}
+                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-500">
+                  Step {step.index + 1}
+                </p>
+                <p className="mt-1 text-sm text-neutral-900">{step.title}</p>
               </button>
             ))}
           </div>
 
-          {form.projectType === "workstations" ? (
-            <>
-              <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">
-                  Stage 1: system and layout
-                </p>
+          {restoredDraft ? (
+            <div className="rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900">
+              Saved planner draft restored on this device.
+            </div>
+          ) : null}
+
+          <p className="text-xs text-neutral-500">
+            Progress is saved on this device until you submit the planning brief.
+          </p>
+
+          {currentStep === 0 ? (
+            <div className="space-y-4 rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">
+                Step 1: project type
+              </p>
+              <div className="grid grid-cols-2 gap-2 rounded-xl border border-neutral-200 bg-white p-1">
+                {(["workstations", "storages"] as ProjectType[]).map((type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() =>
+                      setForm((prev) => {
+                        const nextGoal =
+                          type === "storages"
+                            ? prev.planningGoal === "storage" || prev.planningGoal === "density"
+                              ? prev.planningGoal
+                              : "storage"
+                            : prev.planningGoal === "privacy" ||
+                                prev.planningGoal === "ergonomics" ||
+                                prev.planningGoal === "density"
+                              ? prev.planningGoal
+                              : "density";
+                        return {
+                          ...prev,
+                          projectType: type,
+                          planningGoal: nextGoal,
+                        };
+                      })
+                    }
+                    className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border text-xs font-semibold uppercase tracking-[0.12em] transition-colors ${
+                      form.projectType === type
+                        ? "border-primary bg-primary text-white shadow-sm"
+                        : "border-transparent bg-transparent text-neutral-700 hover:border-neutral-300 hover:bg-white"
+                    }`}
+                  >
+                    {type === "workstations" ? <Grid3X3 className="h-4 w-4" /> : <Layers3 className="h-4 w-4" />}
+                    {type === "workstations" ? "Workstations" : "Storages"}
+                  </button>
+                ))}
+              </div>
+
+              {form.projectType === "workstations" ? (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <label className="space-y-1 text-sm text-neutral-700">
                     <span>Series</span>
@@ -852,7 +1260,6 @@ export function Simple2DConfigurator({
                       ))}
                     </select>
                   </label>
-
                   <label className="space-y-1 text-sm text-neutral-700">
                     <span>Layout</span>
                     <select
@@ -873,320 +1280,8 @@ export function Simple2DConfigurator({
                     </select>
                     <p className="text-xs text-neutral-500">{activeLayout?.description}</p>
                   </label>
-
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Module count</span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={80}
-                      value={moduleCount}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          moduleCount: clampInteger(Number(event.target.value), 1, 80),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    />
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Modules per row</span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={10}
-                      value={modulesPerRow}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          modulesPerRow: clampInteger(Number(event.target.value), 1, 10),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    />
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Aisle width (mm)</span>
-                    <select
-                      value={form.aisleWidth}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          aisleWidth: Number(event.target.value),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    >
-                      {[900, 1050, 1200].map((value) => (
-                        <option key={value} value={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Finish</span>
-                    <select
-                      value={form.finish}
-                      onChange={(event) => setForm((prev) => ({ ...prev, finish: event.target.value }))}
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    >
-                      {FINISH_OPTIONS.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
                 </div>
-              </div>
-
-              <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">
-                  Stage 2: module and room dimensions
-                </p>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Desk width (mm)</span>
-                    <select
-                      value={form.deskWidth}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          deskWidth: Number(event.target.value),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    >
-                      {[1200, 1350, 1500].map((value) => (
-                        <option key={value} value={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Desk depth (mm)</span>
-                    <select
-                      value={form.deskDepth}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          deskDepth: Number(event.target.value),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    >
-                      {[600, 750].map((value) => (
-                        <option key={value} value={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Room width (mm)</span>
-                    <input
-                      type="number"
-                      min={3000}
-                      max={50000}
-                      value={roomWidthMm}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          roomWidth: clampInteger(Number(event.target.value), 3000, 50000),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    />
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Room length (mm)</span>
-                    <input
-                      type="number"
-                      min={3000}
-                      max={50000}
-                      value={roomLengthMm}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          roomLength: clampInteger(Number(event.target.value), 3000, 50000),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    />
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Perimeter clearance (mm)</span>
-                    <select
-                      value={roomClearanceMm}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          roomClearance: Number(event.target.value),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    >
-                      {[0, 300, 450, 600, 750, 900].map((value) => (
-                        <option key={value} value={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-                <p className="mt-3 text-xs text-neutral-600">
-                  Fit check:{" "}
-                  <span className={fitOrientation === "overflow" ? "font-semibold text-rose-700" : "font-semibold text-emerald-700"}>
-                    {fitStatusText}
-                  </span>
-                </p>
-              </div>
-
-              <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">
-                  Stage 3: technical options
-                </p>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Screens</span>
-                    <select
-                      value={form.screen}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          screen: event.target.value as ScreenId,
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    >
-                      {SCREEN_OPTIONS.map((option) => (
-                        <option key={option.id} value={option.id}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Screen height (mm)</span>
-                    <select
-                      value={form.screenHeight}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          screenHeight: Number(event.target.value),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                      disabled={form.screen === "none"}
-                    >
-                      {[300, 450, 530, 600].map((value) => (
-                        <option key={value} value={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Modesty panel</span>
-                    <select
-                      value={form.modesty}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          modesty: event.target.value as ModestyId,
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    >
-                      {MODESTY_OPTIONS.map((option) => (
-                        <option key={option.id} value={option.id}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Raceway</span>
-                    <select
-                      value={form.raceway}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          raceway: event.target.value as RacewayId,
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    >
-                      {RACEWAY_OPTIONS.map((option) => (
-                        <option key={option.id} value={option.id}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Power points per seat</span>
-                    <input
-                      type="number"
-                      min={0}
-                      max={4}
-                      value={form.powerPerSeat}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          powerPerSeat: clampInteger(Number(event.target.value), 0, 4),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    />
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Data points per seat</span>
-                    <input
-                      type="number"
-                      min={0}
-                      max={4}
-                      value={form.dataPerSeat}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          dataPerSeat: clampInteger(Number(event.target.value), 0, 4),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    />
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700 sm:col-span-3">
-                    <span>Storage add-on</span>
-                    <select
-                      value={form.storageMode}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          storageMode: event.target.value as StorageModeId,
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    >
-                      {STORAGE_MODE_OPTIONS.map((option) => (
-                        <option key={option.id} value={option.id}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">
-                  Stage 1: storage module setup
-                </p>
+              ) : (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <label className="space-y-1 text-sm text-neutral-700">
                     <span>Layout style</span>
@@ -1208,7 +1303,7 @@ export function Simple2DConfigurator({
                     </select>
                   </label>
                   <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Finish</span>
+                    <span>Finish direction</span>
                     <select
                       value={form.finish}
                       onChange={(event) => setForm((prev) => ({ ...prev, finish: event.target.value }))}
@@ -1221,221 +1316,317 @@ export function Simple2DConfigurator({
                       ))}
                     </select>
                   </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Rows</span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={12}
-                      value={storageRows}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          storageRows: clampInteger(Number(event.target.value), 1, 12),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    />
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700">
-                    <span>Columns</span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={12}
-                      value={storageColumns}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          storageColumns: clampInteger(Number(event.target.value), 1, 12),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    />
-                  </label>
-                  <label className="space-y-1 text-sm text-neutral-700 sm:col-span-2">
-                    <span>Units</span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={144}
-                      value={storageUnits}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          storageUnits: clampInteger(Number(event.target.value), 1, 144),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    />
-                  </label>
                 </div>
-              </div>
+              )}
+            </div>
+          ) : null}
 
-              <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">
-                  Stage 2: room dimensions
-                </p>
+          {currentStep === 1 ? (
+            <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">
+                Step 2: planning goal
+              </p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {supportedGoals.map((goal) => {
+                  const copy = CONFIGURATOR_PAGE_COPY.planningGoals[goal.id];
+                  const isActive = form.planningGoal === goal.id;
+                  return (
+                    <button
+                      key={goal.id}
+                      type="button"
+                      onClick={() => setForm((prev) => ({ ...prev, planningGoal: goal.id }))}
+                      className={`rounded-xl border p-4 text-left transition-colors ${
+                        isActive
+                          ? "border-primary bg-white shadow-sm"
+                          : "border-neutral-200 bg-white hover:border-neutral-400"
+                      }`}
+                    >
+                      <p className="text-sm font-medium text-neutral-950">{copy.label}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-neutral-600">{copy.detail}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
+
+          {currentStep === 2 ? (
+            <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">
+                Step 3: room and capacity
+              </p>
+              {form.projectType === "workstations" ? (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <label className="space-y-1 text-sm text-neutral-700">
+                    <span>Module count</span>
+                    <input type="number" min={1} max={80} value={moduleCount} onChange={(event) => setForm((prev) => ({ ...prev, moduleCount: clampInteger(Number(event.target.value), 1, 80) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" />
+                  </label>
+                  <label className="space-y-1 text-sm text-neutral-700">
+                    <span>Modules per row</span>
+                    <input type="number" min={1} max={10} value={modulesPerRow} onChange={(event) => setForm((prev) => ({ ...prev, modulesPerRow: clampInteger(Number(event.target.value), 1, 10) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" />
+                  </label>
+                  <label className="space-y-1 text-sm text-neutral-700">
+                    <span>Aisle width (mm)</span>
+                    <select value={form.aisleWidth} onChange={(event) => setForm((prev) => ({ ...prev, aisleWidth: Number(event.target.value) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60">
+                      {[900, 1050, 1200].map((value) => <option key={value} value={value}>{value}</option>)}
+                    </select>
+                  </label>
+                  <label className="space-y-1 text-sm text-neutral-700">
+                    <span>Desk width (mm)</span>
+                    <select value={form.deskWidth} onChange={(event) => setForm((prev) => ({ ...prev, deskWidth: Number(event.target.value) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60">
+                      {[1200, 1350, 1500].map((value) => <option key={value} value={value}>{value}</option>)}
+                    </select>
+                  </label>
+                  <label className="space-y-1 text-sm text-neutral-700">
+                    <span>Desk depth (mm)</span>
+                    <select value={form.deskDepth} onChange={(event) => setForm((prev) => ({ ...prev, deskDepth: Number(event.target.value) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60">
+                      {[600, 750].map((value) => <option key={value} value={value}>{value}</option>)}
+                    </select>
+                  </label>
+                  <label className="space-y-1 text-sm text-neutral-700">
                     <span>Room width (mm)</span>
-                    <input
-                      type="number"
-                      min={3000}
-                      max={50000}
-                      value={roomWidthMm}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          roomWidth: clampInteger(Number(event.target.value), 3000, 50000),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    />
+                    <input type="number" min={3000} max={50000} value={roomWidthMm} onChange={(event) => setForm((prev) => ({ ...prev, roomWidth: clampInteger(Number(event.target.value), 3000, 50000) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" />
                   </label>
                   <label className="space-y-1 text-sm text-neutral-700">
                     <span>Room length (mm)</span>
-                    <input
-                      type="number"
-                      min={3000}
-                      max={50000}
-                      value={roomLengthMm}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          roomLength: clampInteger(Number(event.target.value), 3000, 50000),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    />
+                    <input type="number" min={3000} max={50000} value={roomLengthMm} onChange={(event) => setForm((prev) => ({ ...prev, roomLength: clampInteger(Number(event.target.value), 3000, 50000) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" />
                   </label>
                   <label className="space-y-1 text-sm text-neutral-700">
                     <span>Perimeter clearance (mm)</span>
-                    <select
-                      value={roomClearanceMm}
-                      onChange={(event) =>
-                        setForm((prev) => ({
-                          ...prev,
-                          roomClearance: Number(event.target.value),
-                        }))
-                      }
-                      className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60"
-                    >
-                      {[0, 300, 450, 600, 750, 900].map((value) => (
-                        <option key={value} value={value}>
-                          {value}
-                        </option>
-                      ))}
+                    <select value={roomClearanceMm} onChange={(event) => setForm((prev) => ({ ...prev, roomClearance: Number(event.target.value) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60">
+                      {[0, 300, 450, 600, 750, 900].map((value) => <option key={value} value={value}>{value}</option>)}
                     </select>
                   </label>
                 </div>
-                <p className="mt-3 text-xs text-neutral-600">
-                  Fit check:{" "}
-                  <span className={fitOrientation === "overflow" ? "font-semibold text-rose-700" : "font-semibold text-emerald-700"}>
-                    {fitStatusText}
-                  </span>
-                </p>
+              ) : (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Rows</span><input type="number" min={1} max={12} value={storageRows} onChange={(event) => setForm((prev) => ({ ...prev, storageRows: clampInteger(Number(event.target.value), 1, 12) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" /></label>
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Columns</span><input type="number" min={1} max={12} value={storageColumns} onChange={(event) => setForm((prev) => ({ ...prev, storageColumns: clampInteger(Number(event.target.value), 1, 12) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" /></label>
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Units</span><input type="number" min={1} max={144} value={storageUnits} onChange={(event) => setForm((prev) => ({ ...prev, storageUnits: clampInteger(Number(event.target.value), 1, 144) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" /></label>
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Room width (mm)</span><input type="number" min={3000} max={50000} value={roomWidthMm} onChange={(event) => setForm((prev) => ({ ...prev, roomWidth: clampInteger(Number(event.target.value), 3000, 50000) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" /></label>
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Room length (mm)</span><input type="number" min={3000} max={50000} value={roomLengthMm} onChange={(event) => setForm((prev) => ({ ...prev, roomLength: clampInteger(Number(event.target.value), 3000, 50000) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" /></label>
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Perimeter clearance (mm)</span><select value={roomClearanceMm} onChange={(event) => setForm((prev) => ({ ...prev, roomClearance: Number(event.target.value) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60">{[0, 300, 450, 600, 750, 900].map((value) => <option key={value} value={value}>{value}</option>)}</select></label>
+                </div>
+              )}
+              <p className="mt-3 text-xs text-neutral-600">
+                Fit check: <span className={fitOrientation === "overflow" ? "font-semibold text-rose-700" : "font-semibold text-emerald-700"}>{fitStatusText}</span>
+              </p>
+            </div>
+          ) : null}
+
+          {currentStep === 3 ? (
+            <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">
+                Step 4: system options
+              </p>
+              {form.projectType === "workstations" ? (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Screens</span><select value={form.screen} onChange={(event) => setForm((prev) => ({ ...prev, screen: event.target.value as ScreenId }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60">{SCREEN_OPTIONS.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}</select></label>
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Screen height (mm)</span><select value={form.screenHeight} onChange={(event) => setForm((prev) => ({ ...prev, screenHeight: Number(event.target.value) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" disabled={form.screen === "none"}>{[300, 450, 530, 600].map((value) => <option key={value} value={value}>{value}</option>)}</select></label>
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Modesty panel</span><select value={form.modesty} onChange={(event) => setForm((prev) => ({ ...prev, modesty: event.target.value as ModestyId }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60">{MODESTY_OPTIONS.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}</select></label>
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Raceway</span><select value={form.raceway} onChange={(event) => setForm((prev) => ({ ...prev, raceway: event.target.value as RacewayId }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60">{RACEWAY_OPTIONS.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}</select></label>
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Power points per seat</span><input type="number" min={0} max={4} value={form.powerPerSeat} onChange={(event) => setForm((prev) => ({ ...prev, powerPerSeat: clampInteger(Number(event.target.value), 0, 4) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" /></label>
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Data points per seat</span><input type="number" min={0} max={4} value={form.dataPerSeat} onChange={(event) => setForm((prev) => ({ ...prev, dataPerSeat: clampInteger(Number(event.target.value), 0, 4) }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60" /></label>
+                  <label className="space-y-1 text-sm text-neutral-700 sm:col-span-3"><span>Storage add-on</span><select value={form.storageMode} onChange={(event) => setForm((prev) => ({ ...prev, storageMode: event.target.value as StorageModeId }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60">{STORAGE_MODE_OPTIONS.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}</select></label>
+                  <label className="space-y-1 text-sm text-neutral-700 sm:col-span-3"><span>Finish</span><select value={form.finish} onChange={(event) => setForm((prev) => ({ ...prev, finish: event.target.value }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60">{FINISH_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <label className="space-y-1 text-sm text-neutral-700"><span>Finish</span><select value={form.finish} onChange={(event) => setForm((prev) => ({ ...prev, finish: event.target.value }))} className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none focus:border-primary/60">{FINISH_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
+                </div>
+              )}
+            </div>
+          ) : null}
+
+          {currentStep === 4 ? (
+            <div className="space-y-4 rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">Step 5: recommendation</p>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="rounded-xl border border-neutral-200 bg-white p-4">
+                  <p className="text-sm font-medium text-neutral-950">{recommendationTitle}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-neutral-600">{recommendationDetail}</p>
+                </div>
+                <div className="rounded-xl border border-neutral-200 bg-white p-4">
+                  <p className="text-sm font-medium text-neutral-950">Planning tradeoff</p>
+                  <p className="mt-2 text-sm leading-relaxed text-neutral-600">{planningTradeoff}</p>
+                  <p className="mt-3 text-xs uppercase tracking-[0.12em] text-neutral-500">{fitStatusDetail}</p>
+                </div>
               </div>
-            </>
-          )}
+              {form.projectType === "workstations" ? (
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {suggestedSystems.map((system) => (
+                    <Link key={system.name} href={system.href} className="rounded-xl border border-neutral-200 bg-white p-4 transition-colors hover:border-neutral-400">
+                      <p className="text-sm font-medium text-neutral-950">{system.name}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-neutral-600">{system.hint}</p>
+                    </Link>
+                  ))}
+                </div>
+              ) : null}
+              <div className="flex flex-wrap gap-2">
+                <button type="button" onClick={copyPlannerBrief} className="btn-outline">
+                  {shareStatus === "brief" ? "Brief copied" : "Copy planning brief"}
+                </button>
+                <button type="button" onClick={copyPlannerLink} className="btn-outline">
+                  {shareStatus === "link" ? "Link copied" : "Copy planner link"}
+                </button>
+                <button type="button" onClick={downloadPlannerBrief} className="btn-outline">
+                  Download brief
+                </button>
+                <a href={plannerMailtoUrl} className="btn-outline">
+                  Email brief
+                </a>
+                <a href={plannerWhatsappUrl} target="_blank" rel="noreferrer" className="btn-outline">
+                  WhatsApp brief
+                </a>
+              </div>
+            </div>
+          ) : null}
 
-          <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">
-              Stage 4: project and client context
+          {currentStep === 5 ? (
+            <div className="space-y-4 rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">Step 6: contact and submission</p>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <input type="text" placeholder="End client (optional)" value={form.clientName} onChange={(event) => setForm((prev) => ({ ...prev, clientName: event.target.value }))} className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60" />
+                <input type="text" placeholder="Project name (optional)" value={form.projectName} onChange={(event) => setForm((prev) => ({ ...prev, projectName: event.target.value }))} className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60" />
+                <input type="text" placeholder="Site location (city/state)" value={form.siteLocation} onChange={(event) => setForm((prev) => ({ ...prev, siteLocation: event.target.value }))} className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60" />
+                <input type="text" placeholder="Company (optional)" value={form.company} onChange={(event) => setForm((prev) => ({ ...prev, company: event.target.value }))} className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60" />
+                <input type="text" placeholder="Your name" value={form.name} onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))} className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60" />
+                <input type="email" placeholder="Work email" value={form.email} onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))} className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60" />
+                <input type="tel" placeholder="Phone (optional)" value={form.phone} onChange={(event) => setForm((prev) => ({ ...prev, phone: event.target.value }))} className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60" />
+                <textarea rows={3} placeholder="Notes (optional)" value={form.notes} onChange={(event) => setForm((prev) => ({ ...prev, notes: event.target.value }))} className="w-full resize-none rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60 sm:col-span-2" />
+              </div>
+            </div>
+          ) : null}
+
+          {stepError ? (
+            <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+              {stepError}
             </p>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <input
-                type="text"
-                placeholder="End client (optional)"
-                value={form.clientName}
-                onChange={(event) => setForm((prev) => ({ ...prev, clientName: event.target.value }))}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60"
-              />
-              <input
-                type="text"
-                placeholder="Project name (optional)"
-                value={form.projectName}
-                onChange={(event) => setForm((prev) => ({ ...prev, projectName: event.target.value }))}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60"
-              />
-              <input
-                type="text"
-                placeholder="Site location (city/state)"
-                value={form.siteLocation}
-                onChange={(event) => setForm((prev) => ({ ...prev, siteLocation: event.target.value }))}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60"
-              />
-              <input
-                type="text"
-                placeholder="Company (optional)"
-                value={form.company}
-                onChange={(event) => setForm((prev) => ({ ...prev, company: event.target.value }))}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60"
-              />
+          ) : null}
+
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-neutral-200 bg-neutral-50 p-3">
+            <div className="flex flex-wrap gap-2">
+              <button type="button" onClick={goToPreviousStep} disabled={currentStep === 0} className="btn-outline disabled:cursor-not-allowed disabled:opacity-50">
+                Previous step
+              </button>
+              <button type="button" onClick={resetPlanner} className="btn-outline">
+                Reset planner
+              </button>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              {currentStep < stepStates.length - 1 ? (
+                <button type="button" onClick={goToNextStep} className="btn-primary">
+                  Continue
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              ) : null}
+              <button
+                type="submit"
+                disabled={submit.loading || !canSubmit || currentStep !== stepStates.length - 1}
+                className="btn-primary disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {submit.loading ? "Sending..." : CONFIGURATOR_PAGE_COPY.submitCta}
+                <ArrowRight className="h-4 w-4" />
+              </button>
+              <Link href={matchingProductsHref} className="btn-outline">
+                {CONFIGURATOR_PAGE_COPY.viewProductsCta}
+              </Link>
             </div>
           </div>
-
-          <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-neutral-600">
-              Stage 5: contact and submission
-            </p>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <input
-                type="text"
-                placeholder="Your name"
-                value={form.name}
-                onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60"
-              />
-              <input
-                type="email"
-                placeholder="Work email"
-                value={form.email}
-                onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60"
-              />
-              <input
-                type="tel"
-                placeholder="Phone (optional)"
-                value={form.phone}
-                onChange={(event) => setForm((prev) => ({ ...prev, phone: event.target.value }))}
-                className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60"
-              />
-              <textarea
-                rows={3}
-                placeholder="Notes (optional)"
-                value={form.notes}
-                onChange={(event) => setForm((prev) => ({ ...prev, notes: event.target.value }))}
-                className="w-full resize-none rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-primary/60 sm:col-span-2"
-              />
-            </div>
-          </div>
-
           {submit.error ? <p className="text-sm text-red-600">{submit.error}</p> : null}
           {submit.queryId ? (
             <p className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
               Configuration sent. Reference: <span className="font-semibold">{submit.queryId}</span>
             </p>
           ) : null}
-
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="submit"
-              disabled={submit.loading || !canSubmit}
-              className="btn-primary disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {submit.loading ? "Sending..." : "Submit configuration"}
-              <ArrowRight className="h-4 w-4" />
-            </button>
-            <Link
-              href={form.projectType === "workstations" ? "/products/workstations" : "/products/storages"}
-              className="btn-outline"
-            >
-              View matching products
-            </Link>
-          </div>
         </form>
       </section>
+      </div>
+
+      <div className="fixed inset-x-0 bottom-4 z-30 px-4 xl:hidden">
+        <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 rounded-2xl border border-neutral-200 bg-white/95 px-4 py-3 shadow-[0_20px_60px_-24px_rgba(15,23,42,0.4)] backdrop-blur">
+          <div className="min-w-0">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-500">
+              Planner summary
+            </p>
+            <p className="mt-1 truncate text-sm font-medium text-neutral-950">{summaryPreviewLine}</p>
+          </div>
+          <button
+            ref={mobileSummaryButtonRef}
+            type="button"
+            onClick={() => setMobileSummaryOpen(true)}
+            className="btn-primary shrink-0"
+            aria-expanded={mobileSummaryOpen}
+            aria-controls="planner-mobile-summary"
+          >
+            View live brief
+          </button>
+        </div>
+      </div>
+
+      {mobileSummaryOpen ? (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-neutral-950/35 xl:hidden"
+            onClick={() => setMobileSummaryOpen(false)}
+            aria-hidden="true"
+          />
+          <div
+            ref={mobileSummaryDialogRef}
+            id="planner-mobile-summary"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Planner summary"
+            className="fixed inset-x-0 bottom-0 z-50 max-h-[82vh] overflow-y-auto rounded-t-[28px] border border-neutral-200 bg-[linear-gradient(180deg,#fbfcfe_0%,#f4f6fa_100%)] p-5 text-neutral-950 shadow-[0_-24px_80px_-32px_rgba(15,23,42,0.28)] xl:hidden"
+          >
+            <div className="mx-auto max-w-3xl">
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-neutral-500">
+                    Live planner brief
+                  </p>
+                  <p className="mt-2 text-xl font-light text-neutral-950">{recommendationTitle}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMobileSummaryOpen(false)}
+                  className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-neutral-200 bg-white"
+                  aria-label="Close planner summary"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {mobileSummaryCards.map((card) => (
+                  <div key={card.label} className="rounded-2xl border border-neutral-200 bg-white px-4 py-3">
+                    <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">{card.label}</p>
+                    <p className="mt-2 text-sm font-medium text-neutral-950">{card.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-neutral-200 bg-white p-4">
+                <p className="text-sm font-medium text-neutral-950">{recommendationDetail}</p>
+                <p className="mt-2 text-sm leading-relaxed text-neutral-700">{planningTradeoff}</p>
+                <p className="mt-3 text-xs uppercase tracking-[0.12em] text-neutral-500">{fitStatusDetail}</p>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button type="button" onClick={copyPlannerBrief} className="btn-outline">
+                  {shareStatus === "brief" ? "Brief copied" : "Copy brief"}
+                </button>
+                <button type="button" onClick={copyPlannerLink} className="btn-outline">
+                  {shareStatus === "link" ? "Link copied" : "Copy link"}
+                </button>
+                <Link href={matchingProductsHref} className="btn-primary" onClick={() => setMobileSummaryOpen(false)}>
+                  {CONFIGURATOR_PAGE_COPY.viewProductsCta}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : null}
     </div>
   );
 }

@@ -133,8 +133,8 @@ export default async function ComparePage({
             <h1 className="typ-section text-neutral-950">Compare workstation and storage options</h1>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link href="/configurator" className="btn-outline">
-              Open 2D configurator
+            <Link href="/planning" className="btn-outline">
+              Open workspace planner
             </Link>
             <Link href="/contact" className="btn-primary">
               Request quote

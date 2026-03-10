@@ -36,6 +36,8 @@ interface ProductViewerProps {
   categoryId?: string;
 }
 
+type WorkstationSeries = "Desking Series" | "Panel Series" | "Height Adjustable Series";
+
 export function sanitizeDisplayText(value: string): string {
   return String(value || "")
     .replace(/[�]+/g, "")
@@ -231,6 +233,8 @@ export function ProductViewer({
     ) || [],
   );
   const useCases = sanitizeDisplayList(product.metadata?.useCase || fallbackProfile.useCase);
+  const isConfigurableCategory =
+    normalizedCategory === "workstations" || normalizedCategory === "storages";
   const warrantyYears = product.metadata?.warrantyYears;
   const warrantyText = warrantyYears
     ? `${warrantyYears}-Year Warranty`
@@ -260,6 +264,74 @@ export function ProductViewer({
     if (sentenceMatch?.[0]) return sentenceMatch[0].trim();
     return clean.length > 180 ? `${clean.slice(0, 180).trim()}...` : clean;
   })();
+  const inferredPlanningSeries: WorkstationSeries | null =
+    normalizedCategory !== "workstations"
+      ? null
+      : /height|adjustable|sit-stand/i.test(seriesName) || /height|adjustable|sit-stand/i.test(displayName)
+        ? "Height Adjustable Series"
+        : /panel/i.test(seriesName) || /panel/i.test(displayName)
+          ? "Panel Series"
+          : "Desking Series";
+  const recommendedLayout =
+    normalizedCategory === "storages"
+      ? "wall-run"
+      : useCases.some((useCase) => /operations|team|open/i.test(useCase))
+        ? "cluster-6"
+        : "double-bank";
+  const planningGoal =
+    normalizedCategory === "storages"
+      ? "storage"
+      : inferredPlanningSeries === "Height Adjustable Series"
+        ? "ergonomics"
+        : /focus|privacy|director|executive/i.test(shortOverview)
+          ? "privacy"
+          : "density";
+  const plannerHref = (() => {
+    const params = new URLSearchParams({
+      type: normalizedCategory === "storages" ? "storages" : "workstations",
+      goal: planningGoal,
+      roomWidth: normalizedCategory === "storages" ? "9000" : "12000",
+      roomLength: normalizedCategory === "storages" ? "12000" : "18000",
+      roomClearance: "450",
+    });
+    if (normalizedCategory === "workstations" && inferredPlanningSeries) {
+      params.set("series", inferredPlanningSeries);
+      params.set("layout", recommendedLayout);
+    }
+    return `/planning?${params.toString()}`;
+  })();
+  const planningPrimaryLabel = isConfigurableCategory
+    ? PDP_ROUTE_COPY.ctas.planSystem
+    : PDP_ROUTE_COPY.ctas.planningRecommendation;
+  const planningRole =
+    normalizedCategory === "workstations"
+      ? `Best explored as a ${quickConfig.toLowerCase()} with room-fit and capacity checks.`
+      : normalizedCategory === "storages"
+        ? "Works best when storage volume, aisle access, and room clearance are tested together."
+        : PDP_ROUTE_COPY.planningNotes.consultative;
+  const plannerAvailability = isConfigurableCategory
+    ? PDP_ROUTE_COPY.planningNotes.configurable
+    : PDP_ROUTE_COPY.planningNotes.consultative;
+  const bestFor =
+    useCases.length > 0 ? useCases.slice(0, 3).join(", ") : "Corporate and institutional projects";
+  const relatedPlanningLayouts =
+    normalizedCategory === "storages"
+      ? ["Wall-run planning", "Dual-aisle storage", "Compactor-ready zone"]
+      : recommendedLayout === "cluster-6"
+        ? ["Cluster-6 planning", "Double-bank floorplate", "Operations benching"]
+        : inferredPlanningSeries === "Height Adjustable Series"
+          ? ["Ergonomic sit-stand bay", "Double-bank planning", "Leadership touch-down"]
+          : ["Double-bank planning", "Cluster-4 module", "Linear benching"];
+  const relatedPlanningNotes =
+    normalizedCategory === "storages"
+      ? [
+          "Pairs well with aisle-clearance checks and phased storage growth.",
+          "Best used when filing volume and access speed matter equally.",
+        ]
+      : [
+          `Recommended layout direction: ${relatedPlanningLayouts[0]}.`,
+          "Use the planner to compare density, privacy, and ergonomic tradeoffs before finalizing the system.",
+        ];
   const specRows = [
     { label: "Dimensions", value: dimensions },
     {
@@ -329,7 +401,7 @@ export function ProductViewer({
   return (
     <section className="bg-white min-h-screen">
       {/* ── BREADCRUMB BAR ── */}
-      <div className="border-b border-neutral-100 bg-white/90 backdrop-blur-sm sticky top-16 z-10">
+      <div className="sticky top-16 z-10 border-b border-neutral-200 bg-white/92 backdrop-blur-sm">
         <div className="container px-6 2xl:px-0 h-10 flex items-center gap-1.5 text-[11px] font-medium text-neutral-500">
           <Link
             href="/products"
@@ -351,10 +423,10 @@ export function ProductViewer({
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-112px)]">
+      <div className="min-h-[calc(100vh-112px)] flex flex-col lg:flex-row">
         {/* ── LEFT: IMAGE GALLERY ── */}
-        <div className="w-full lg:w-[58%] xl:w-[62%] flex flex-col pt-0 lg:pt-8 bg-neutral-100">
-          <div className="flex-1 w-full max-w-[800px] mx-auto p-4 lg:p-8">
+        <div className="flex w-full flex-col border-b border-neutral-200 bg-[linear-gradient(180deg,#fafbfd_0%,#f4f6fa_100%)] pt-0 lg:w-[58%] lg:border-b-0 lg:border-r xl:w-[62%]">
+          <div className="mx-auto flex-1 w-full max-w-[860px] p-4 lg:p-8">
               <ProductGallery
                 images={uniqueImages}
                 productName={displayName}
@@ -363,7 +435,7 @@ export function ProductViewer({
 
           {/* 3D viewer toggle wrapper */}
           {hasModelPath && (
-            <div className="w-full aspect-video bg-neutral-50 border-t border-neutral-200 relative group">
+            <div className="group relative aspect-video w-full border-t border-neutral-200 bg-white/70">
               <div className="absolute top-4 left-4 z-20 flex gap-2">
                 <button
                   type="button"
@@ -373,7 +445,7 @@ export function ProductViewer({
                   }}
                   disabled={!isModelAvailable}
                   className={clsx(
-                    "bg-white/90 backdrop-blur text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-sm border border-neutral-200",
+                    "rounded-full border border-neutral-200 bg-white/92 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest backdrop-blur",
                     isModelAvailable
                       ? "text-neutral-800 hover:bg-neutral-900 hover:text-white transition-colors"
                       : "text-neutral-400 cursor-not-allowed",
@@ -437,7 +509,7 @@ export function ProductViewer({
         </div>
 
         {/* ── RIGHT: DETAILS PANEL ── */}
-        <div className="w-full lg:w-[42%] xl:w-[38%] lg:sticky lg:top-[112px] lg:h-[calc(100vh-112px)] overflow-y-auto px-6 sm:px-10 lg:px-12 py-10 border-l border-neutral-100 scrollbar-hide">
+        <div className="scrollbar-hide w-full overflow-y-auto px-6 py-10 sm:px-10 lg:sticky lg:top-[112px] lg:h-[calc(100vh-112px)] lg:w-[42%] lg:bg-white xl:w-[38%] lg:px-12">
           <div className="max-w-sm mx-auto lg:max-w-none">
             {/* Title block */}
             <div className="mb-8">
@@ -450,23 +522,49 @@ export function ProductViewer({
               <p className="text-sm sm:text-base text-neutral-700 leading-relaxed font-light mb-6 max-w-prose line-clamp-3 lg:line-clamp-none">
                 {shortOverview}
               </p>
-              <div className="flex flex-wrap gap-2 mb-6">
-                <span className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] bg-neutral-100 text-neutral-700">
+              <div className="mb-6 flex flex-wrap gap-2">
+                <span className="rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-neutral-700">
                   {warrantyText}
                 </span>
                 {product.metadata?.bifmaCertified && (
-                  <span className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] bg-neutral-900 text-white">
+                  <span className="rounded-full border border-neutral-900 bg-neutral-900 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
                     BIFMA
                   </span>
                 )}
                 {typeof product.metadata?.sustainabilityScore === "number" && (
-                  <span className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] bg-green-50 text-green-700 border border-green-200">
+                  <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">
                     Eco {product.metadata.sustainabilityScore}/10
                   </span>
                 )}
               </div>
 
-              <div className="flex gap-4 items-center mb-6">
+              <div className="mb-6 rounded-[24px] border border-neutral-200 bg-[linear-gradient(180deg,#fbfcfe_0%,#f5f7fb_100%)] p-5 shadow-[0_24px_60px_-46px_rgba(15,23,42,0.18)]">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500">
+                  {PDP_ROUTE_COPY.ctas.planningRecommendation}
+                </p>
+                <div className="mt-3 space-y-3">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-500">
+                      {PDP_ROUTE_COPY.planningSummaryLabels.bestFor}
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-neutral-800">{bestFor}</p>
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-500">
+                      {PDP_ROUTE_COPY.planningSummaryLabels.planningRole}
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-neutral-800">{planningRole}</p>
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-500">
+                      {PDP_ROUTE_COPY.planningSummaryLabels.planner}
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-neutral-800">{plannerAvailability}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-6 flex items-center gap-4">
                 <button
                   type="button"
                   onClick={() => {
@@ -479,7 +577,7 @@ export function ProductViewer({
                       "_blank",
                     );
                   }}
-                  className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-neutral-900 hover:border-neutral-400 transition-colors"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition-colors hover:border-neutral-400 hover:text-neutral-900"
                   aria-label="Share on Twitter"
                 >
                   <Twitter className="w-3.5 h-3.5" />
@@ -493,7 +591,7 @@ export function ProductViewer({
                       "_blank",
                     );
                   }}
-                  className="w-8 h-8 rounded-full border border-neutral-200 flex items-center justify-center text-neutral-500 hover:text-neutral-900 hover:border-neutral-400 transition-colors"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition-colors hover:border-neutral-400 hover:text-neutral-900"
                   aria-label="Share on Facebook"
                 >
                   <Facebook className="w-3.5 h-3.5" />
@@ -579,6 +677,24 @@ export function ProductViewer({
 
             {/* CTA */}
             <div className="mb-8">
+              <Link
+                href={isConfigurableCategory ? plannerHref : "/planning"}
+                className="btn-primary group mb-2 flex w-full items-center justify-between px-6 py-4"
+              >
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em]">
+                  {planningPrimaryLabel}
+                </span>
+                <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                href="/contact"
+                className="btn-outline group mb-2 flex w-full items-center justify-between px-6 py-3.5"
+              >
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em]">
+                  {PDP_ROUTE_COPY.ctas.requestQuote}
+                </span>
+                <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
+              </Link>
               <button
                 type="button"
                 onClick={() =>
@@ -590,7 +706,7 @@ export function ProductViewer({
                     qty: 1,
                   })
                 }
-                className="group mb-2 flex w-full items-center justify-between border border-primary text-primary px-6 py-3.5 hover:bg-primary hover:text-white transition-colors"
+                className="group mb-2 flex w-full items-center justify-between rounded-full border border-neutral-300 bg-white px-6 py-3.5 text-neutral-900 transition-colors hover:border-primary hover:text-primary"
               >
                 <span className="text-[11px] font-bold uppercase tracking-[0.2em]">
                   {PDP_ROUTE_COPY.ctas.addToQuote}
@@ -611,10 +727,10 @@ export function ProductViewer({
                     })
                   }
                   className={clsx(
-                    "group mb-2 flex w-full items-center justify-between border px-6 py-3.5 transition-colors",
+                    "group mb-2 flex w-full items-center justify-between rounded-full border px-6 py-3.5 transition-colors",
                     inCompare
                       ? "border-primary bg-primary text-white hover:bg-primary-hover"
-                      : "border-neutral-300 text-neutral-800 hover:border-primary hover:text-primary",
+                      : "border-neutral-300 bg-white text-neutral-800 hover:border-primary hover:text-primary",
                   )}
                 >
                   <span className="text-[11px] font-bold uppercase tracking-[0.2em]">
@@ -625,16 +741,7 @@ export function ProductViewer({
               ) : null}
               <Link
                 href="/contact"
-                className="group flex w-full items-center justify-between bg-neutral-900 text-white px-6 py-4 hover:bg-neutral-800 transition-colors"
-              >
-                <span className="text-[11px] font-bold uppercase tracking-[0.2em]">
-                  {PDP_ROUTE_COPY.ctas.requestQuote}
-                </span>
-                <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link
-                href="/contact"
-                className="group flex w-full items-center justify-between border border-neutral-200 text-neutral-900 px-6 py-3.5 hover:border-neutral-400 transition-colors mt-2"
+                className="group mt-2 flex w-full items-center justify-between rounded-full border border-neutral-300 bg-white px-6 py-3.5 text-neutral-900 transition-colors hover:border-neutral-400"
               >
                 <span className="text-[11px] font-bold uppercase tracking-[0.2em]">
                   {PDP_ROUTE_COPY.ctas.consultation}
@@ -644,8 +751,8 @@ export function ProductViewer({
             </div>
 
             {/* Trust Badges */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 pt-6 border-t border-neutral-100">
-              <div className="flex flex-col gap-2">
+            <div className="mb-8 grid grid-cols-1 gap-4 border-t border-neutral-200 pt-6 sm:grid-cols-3">
+              <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
                 <ShieldCheck className="w-5 h-5 text-neutral-400" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-900">
                   {warrantyText}
@@ -654,7 +761,7 @@ export function ProductViewer({
                   {PDP_ROUTE_COPY.trustBadges.warrantyDescription}
                 </p>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
                 <Award className="w-5 h-5 text-neutral-400" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-900">
                   {PDP_ROUTE_COPY.trustBadges.madeInIndia}
@@ -663,7 +770,7 @@ export function ProductViewer({
                   {PDP_ROUTE_COPY.trustBadges.madeInIndiaDescription}
                 </p>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
                 <ThumbsUp className="w-5 h-5 text-neutral-400" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-900">
                   {certificationText}
@@ -674,12 +781,43 @@ export function ProductViewer({
               </div>
             </div>
 
+            <div className="mb-8 rounded-[24px] border border-neutral-200 bg-[linear-gradient(180deg,#fbfcfe_0%,#f5f7fb_100%)] p-5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500">
+                Related planning paths
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {relatedPlanningLayouts.map((layout) => (
+                  <span
+                    key={layout}
+                    className="rounded-full border border-neutral-300 bg-white px-3 py-1 text-xs font-medium text-neutral-700"
+                  >
+                    {layout}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-4 space-y-2">
+                {relatedPlanningNotes.map((note) => (
+                  <p key={note} className="text-sm leading-relaxed text-neutral-700">
+                    {note}
+                  </p>
+                ))}
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Link href={isConfigurableCategory ? plannerHref : "/planning"} className="btn-primary">
+                  {planningPrimaryLabel}
+                </Link>
+                <Link href={categoryRoute} className="btn-outline">
+                  View related systems
+                </Link>
+              </div>
+            </div>
+
             {/* Specifications */}
             <div className="pt-7 border-t border-neutral-100">
-              <h2 className="text-xl font-semibold text-neutral-900 mb-4">
+              <h2 className="mb-4 text-xl font-semibold text-neutral-900">
                 {PDP_ROUTE_COPY.ctas.specifications}
               </h2>
-              <div className="rounded-lg border border-neutral-200 overflow-hidden mb-7">
+              <div className="mb-7 overflow-hidden rounded-[20px] border border-neutral-200">
                 {specRows.map((row) => (
                   <div
                     key={row.label}

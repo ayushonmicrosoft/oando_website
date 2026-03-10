@@ -232,11 +232,11 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef }: MobileNavDraw
                     className="w-full bg-transparent text-sm text-neutral-800 outline-none placeholder:text-neutral-400"
                     aria-label="Mobile AI product search"
                   />
-                  <Sparkles className="h-4 w-4 text-accent1" />
+                  <Sparkles className="h-4 w-4 text-primary/70" />
                 </div>
 
                 {(showSearchPanel || searchQuery.trim().length >= 2) && (
-                  <div className="mt-2 rounded-2xl border border-neutral-200 bg-neutral-50 p-3">
+                  <div className="mt-2 rounded-[1.5rem] border border-neutral-200 bg-[linear-gradient(180deg,#ffffff_0%,#f9fbfe_100%)] p-3 shadow-[0_18px_36px_-28px_rgba(16,24,40,0.12)]">
                     <p className="mb-2 text-[10px] font-normal tracking-[0.04em] text-neutral-500">
                       {searchLoading
                         ? "Searching"
@@ -253,7 +253,7 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef }: MobileNavDraw
                             <Link
                               href={result.href}
                               onClick={onSearchResultClick}
-                              className="flex items-center justify-between rounded-lg bg-white px-3 py-2 text-sm text-neutral-700"
+                              className="flex items-center justify-between rounded-xl bg-white px-3 py-2 text-sm text-neutral-700 shadow-[0_10px_22px_-20px_rgba(16,24,40,0.12)]"
                             >
                               <span>{result.title}</span>
                               <span className="text-[10px] tracking-[0.04em] text-neutral-400">
@@ -377,7 +377,7 @@ export function MobileNavDrawer({ open, onClose, closeButtonRef }: MobileNavDraw
               <a
                 href="tel:+919835630940"
                 onClick={handleClose}
-                className="mb-3 flex min-h-12 items-center justify-center rounded-lg border border-neutral-200 text-sm font-normal tracking-[0.03em] text-primary transition-colors hover:border-primary hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="mb-3 flex min-h-12 items-center justify-center rounded-full border border-neutral-300 bg-white text-sm font-medium tracking-[0.02em] text-neutral-900 transition-colors hover:border-primary/30 hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 aria-label="Call +91 98356 30940"
               >
                 Call +91 98356 30940

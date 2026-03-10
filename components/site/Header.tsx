@@ -192,9 +192,9 @@ export function SiteHeader() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 z-50 w-full border-b border-neutral-200/70 bg-white/90 backdrop-blur-xl transition-shadow duration-300",
+          "fixed top-0 left-0 z-50 w-full border-b border-neutral-200/80 bg-white/92 backdrop-blur-xl transition-shadow duration-300",
           scrolled
-            ? "shadow-[0_8px_32px_-12px_rgba(0,0,0,0.25)]"
+            ? "shadow-[0_14px_36px_-24px_rgba(16,24,40,0.14)]"
             : "shadow-none",
         )}
       >
@@ -210,13 +210,13 @@ export function SiteHeader() {
               {SITE_BRAND.utilityTagline}
             </p>
             <div className="flex items-center gap-5 text-xs font-normal tracking-[0.04em] text-neutral-500">
-              <Link href="/service" className="hover:text-primary transition-colors">
+              <Link href="/service" className="hover:text-neutral-900 transition-colors">
                 Service
               </Link>
-              <Link href="/showrooms" className="hover:text-primary transition-colors">
+              <Link href="/showrooms" className="hover:text-neutral-900 transition-colors">
                 Showrooms
               </Link>
-              <Link href="/contact" className="hover:text-primary transition-colors">
+              <Link href="/contact" className="hover:text-neutral-900 transition-colors">
                 Contact
               </Link>
             </div>
@@ -256,12 +256,12 @@ export function SiteHeader() {
                         aria-controls="products-mega-menu"
                         onFocus={() => setActiveMega(link.label)}
                         className={cn(
-                          "relative inline-flex items-center gap-1 rounded-lg px-3 py-2 text-base font-normal transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                          "relative inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-[0.95rem] font-medium tracking-[0.01em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                           isActive
-                            ? "text-primary after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:rounded-full after:bg-primary after:content-['']"
+                            ? "bg-[rgba(20,57,129,0.08)] text-primary"
                             : activeMega === link.label
-                              ? "text-primary"
-                              : "text-neutral-700 hover:text-primary",
+                              ? "bg-neutral-100 text-neutral-900"
+                              : "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900",
                         )}
                       >
                         {link.label}
@@ -281,10 +281,10 @@ export function SiteHeader() {
                     key={link.label}
                     href={link.href}
                     className={cn(
-                      "relative rounded-lg px-3 py-2 text-base font-normal transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                      "relative rounded-full px-3.5 py-2 text-[0.95rem] font-medium tracking-[0.01em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                       isActive
-                        ? "text-primary after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:rounded-full after:bg-primary after:content-['']"
-                        : "text-neutral-700 hover:text-primary",
+                        ? "bg-[rgba(20,57,129,0.08)] text-primary"
+                        : "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900",
                     )}
                   >
                     {link.label}
@@ -306,7 +306,7 @@ export function SiteHeader() {
                     className="w-52 bg-transparent text-sm text-neutral-800 outline-none placeholder:text-neutral-400"
                     aria-label="Search products with AI"
                   />
-                  <Sparkles className="h-4 w-4 text-accent1" />
+                  <Sparkles className="h-4 w-4 text-primary/70" />
                 </label>
 
                 <AnimatePresence>
@@ -316,12 +316,12 @@ export function SiteHeader() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 8 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 mt-2 w-[24rem] overflow-hidden rounded-3xl border border-neutral-200 bg-white p-4 shadow-[0_24px_55px_-30px_rgba(0,0,0,0.45)]"
+                      className="absolute right-0 mt-2 w-[24rem] overflow-hidden rounded-[1.75rem] border border-neutral-200 bg-white p-4 shadow-[0_22px_48px_-30px_rgba(16,24,40,0.18)]"
                     >
                       <div className="mb-2 flex items-center justify-between text-[11px] font-normal tracking-[0.04em] text-neutral-500">
                         <span>{searchSectionTitle}</span>
                         {searchSource && (
-                          <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px]">
+                          <span className="rounded-full bg-[rgba(20,57,129,0.08)] px-2 py-0.5 text-[10px] text-primary">
                             {searchSource === "ai"
                               ? "AI ranked"
                               : searchSource === "static-fallback"
@@ -414,13 +414,13 @@ export function SiteHeader() {
               transition={{ duration: 0.15 }}
               onMouseEnter={() => setActiveMega("Products")}
               onMouseLeave={() => setActiveMega(null)}
-              className="hidden lg:block border-t border-neutral-100 bg-white/95 backdrop-blur-xl"
+              className="hidden lg:block border-t border-neutral-200/80 bg-white/96 backdrop-blur-xl"
             >
               <div className="container-wide px-6 py-8">
-                <div className="grid grid-cols-6 gap-4">
+                <div className="grid grid-cols-6 gap-5">
                   {groupedCategories.map((group) => (
-                    <div key={group.groupId}>
-                      <p className="typ-label mb-2 text-neutral-400">
+                    <div key={group.groupId} className="rounded-[1.25rem] border border-neutral-200 bg-[linear-gradient(180deg,#ffffff_0%,#fbfcfe_100%)] p-4">
+                      <p className="typ-label mb-2 text-neutral-500">
                         {group.groupLabel}
                       </p>
                       <ul className="space-y-1">
@@ -430,7 +430,7 @@ export function SiteHeader() {
                               <Link
                                 href={item.href}
                                 onClick={() => setActiveMega(null)}
-                                className="flex items-center justify-between rounded-lg px-2 py-1.5 text-base text-neutral-700 hover:bg-neutral-50 hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                                className="flex items-center justify-between rounded-lg px-2 py-1.5 text-[0.96rem] font-medium text-neutral-700 hover:bg-neutral-50 hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                               >
                                 <span>{item.name}</span>
                                 {typeof item.count === "number" && (
@@ -443,7 +443,7 @@ export function SiteHeader() {
 
                             {Array.isArray(item.subcategories) &&
                               item.subcategories.length > 0 && (
-                              <ul className="ml-2 mt-1 space-y-0.5 border-l border-neutral-100 pl-2">
+                              <ul className="ml-2 mt-1 space-y-0.5 border-l border-neutral-200 pl-2">
                                 {item.subcategories.map((subcategory) => (
                                   <li key={`${item.id}-${subcategory.id}`}>
                                     <Link
@@ -473,9 +473,9 @@ export function SiteHeader() {
                     <Link
                       href="/products"
                       onClick={() => setActiveMega(null)}
-                      className="text-base font-normal text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                      className="inline-flex rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-900 transition-colors hover:border-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                     >
-                      All Products &gt;
+                      All Products
                     </Link>
                   </div>
                 </div>

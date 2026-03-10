@@ -1,18 +1,22 @@
 export const HOMEPAGE_HERO_CONTENT = {
-  eyebrowPrimary: "",
-  eyebrowSecondary: "Premium workspaces",
-  title: ["Spaces that work", "as hard as your team.", ""],
-  description: "",
+  eyebrowPrimary: "Workspace planning for Bihar and beyond",
+  eyebrowSecondary: "Planning, supply, installation, after-sales",
+  imageAlt:
+    "Ergonomic seating and workstations expertly installed at Titan Patna HQ by One and Only Furniture",
+  title: ["Workspaces built", "to perform", "and endure."],
+  description:
+    "From planning and product selection to installation and after-sales, one team carries the project from brief to handover.",
   primaryCta: { label: "Guided Planner", href: "/contact" },
   secondaryCta: { label: "View Products", href: "/products" },
   proofCards: [
     { label: "Selected clients", value: "DMRC, Titan, Tata Steel" },
-    { label: "Service", value: "Planning, installation, after-sales" },
+    { label: "Delivery model", value: "Plan, supply, install, support" },
   ],
   deliverySummary: {
-    kicker: "Project delivery",
-    title: "From brief to handover.",
-    description: "One team through planning, installation, and support.",
+    kicker: "Delivery view",
+    title: "Clarity before procurement begins.",
+    description:
+      "Planning outputs stay readable for leadership, procurement, and facilities teams.",
   },
   deliveryRows: [
     {
@@ -37,6 +41,12 @@ export const HOMEPAGE_TRUST_CONTENT = {
     "Furniture, planning, and installation handled with one accountable flow.",
   brands: ["DMRC", "Tata Steel", "Titan"],
   summary: "Selected clients and current execution scale",
+  kpiLabels: {
+    organisationsServed: "Organisations served",
+    projectsDelivered: "Projects delivered",
+    yearsExperience: "Years experience",
+    sectorsServed: "Sectors served",
+  },
 } as const;
 
 export const HOMEPAGE_CONTACT_CONTENT = {
@@ -85,6 +95,109 @@ export const HOMEPAGE_EXPERIENCE_CONTENT = {
       subtitle: "Titan Company Limited",
       image: "/projects/Titan/27-06-2025 Image 05_edited_edited.webp",
       link: "/gallery",
+    },
+  ],
+} as const;
+
+export const HOMEPAGE_OUR_WORK_CONTENT = {
+  kicker: "Trusted Clients",
+  title: "Trusted by India's most respected organisations.",
+  cta: "View all clients",
+  featuredClients: [
+    { name: "Titan", sector: "Manufacturing" },
+    { name: "Usha International", sector: "Manufacturing" },
+    { name: "DMRC", sector: "Government" },
+    { name: "Government of Bihar", sector: "Government" },
+    { name: "Tata Steel", sector: "Manufacturing" },
+    { name: "Tata Motors", sector: "Automotive" },
+    { name: "L&T", sector: "Manufacturing" },
+    { name: "HDFC", sector: "Finance" },
+    { name: "State Bank of India", sector: "Finance" },
+    { name: "NTPC", sector: "Energy" },
+    { name: "IndianOil", sector: "Energy" },
+    { name: "Maruti Suzuki", sector: "Automotive" },
+    { name: "Asian Paints", sector: "FMCG" },
+    { name: "ITC Limited", sector: "FMCG" },
+    { name: "Indian Army", sector: "Government" },
+    { name: "BHEL", sector: "Energy" },
+  ],
+} as const;
+
+export const HOMEPAGE_PROJECTS_CONTENT = {
+  kicker: "Featured Work",
+  title: ["Spaces Designed For", "Excellence."],
+  portfolioCta: "View Complete Portfolio",
+  projects: [
+    {
+      client: "Titan",
+      location: "Patna, Bihar",
+      category: "Corporate Office",
+      image: "/photos/Titan/hero.webp",
+      slug: "titan-patna",
+    },
+    {
+      client: "DMRC",
+      location: "New Delhi",
+      category: "Government Infrastructure",
+      image: "/photos/DMRC/hero.webp",
+      slug: "dmrc-delhi",
+    },
+    {
+      client: "Usha International",
+      location: "New Delhi",
+      category: "Corporate Headquarters",
+      image: "/photos/Usha/hero.webp",
+      slug: "usha-delhi",
+    },
+  ],
+} as const;
+
+export const HOMEPAGE_TRUSTED_CLIENTS_CONTENT = {
+  kicker: "Trusted by India's leading corporations",
+  cta: "View all projects",
+  clients: [
+    { name: "Titan Company", abbr: "TITAN" },
+    { name: "TVS Group", abbr: "TVS" },
+    { name: "Usha International", abbr: "USHA" },
+    { name: "DMRC", abbr: "DMRC" },
+  ],
+} as const;
+
+export const HOMEPAGE_WHY_CHOOSE_US_CONTENT = {
+  kicker: "Why One & Only",
+  titleLead: "We engineer workspace systems",
+  titleEmphasis: "not just furniture.",
+  description:
+    "We engineer workspace systems that improve productivity, health, and scalability - trusted by corporate, government, and institutional clients across Bihar and beyond.",
+  bullets: [
+    "Performance-graded components",
+    "Enterprise-grade durability",
+    "Sustainable engineering",
+  ],
+  features: [
+    {
+      icon: "activity",
+      title: "Performance-Graded Components",
+      description:
+        "Every system is rated for sustained enterprise use - tested for load, cycle, and ergonomic compliance.",
+    },
+    {
+      icon: "shield",
+      title: "Enterprise-Grade Durability",
+      description:
+        "Built for institutions that demand reliability. BIFMA-compliant structures with a 5-year performance warranty.",
+    },
+    {
+      icon: "leaf",
+      title: "Sustainable Engineering",
+      description:
+        "Low-emission materials, recycled substrates, and responsible supply chains - engineered for a net-positive future.",
+    },
+    {
+      icon: "zap",
+      title: "Scalable System Design",
+      description:
+        "Modular by design. Configure for 5 or 500 workpoints without retrofitting - engineered to scale with you.",
     },
   ],
 } as const;
@@ -173,9 +286,21 @@ export const HOMEPAGE_PARTNERSHIP_CONTENT = {
   kicker: "Official Strategic Partnership",
   title: ["Authorized Franchise", "Partner"],
   description:
-    "Bringing world-class manufacturing excellence and sustainable furniture solutions to your workspace.",
+    "Access a stronger manufacturing backbone without losing local planning, installation, and support accountability.",
   cta: {
     label: "Partner Profile",
     href: "/about",
+  },
+} as const;
+
+export const HOMEPAGE_CTA_SECTION_CONTENT = {
+  titleLead: "Ready to",
+  titleEmphasis: "Transform",
+  titleTail: "Your Space?",
+  description:
+    "Connect with our design experts today to discuss your project requirements.",
+  cta: {
+    label: "Start Your Project",
+    href: "/contact",
   },
 } as const;

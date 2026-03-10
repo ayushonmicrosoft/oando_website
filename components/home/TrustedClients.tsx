@@ -1,57 +1,34 @@
-// Real client logos section — Titan, TVS, Usha, DMRC
-// Add more logos here as SVG/image files become available
-
 import Link from "next/link";
-
-const CLIENTS = [
-  { name: "Titan Company", abbr: "TITAN" },
-  { name: "TVS Group", abbr: "TVS" },
-  { name: "Usha International", abbr: "USHA" },
-  { name: "DMRC", abbr: "DMRC" },
-];
+import { HOMEPAGE_TRUSTED_CLIENTS_CONTENT } from "@/data/site/homepage";
 
 export function TrustedClients() {
   return (
-    <section className="w-full bg-white border-t border-neutral-100 py-16 md:py-20">
+    <section className="w-full border-t border-neutral-100 bg-white py-16 md:py-20">
       <div className="container px-6 2xl:px-0">
-        <p className="text-xs tracking-[0.3em] uppercase text-neutral-400 mb-10 text-center">
-          Trusted by India&apos;s leading corporations
+        <p className="mb-10 text-center text-xs uppercase tracking-[0.3em] text-neutral-400">
+          {HOMEPAGE_TRUSTED_CLIENTS_CONTENT.kicker}
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-8">
-          {CLIENTS.map((client) => (
+          {HOMEPAGE_TRUSTED_CLIENTS_CONTENT.clients.map((client) => (
             <div
               key={client.name}
               title={client.name}
-              className="text-2xl md:text-3xl font-bold tracking-tight text-neutral-200 hover:text-neutral-400 transition-colors duration-300 select-none"
+              className="select-none text-2xl font-bold tracking-tight text-neutral-200 transition-colors duration-300 hover:text-neutral-400 md:text-3xl"
             >
               {client.abbr}
             </div>
           ))}
         </div>
 
-        {/* TODO: Replace text badges above with actual client logo SVG/PNG files
-            when assets are provided. Suggested path: /images/clients/titan.svg etc. */}
-
         <div className="mt-12 text-center">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase font-semibold text-neutral-500 hover:text-neutral-900 transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500 transition-colors hover:text-neutral-900"
           >
-            View all projects
-            <svg
-              className="w-3.5 h-3.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
+            {HOMEPAGE_TRUSTED_CLIENTS_CONTENT.cta}
+            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
         </div>

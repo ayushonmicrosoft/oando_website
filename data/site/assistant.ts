@@ -47,6 +47,7 @@ export const AI_ADVISOR_COPY = {
 export const GUIDED_PLANNER_COPY = {
   title: "Guided Planner",
   subtitle: "Structured intake with auto lead capture",
+  summaryTitle: "Guided planner intake",
   stepOneIntro: "What project are you planning, and roughly how many seats or units?",
   stepTwoIntro: "Add project details.",
   stepThreeIntro: "Add contact details. We save this automatically when you finish.",
@@ -72,6 +73,25 @@ export const GUIDED_PLANNER_COPY = {
     network: "Network error while saving intake.",
   },
 } as const;
+
+export const GUIDED_PLANNER_USE_CASES = [
+  { id: "workstations", label: "Workstations" },
+  { id: "seating", label: "Seating" },
+  { id: "meeting", label: "Meeting and conference" },
+  { id: "storage", label: "Storage" },
+  { id: "acoustics", label: "Acoustics" },
+  { id: "reception", label: "Reception and lounge" },
+  { id: "cafeteria", label: "Cafeteria and breakout" },
+  { id: "full-office", label: "Full office" },
+  { id: "other", label: "Other" },
+] as const;
+
+export const GUIDED_PLANNER_TIMELINES = [
+  { id: "immediately", label: "Immediate (0-4 weeks)" },
+  { id: "one-to-three", label: "1-3 months" },
+  { id: "three-to-six", label: "3-6 months" },
+  { id: "exploring", label: "Exploring options" },
+] as const;
 
 export const AI_CHATBOT_COPY = {
   title: "AI Chatbot",

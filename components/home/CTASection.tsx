@@ -2,23 +2,26 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { HOMEPAGE_CTA_SECTION_CONTENT } from "@/data/site/homepage";
 
 export function CTASection() {
   return (
-    <section className="py-24 bg-neutral-900 text-white border-t border-neutral-800">
-      <div className="container mx-auto px-6 lg:px-12 text-center">
-        <h2 className="text-4xl md:text-5xl font-light mb-6">
-          Ready to <span className="italic text-neutral-400">Transform</span> Your Space?
+    <section className="border-t border-neutral-800 bg-neutral-900 py-24 text-white">
+      <div className="container mx-auto px-6 text-center lg:px-12">
+        <h2 className="mb-6 text-4xl font-light md:text-5xl">
+          {HOMEPAGE_CTA_SECTION_CONTENT.titleLead}{" "}
+          <span className="italic text-neutral-400">{HOMEPAGE_CTA_SECTION_CONTENT.titleEmphasis}</span>{" "}
+          {HOMEPAGE_CTA_SECTION_CONTENT.titleTail}
         </h2>
-        <p className="text-neutral-400 max-w-2xl mx-auto mb-10 text-lg">
-          Connect with our design experts today to discuss your project requirements.
+        <p className="mx-auto mb-10 max-w-2xl text-lg text-neutral-400">
+          {HOMEPAGE_CTA_SECTION_CONTENT.description}
         </p>
         <Link
-          href="/contact"
-          className="inline-flex items-center gap-2 px-8 py-4 bg-white text-neutral-900 font-medium tracking-widest uppercase hover:bg-neutral-100 transition-colors"
+          href={HOMEPAGE_CTA_SECTION_CONTENT.cta.href}
+          className="inline-flex items-center gap-2 bg-white px-8 py-4 font-medium uppercase tracking-widest text-neutral-900 transition-colors hover:bg-neutral-100"
         >
-          Start Your Project
-          <ArrowRight className="w-4 h-4" />
+          {HOMEPAGE_CTA_SECTION_CONTENT.cta.label}
+          <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
     </section>

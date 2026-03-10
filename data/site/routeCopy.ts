@@ -568,9 +568,48 @@ export const DOWNLOADS_RESOURCE_CATEGORIES = [
 ] as const;
 
 export const CONFIGURATOR_PAGE_COPY = {
-  heroTitle: "Workspace Module Configurator",
+  heroTitle: "Workspace Planning Configurator",
   heroSubtitle:
-    "Configure workstation or storage modules with room dimensions, screens, modesty panels, raceways, and power/data points, then send a full enquiry.",
+    "Plan workstation and storage systems with room dimensions, density goals, technical options, and a quote-ready project brief.",
+  eyebrow: "Planning-first configurator",
+  introTitle: "A guided planning flow for fit, capacity, and budget confidence.",
+  introDescription:
+    "This configurator is designed for workspace decisions, not just options selection. Define intent, test fit, review layout tradeoffs, and send a cleaner project brief to our team.",
+  steps: [
+    "Project type",
+    "Planning goal",
+    "Room and capacity",
+    "System options",
+    "Recommendation",
+    "Contact and submission",
+  ],
+  planningGoals: {
+    density: {
+      label: "High-density planning",
+      detail: "Maximise seat or unit count while keeping the layout practical.",
+    },
+    privacy: {
+      label: "Privacy and zoning",
+      detail: "Favour screen, panel, and separation choices for more focused work.",
+    },
+    ergonomics: {
+      label: "Premium ergonomics",
+      detail: "Prioritise comfort, adjustability, and long-session usability.",
+    },
+    storage: {
+      label: "Storage-heavy planning",
+      detail: "Optimise space for storage volume, filing, or mixed utility use.",
+    },
+  },
+  outcomeLabels: {
+    fit: "Fit verdict",
+    capacity: "Capacity",
+    footprint: "Footprint",
+    budget: "Budget band",
+    efficiency: "Area efficiency",
+  },
+  submitCta: "Send planning brief",
+  viewProductsCta: "View matching products",
   statsLabels: [
     "Client organizations served",
     "Projects delivered",
@@ -740,6 +779,35 @@ export const CATEGORY_ROUTE_COPY = {
   offlineTitle: "Workspace product catalog temporarily unavailable",
   offlineDescription:
     "Product data is temporarily unavailable while the catalog reconnects. Please try again shortly.",
+  plannerEntry: {
+    title: "Need help narrowing the shortlist?",
+    description:
+      "Use the planning configurator when you need a better answer than filters alone: fit, capacity, and budget direction.",
+    primaryCta: "Open planning configurator",
+    secondaryCta: "Request product advice",
+  },
+  filterLabels: {
+    series: "System family",
+    type: "Use case",
+    priceRange: "Budget band",
+    material: "Material",
+    sustainability: "Sustainability",
+    features: "Ergonomic features",
+    filters: "Planning filters",
+    clearAll: "Clear all",
+    allSeries: "All systems",
+    sortAz: "Name A-Z",
+    sortZa: "Name Z-A",
+    sortEcoDesc: "Eco score high-low",
+    sortEcoAsc: "Eco score low-high",
+  },
+  emptyState: {
+    title: "No products match this planning brief",
+    description:
+      "Broaden the filters or open the planning configurator for a guided recommendation.",
+    clearCta: "Clear all filters",
+    plannerCta: "Open planning configurator",
+  },
 } as const;
 
 export const PDP_ROUTE_COPY = {
@@ -753,6 +821,8 @@ export const PDP_ROUTE_COPY = {
     warrantyDescription: "Guaranteed durability and performance.",
   },
   ctas: {
+    planSystem: "Plan this system",
+    planningRecommendation: "Get planning recommendation",
     addToQuote: "Add to Quote Cart",
     addToCompare: "Add To Compare",
     addedToCompare: "Added To Compare",
@@ -768,5 +838,16 @@ export const PDP_ROUTE_COPY = {
     modelChecking: "Checking 3D model availability...",
     viewImage: "View Image",
     view3d: "View in 3D/AR",
+  },
+  planningSummaryLabels: {
+    bestFor: "Best for",
+    planningRole: "Planning role",
+    planner: "Planner availability",
+  },
+  planningNotes: {
+    configurable:
+      "Supports guided planning with room-fit checks, capacity logic, and budget guidance.",
+    consultative:
+      "Use this product as a reference point, then request a planning recommendation for the wider space.",
   },
 } as const;

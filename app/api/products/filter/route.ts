@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import Fuse from "fuse.js";
 import { buildRequestedCategoryCatalog } from "@/lib/catalogCategories";
+import {
+  buildCatalogAltText,
+  dedupeCatalogProducts,
+  uniqueSortedTextValues,
+} from "@/lib/catalogPresentation";
 import { getCatalog, type CompatProduct } from "@/lib/getProducts";
 import {
   PRICE_RANGES,
@@ -56,80 +61,18 @@ interface FilterResponse {
   };
 }
 
-function productAltText(product: CompatProduct, categoryLabel: string): string {
-  const metadata = (product.metadata || {}) as Record<string, unknown>;
-  const aiAltText =
-    (typeof metadata.ai_alt_text === "string" && metadata.ai_alt_text) ||
-    (typeof metadata.aiAltText === "string" && metadata.aiAltText) ||
-    "";
-  const explicitAlt =
-    (product as unknown as { altText?: string; alt_text?: string }).altText ||
-    (product as unknown as { altText?: string; alt_text?: string }).alt_text ||
-    aiAltText;
-
-  const fallback = `${product.name} ${categoryLabel}`.replace(/\s+/g, " ").trim();
-  return (explicitAlt || fallback).replace(/\s+/g, " ").trim().slice(0, 140);
-}
-
 function toFlatProduct(categoryLabel: string, seriesId: string, seriesName: string, product: CompatProduct): FlatProduct {
   return {
     ...product,
     seriesId,
     seriesName,
-    altText: productAltText(product, categoryLabel),
-  };
-}
-
-function uniqueSorted(values: string[]): string[] {
-  return Array.from(
-    new Set(
-      values
-        .map((value) => value.trim())
-        .filter(Boolean),
+    altText: buildCatalogAltText(
+      product,
+      categoryLabel,
+      (product as unknown as { altText?: string; alt_text?: string }).altText ||
+        (product as unknown as { altText?: string; alt_text?: string }).alt_text,
     ),
-  ).sort((a, b) => a.localeCompare(b));
-}
-
-function getPrimaryImage(product: Pick<CompatProduct, "images" | "flagshipImage">): string {
-  if (Array.isArray(product.images) && product.images.length > 0) {
-    return String(product.images[0] || "").trim();
-  }
-  return String(product.flagshipImage || "").trim();
-}
-
-function dedupePriority(product: FlatProduct): number {
-  const slug = String(product.slug || "").trim();
-  let score = 0;
-  if (slug.startsWith("oando-")) score += 4;
-  if (slug.includes("--")) score += 2;
-  if (product.metadata?.source === "oando.co.in") score += 1;
-  return score;
-}
-
-function dedupeKey(product: FlatProduct): string {
-  const normalizedName = normalizeOptionValue(product.name);
-  const normalizedSubcategory = normalizeOptionValue(product.metadata?.subcategory || "");
-  const normalizedImage = normalizeOptionValue(getPrimaryImage(product));
-  return `${normalizedName}|${normalizedSubcategory}|${normalizedImage}`;
-}
-
-function dedupeProducts(products: FlatProduct[]): FlatProduct[] {
-  const bestByKey = new Map<string, FlatProduct>();
-
-  for (const product of products) {
-    const key = dedupeKey(product);
-    const existing = bestByKey.get(key);
-    if (!existing) {
-      bestByKey.set(key, product);
-      continue;
-    }
-
-    if (dedupePriority(product) > dedupePriority(existing)) {
-      bestByKey.set(key, product);
-    }
-  }
-
-  return Array.from(bestByKey.values());
+  };
 }
 
 function parseAppliedFilters(request: NextRequest): AppliedFilters {
@@ -167,11 +110,11 @@ function buildFacets(
   const series =
     categoryId === "seating"
       ? []
-      : uniqueSorted(products.map((product) => product.seriesName || "").filter(Boolean));
-  const subcategory = uniqueSorted(
+      : uniqueSortedTextValues(products.map((product) => product.seriesName || "").filter(Boolean));
+  const subcategory = uniqueSortedTextValues(
     products.map((product) => product.metadata?.subcategory || "").filter(Boolean),
   );
-  const material = uniqueSorted(
+  const material = uniqueSortedTextValues(
     products.flatMap((product) => product.metadata?.material || []).filter(Boolean),
   );
   const priceRange = PRICE_RANGES.filter((range) =>
@@ -338,7 +281,7 @@ export async function GET(request: NextRequest) {
         toFlatProduct(category.name, series.id, series.name, product),
       ),
     );
-    const uniqueProducts = dedupeProducts(allProducts);
+    const uniqueProducts = dedupeCatalogProducts(allProducts);
 
     const facets = buildFacets(category.id, uniqueProducts);
     const filtered = applyFilters(category.id, uniqueProducts, filters);

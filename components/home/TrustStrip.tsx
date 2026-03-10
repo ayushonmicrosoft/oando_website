@@ -11,20 +11,24 @@ export function TrustStrip({ stats, asOfLabel }: TrustStripProps) {
   const kpis = [
     {
       value: formatKpiValuePlus(stats.clientOrganisations),
-      label: "Organisations served",
+      label: HOMEPAGE_TRUST_CONTENT.kpiLabels.organisationsServed,
       testId: "kpi-client-organisations",
     },
     {
       value: formatKpiValuePlus(stats.projectsDelivered),
-      label: "Projects delivered",
+      label: HOMEPAGE_TRUST_CONTENT.kpiLabels.projectsDelivered,
       testId: "kpi-projects-delivered",
     },
     {
       value: `${stats.yearsExperience}+`,
-      label: "Years experience",
+      label: HOMEPAGE_TRUST_CONTENT.kpiLabels.yearsExperience,
       testId: "kpi-years-experience",
     },
-    { value: formatKpiValuePlus(stats.sectorsServed), label: "Sectors served", testId: undefined },
+    {
+      value: formatKpiValuePlus(stats.sectorsServed),
+      label: HOMEPAGE_TRUST_CONTENT.kpiLabels.sectorsServed,
+      testId: undefined,
+    },
   ];
 
   return (

@@ -24,6 +24,8 @@ import {
   AI_ASSISTANT_WELCOME_MESSAGE,
   AI_CHATBOT_COPY,
   GUIDED_PLANNER_COPY,
+  GUIDED_PLANNER_TIMELINES,
+  GUIDED_PLANNER_USE_CASES,
   MOBILE_ASSISTANT_COPY,
 } from "@/data/site/assistant";
 
@@ -88,27 +90,16 @@ const INITIAL_GUIDED: GuidedState = {
   phone: "",
 };
 
-const USE_CASE_LABEL: Record<UseCase, string> = {
-  workstations: "Workstations",
-  seating: "Seating",
-  meeting: "Meeting and conference",
-  storage: "Storage",
-  acoustics: "Acoustics",
-  reception: "Reception and lounge",
-  cafeteria: "Cafeteria and breakout",
-  "full-office": "Full office",
-  other: "Other",
-};
+const USE_CASE_LABEL = Object.fromEntries(
+  GUIDED_PLANNER_USE_CASES.map((entry) => [entry.id, entry.label]),
+) as Record<UseCase, string>;
 
-const TIMELINE_LABEL: Record<Timeline, string> = {
-  immediately: "Immediate (0-4 weeks)",
-  "one-to-three": "1-3 months",
-  "three-to-six": "3-6 months",
-  exploring: "Exploring options",
-};
+const TIMELINE_LABEL = Object.fromEntries(
+  GUIDED_PLANNER_TIMELINES.map((entry) => [entry.id, entry.label]),
+) as Record<Timeline, string>;
 
 function buildGuidedSummary(guided: GuidedState) {
-  const lines = ["Guided planner intake"];
+  const lines: string[] = [GUIDED_PLANNER_COPY.summaryTitle];
   if (guided.useCase) lines.push(`Use case: ${USE_CASE_LABEL[guided.useCase]}`);
   if (guided.seats.trim()) lines.push(`Seats/units: ${guided.seats.trim()}`);
   if (guided.company.trim()) lines.push(`Company: ${guided.company.trim()}`);
@@ -458,18 +449,18 @@ export function UnifiedAssistant() {
                     <>
                       <p className="text-sm text-neutral-700">{GUIDED_PLANNER_COPY.stepOneIntro}</p>
                       <div className="flex flex-wrap gap-2">
-                        {(Object.keys(USE_CASE_LABEL) as UseCase[]).map((key) => (
+                        {GUIDED_PLANNER_USE_CASES.map(({ id, label }) => (
                           <button
-                            key={key}
+                            key={id}
                             type="button"
-                            onClick={() => setGuided({ ...guided, useCase: key })}
+                            onClick={() => setGuided({ ...guided, useCase: id })}
                             className={`rounded-full border px-3 py-1.5 text-xs ${
-                              guided.useCase === key
+                              guided.useCase === id
                                 ? "border-neutral-900 bg-neutral-900 text-white"
                                 : "border-neutral-300 text-neutral-700"
                             }`}
                           >
-                            {USE_CASE_LABEL[key]}
+                            {label}
                           </button>
                         ))}
                       </div>
@@ -501,18 +492,18 @@ export function UnifiedAssistant() {
                         className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none focus:border-neutral-900"
                       />
                       <div className="flex flex-wrap gap-2">
-                        {(Object.keys(TIMELINE_LABEL) as Timeline[]).map((key) => (
+                        {GUIDED_PLANNER_TIMELINES.map(({ id, label }) => (
                           <button
-                            key={key}
+                            key={id}
                             type="button"
-                            onClick={() => setGuided({ ...guided, timeline: key })}
+                            onClick={() => setGuided({ ...guided, timeline: id })}
                             className={`rounded-full border px-3 py-1.5 text-xs ${
-                              guided.timeline === key
+                              guided.timeline === id
                                 ? "border-neutral-900 bg-neutral-900 text-white"
                                 : "border-neutral-300 text-neutral-700"
                             }`}
                           >
-                            {TIMELINE_LABEL[key]}
+                            {label}
                           </button>
                         ))}
                       </div>

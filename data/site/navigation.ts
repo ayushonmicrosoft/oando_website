@@ -6,7 +6,7 @@ import { SITE_CONTACT } from "@/data/site/contact";
 
 export const SITE_NAV_LINKS = [
   { label: "Products", href: "/products", hasMega: true },
-  { label: "Configurator", href: "/configurator" },
+  { label: "Configurator", href: "/planning" },
   { label: "Solutions", href: "/solutions" },
   { label: "Projects", href: "/projects" },
   { label: "Portfolio", href: "/portfolio" },
@@ -56,7 +56,7 @@ export const SITE_FOOTER_NAV = [
     heading: "Support",
     links: [
       { href: "/contact", label: "Contact Us" },
-      { href: "/configurator", label: "2D Configurator" },
+      { href: "/planning", label: "Workspace Planner" },
       { href: "/contact", label: "Get Quote" },
       { href: "/refund-and-return-policy", label: "Refund Policy" },
       { href: "/privacy", label: "Privacy Policy" },

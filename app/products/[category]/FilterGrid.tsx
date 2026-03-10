@@ -11,8 +11,6 @@ import {
   Search as SearchIcon,
   X,
   SlidersHorizontal,
-  ChevronDown,
-  ChevronUp,
   Filter,
   ShoppingCart,
   GitCompareArrows,
@@ -31,7 +29,6 @@ import { useQuoteCart } from "@/lib/store/quoteCart";
 import { useProductCompare } from "@/lib/store/productCompare";
 import { CompareDock } from "@/components/products/CompareDock";
 import {
-  SUSTAINABILITY_THRESHOLDS,
   buildFilterParams,
   buildFilterUrl,
   countActiveFilters,
@@ -39,7 +36,15 @@ import {
   type ActiveFilters,
   type SortOption,
 } from "@/lib/productFilters";
+import {
+  buildCatalogAltText,
+  dedupeCatalogProducts,
+  getCatalogPrimaryImage,
+  uniqueSortedTextValues,
+} from "@/lib/catalogPresentation";
 import { sanitizeDisplayText } from "@/lib/displayText";
+import { CATEGORY_ROUTE_COPY } from "@/data/site/routeCopy";
+import { ActiveFilterChips, FilterSidebar, type FilterSidebarOptions } from "@/components/products/filter/FilterSidebar";
 
 // â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
@@ -47,45 +52,6 @@ interface FlatProduct extends Product {
   seriesId: string;
   seriesName: string;
   altText?: string;
-}
-
-function normalizeToken(value?: string | null): string {
-  return sanitizeDisplayText(String(value || "")).toLowerCase();
-}
-
-function getPrimaryImagePath(product: Pick<FlatProduct, "images" | "flagshipImage">): string {
-  if (Array.isArray(product.images) && product.images.length > 0) {
-    return String(product.images[0] || "").trim();
-  }
-  return String(product.flagshipImage || "").trim();
-}
-
-function dedupePriority(product: FlatProduct): number {
-  const slug = String(product.slug || "").trim();
-  let score = 0;
-  if (slug.startsWith("oando-")) score += 4;
-  if (slug.includes("--")) score += 2;
-  if (product.metadata?.source === "oando.co.in") score += 1;
-  return score;
-}
-
-function dedupeFlatProducts(products: FlatProduct[]): FlatProduct[] {
-  const bestByKey = new Map<string, FlatProduct>();
-
-  for (const product of products) {
-    const key = `${normalizeToken(product.name)}|${normalizeToken(product.metadata?.subcategory || "")}|${normalizeToken(getPrimaryImagePath(product))}`;
-    const existing = bestByKey.get(key);
-    if (!existing) {
-      bestByKey.set(key, product);
-      continue;
-    }
-
-    if (dedupePriority(product) > dedupePriority(existing)) {
-      bestByKey.set(key, product);
-    }
-  }
-
-  return Array.from(bestByKey.values());
 }
 
 const IMAGE_PLACEHOLDER_PATTERNS = [
@@ -105,7 +71,7 @@ function isUsableImagePath(path: string): boolean {
 
 function buildImageCandidates(product: Pick<FlatProduct, "images" | "flagshipImage">): string[] {
   const raw = [
-    String(product.flagshipImage || "").trim(),
+    getCatalogPrimaryImage(product),
     ...(Array.isArray(product.images) ? product.images.map((image) => String(image || "").trim()) : []),
   ].filter(Boolean);
 
@@ -199,30 +165,21 @@ function flattenCategoryProducts(category: Category): FlatProduct[] {
       ...product,
       seriesId: series.id,
       seriesName: series.name,
-      altText:
+      altText: buildCatalogAltText(
+        product,
+        category.name,
         (product as unknown as { altText?: string; alt_text?: string }).altText ||
-        (product as unknown as { altText?: string; alt_text?: string }).alt_text ||
-        (product.metadata as Record<string, unknown> | undefined)?.ai_alt_text?.toString() ||
-        (product.metadata as Record<string, unknown> | undefined)?.aiAltText?.toString() ||
-        fallbackAltText(product.name, category.name),
+          (product as unknown as { altText?: string; alt_text?: string }).alt_text,
+      ) || fallbackAltText(product.name, category.name),
     })),
   );
-  return dedupeFlatProducts(flattened);
+  return dedupeCatalogProducts(flattened);
 }
 
 function buildFallbackFacets(
   categoryId: string,
   products: FlatProduct[],
 ): FilterResponse["facets"] {
-  const uniqueSorted = (values: string[]) =>
-    Array.from(
-      new Set(
-        values
-          .map((value) => value.trim())
-          .filter(Boolean),
-      ),
-    ).sort((a, b) => a.localeCompare(b));
-
   const ecoScores = products
     .map((product) => product.metadata?.sustainabilityScore)
     .filter((score): score is number => typeof score === "number");
@@ -238,14 +195,14 @@ function buildFallbackFacets(
     series:
       categoryId === "seating"
         ? []
-        : uniqueSorted(products.map((product) => product.seriesName)),
-    subcategory: uniqueSorted(
+        : uniqueSortedTextValues(products.map((product) => product.seriesName)),
+    subcategory: uniqueSortedTextValues(
       products.map((product) => product.metadata?.subcategory || ""),
     ),
-    material: uniqueSorted(
+    material: uniqueSortedTextValues(
       products.flatMap((product) => product.metadata?.material || []),
     ),
-    priceRange: uniqueSorted(
+    priceRange: uniqueSortedTextValues(
       products.map((product) => product.metadata?.priceRange || ""),
     ),
     ecoMin: {
@@ -263,196 +220,137 @@ function buildFallbackFacets(
 
 // â”€â”€â”€ Accordion Section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-function AccordionSection({
-  title,
-  count,
-  children,
-  defaultOpen = false,
-}: {
-  title: string;
-  count?: number;
-  children: React.ReactNode;
-  defaultOpen?: boolean;
-}) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div className="border-b border-neutral-100 last:border-0">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 text-left group"
-        aria-expanded={open}
-      >
-        <span className="text-[11px] font-normal tracking-[0.04em] text-neutral-600 group-hover:text-neutral-900 transition-colors flex items-center gap-2">
-          {title}
-          {count !== undefined && count > 0 && (
-            <span className="badge bg-neutral-900 text-white text-[9px] px-1.5 py-0.5 leading-none">
-              {count}
-            </span>
-          )}
-        </span>
-        {open ? (
-          <ChevronUp className="w-3.5 h-3.5 text-neutral-400" />
-        ) : (
-          <ChevronDown className="w-3.5 h-3.5 text-neutral-400" />
-        )}
-      </button>
-      {open && <div className="px-4 pb-4">{children}</div>}
-    </div>
-  );
-}
-
-// â”€â”€â”€ Multi-checkbox list â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
-function CheckList({
-  options,
-  selected,
-  onToggle,
-}: {
-  options: string[];
-  selected: string[];
-  onToggle: (v: string) => void;
-}) {
-  if (!options.length)
-    return (
-      <p className="text-xs text-neutral-400 italic">No options available</p>
-    );
-  return (
-    <ul className="space-y-1.5">
-      {options.map((opt) => (
-        <li key={opt}>
-          <label className="flex items-center gap-2.5 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={selected.includes(opt)}
-              onChange={() => onToggle(opt)}
-              className="w-3.5 h-3.5 accent-neutral-900"
-            />
-            <span className="text-sm text-neutral-600 group-hover:text-neutral-900 transition-colors capitalize">
-              {opt}
-            </span>
-          </label>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-// â”€â”€â”€ Price Range Buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
-function PriceButtons({
-  options,
-  selected,
-  onToggle,
-}: {
-  options: string[];
-  selected: string[];
-  onToggle: (v: string) => void;
-}) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {options.map((p) => (
-        <button
-          key={p}
-          type="button"
-          onClick={() => onToggle(p)}
-          className={clsx(
-            "px-3 py-1.5 text-xs rounded-sm border transition-all capitalize font-medium",
-            selected.includes(p)
-              ? "bg-accent1 text-neutral-900 border-accent1"
-              : "bg-white text-neutral-600 border-neutral-200 hover:border-neutral-400",
-          )}
-        >
-          {p}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function SustainabilityButtons({
-  selected,
-  onSelect,
-}: {
-  selected: number | null;
-  onSelect: (value: number | null) => void;
-}) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      <button
-        type="button"
-        onClick={() => onSelect(null)}
-        className={clsx(
-          "px-3 py-1.5 text-xs rounded-sm border transition-all font-medium",
-          selected === null
-            ? "bg-accent1 border-accent1 text-neutral-900"
-            : "bg-white text-neutral-600 border-neutral-200 hover:border-neutral-400",
-        )}
-      >
-        Any
-      </button>
-      {SUSTAINABILITY_THRESHOLDS.map((threshold) => (
-        <button
-          key={threshold}
-          type="button"
-          onClick={() => onSelect(threshold)}
-          className={clsx(
-            "px-3 py-1.5 text-xs rounded-sm border transition-all font-medium",
-            selected === threshold
-              ? "bg-accent1 border-accent1 text-neutral-900"
-              : "bg-white text-neutral-600 border-neutral-200 hover:border-neutral-400",
-          )}
-        >
-          &gt;= {threshold}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-// â”€â”€â”€ Feature Toggle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
-function Toggle({
-  label,
-  checked,
-  onChange,
-}: {
-  label: string;
-  checked: boolean;
-  onChange: (v: boolean) => void;
-}) {
-  return (
-    <label className="flex items-center justify-between gap-3 cursor-pointer py-1">
-      <span className="text-sm text-neutral-600">{label}</span>
-      <button
-        type="button"
-        role="switch"
-        aria-label={label}
-        aria-checked={checked}
-        onClick={() => onChange(!checked)}
-        className={clsx(
-          "relative w-9 h-5 rounded-full transition-colors flex items-center shrink-0",
-          checked ? "bg-accent1" : "bg-neutral-200",
-        )}
-      >
-        <span
-          className={clsx(
-            "absolute w-3.5 h-3.5 bg-white rounded-full shadow transition-all",
-            checked ? "left-[18px]" : "left-[3px]",
-          )}
-        />
-      </button>
-    </label>
-  );
-}
-
-// â”€â”€â”€ Product Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
 const PRICE_MAP: Record<string, string> = {
   budget: "Rs. 4,999",
   mid: "Rs. 14,999",
   premium: "Rs. 34,999",
   luxury: "Rs. 74,999",
 };
+
+type PlanningPreset = {
+  id: string;
+  label: string;
+  description: string;
+  build: (options: FilterResponse["facets"], categoryId: string) => Partial<ActiveFilters>;
+};
+
+function pickFirstMatching(values: string[], matcher: RegExp): string | null {
+  return values.find((value) => matcher.test(value)) ?? null;
+}
+
+function getPlanningPresets(categoryId: string): PlanningPreset[] {
+  const presets: PlanningPreset[] = [
+    {
+      id: "sustainable",
+      label: "Sustainable picks",
+      description: "Prioritise higher eco-score products.",
+      build: () => ({ ecoMin: 7 }),
+    },
+    {
+      id: "budget",
+      label: "Budget conscious",
+      description: "Lean toward lower budget bands where available.",
+      build: (options) => ({
+        priceRange: options.priceRange.includes("budget") ? ["budget"] : [],
+      }),
+    },
+  ];
+
+  if (categoryId === "workstations") {
+    return [
+      {
+        id: "density",
+        label: "High density",
+        description: "Bias toward desking-oriented systems and denser planning.",
+        build: (options) => ({
+          series: pickFirstMatching(options.series, /desk|bench/i) ?? "all",
+        }),
+      },
+      {
+        id: "privacy",
+        label: "Privacy led",
+        description: "Bias toward panel systems and stronger zoning.",
+        build: (options) => ({
+          series: pickFirstMatching(options.series, /panel/i) ?? "all",
+        }),
+      },
+      {
+        id: "ergonomics",
+        label: "Premium ergonomic",
+        description: "Bias toward height-adjustable systems.",
+        build: (options) => ({
+          series: pickFirstMatching(options.series, /height|adjust/i) ?? "all",
+        }),
+      },
+      ...presets,
+    ];
+  }
+
+  if (categoryId === "storages") {
+    return [
+      {
+        id: "compact-storage",
+        label: "Compact storage",
+        description: "Focus on denser storage-oriented solutions.",
+        build: (options) => ({
+          subcategory: pickFirstMatching(options.subcategory, /locker|compactor|storage/i)
+            ? [pickFirstMatching(options.subcategory, /locker|compactor|storage/i) as string]
+            : [],
+        }),
+      },
+      {
+        id: "low-maintenance",
+        label: "Low-maintenance",
+        description: "Bias toward durable material options.",
+        build: (options) => ({
+          material: pickFirstMatching(options.material, /steel|metal|crca/i)
+            ? [pickFirstMatching(options.material, /steel|metal|crca/i) as string]
+            : [],
+        }),
+      },
+      ...presets,
+    ];
+  }
+
+  return presets;
+}
+
+function getCardPlannerHref(categoryId: string, product: FlatProduct): string {
+  const params = new URLSearchParams();
+
+  if (categoryId === "storages") {
+    params.set("type", "storages");
+    params.set("goal", "storage");
+    params.set("roomWidth", "9000");
+    params.set("roomLength", "12000");
+    params.set("roomClearance", "450");
+    return `/planning?${params.toString()}`;
+  }
+
+  if (categoryId === "workstations") {
+    const seriesName = sanitizeDisplayText(product.seriesName || product.name);
+    const productName = sanitizeDisplayText(product.name);
+    const series =
+      /height|adjust|sit-stand/i.test(seriesName) || /height|adjust|sit-stand/i.test(productName)
+        ? "Height Adjustable Series"
+        : /panel/i.test(seriesName) || /panel/i.test(productName)
+          ? "Panel Series"
+          : "Desking Series";
+    const layout = /operations|team|bench|cluster/i.test(product.description || "") ? "cluster-6" : "double-bank";
+    const goal = series === "Height Adjustable Series" ? "ergonomics" : /privacy|focus|director|executive/i.test(product.description || "") ? "privacy" : "density";
+
+    params.set("type", "workstations");
+    params.set("series", series);
+    params.set("layout", layout);
+    params.set("goal", goal);
+    params.set("roomWidth", "12000");
+    params.set("roomLength", "18000");
+    params.set("roomClearance", "450");
+    return `/planning?${params.toString()}`;
+  }
+
+  return "/planning";
+}
 
 function ProductCard({
   product,
@@ -470,10 +368,7 @@ function ProductCard({
   const toggleCompareItem = useProductCompare((state) => state.toggleItem);
   const imageCandidates = buildImageCandidates(product);
   const [imgIndex, setImgIndex] = useState(0);
-  const imgSrc =
-    imageCandidates[imgIndex] ||
-    imageCandidates[0] ||
-    "/images/fallback/category.webp";
+  const imgSrc = imageCandidates[imgIndex] || imageCandidates[0] || "/images/fallback/category.webp";
   const displayName = sanitizeDisplayText(product.name);
   const ecoScore = product.metadata?.sustainabilityScore || 0;
   const routeKey = getProductRouteKey(product);
@@ -494,6 +389,9 @@ function ProductCard({
   );
   const dimensions = getDisplayDimensions(product) || "Specs available on request";
   const materials = getDisplayMaterials(product) || "Material options available";
+  const isConfigurableCategory = categoryId === "workstations" || categoryId === "storages";
+  const plannerHref = getCardPlannerHref(categoryId, product);
+  const plannerLabel = isConfigurableCategory ? "Plan this system" : "Get planning help";
 
   return (
     <article className="catalog-card group">
@@ -577,11 +475,17 @@ function ProductCard({
             </p>
           </div>
           <div className="catalog-card__actions">
-            <span className="btn-primary text-center text-xs">View Product</span>
+            <div className="grid gap-2">
+              <span className="btn-primary text-center text-xs">View Product</span>
+              <span className="btn-outline text-center text-xs">{plannerLabel}</span>
+            </div>
           </div>
         </div>
       </Link>
-      <div className="px-5 pb-5 pt-0">
+      <div className="grid gap-2 px-5 pb-5 pt-0">
+        <Link href={plannerHref} className="btn-primary w-full text-xs">
+          {plannerLabel}
+        </Link>
         <button
           type="button"
           onClick={() =>
@@ -604,70 +508,6 @@ function ProductCard({
 }
 
 // â”€â”€â”€ Active Filter Chips â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
-function ActiveChips({
-  filters,
-  onRemove,
-  onClearAll,
-  total,
-}: {
-  filters: ActiveFilters;
-  onRemove: (key: string, value?: string | number) => void;
-  onClearAll: () => void;
-  total: number;
-}) {
-  if (total === 0) return null;
-  const chips: { label: string; key: string; value?: string | number }[] = [];
-  if (filters.series !== "all")
-    chips.push({ label: `Series: ${filters.series}`, key: "series" });
-  filters.subcategory.forEach((v) =>
-    chips.push({ label: v, key: "subcategory", value: v }),
-  );
-  filters.priceRange.forEach((v) =>
-    chips.push({ label: `${v} range`, key: "priceRange", value: v }),
-  );
-  filters.material.forEach((v) =>
-    chips.push({ label: v, key: "material", value: v }),
-  );
-  if (filters.hasHeadrest)
-    chips.push({ label: "With headrest", key: "hasHeadrest" });
-  if (filters.isHeightAdjustable)
-    chips.push({ label: "Height adjustable", key: "isHeightAdjustable" });
-  if (filters.bifmaCertified)
-    chips.push({ label: "BIFMA certified", key: "bifmaCertified" });
-  if (filters.isStackable)
-    chips.push({ label: "Stackable", key: "isStackable" });
-  if (typeof filters.ecoMin === "number")
-    chips.push({ label: `Eco >= ${filters.ecoMin}`, key: "ecoMin", value: filters.ecoMin });
-
-  return (
-    <div className="flex flex-wrap items-center gap-2 py-3 border-b border-neutral-100">
-      <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-        Active:
-      </span>
-      {chips.map((chip) => (
-        <button
-          key={`${chip.key}-${chip.value ?? ""}`}
-          type="button"
-          onClick={() => onRemove(chip.key, chip.value)}
-          className="flex items-center gap-1.5 bg-accent1 text-neutral-900 text-xs px-2.5 py-1 rounded-sm hover:bg-accent2 transition-colors"
-        >
-          <span className="capitalize">{chip.label}</span>
-          <X className="w-3 h-3" />
-        </button>
-      ))}
-      <button
-        type="button"
-        onClick={onClearAll}
-        className="text-xs text-neutral-500 hover:text-neutral-900 underline transition-colors ml-1"
-      >
-        Clear all
-      </button>
-    </div>
-  );
-}
-
-// â”€â”€â”€ Inner Component (needs useSearchParams) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function AdvancedFilterGridInner({
   category,
@@ -777,6 +617,13 @@ function AdvancedFilterGridInner({
       options.featureAvailability.isHeightAdjustable ||
       options.featureAvailability.bifmaCertified ||
       options.featureAvailability.isStackable);
+  const planningPresets = useMemo(() => getPlanningPresets(categoryId), [categoryId]);
+  const plannerHref =
+    categoryId === "storages"
+      ? "/planning?type=storages&goal=storage&roomWidth=9000&roomLength=12000&roomClearance=450"
+      : categoryId === "workstations"
+        ? "/planning?type=workstations&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450"
+        : "/planning";
 
   const toggleArray = useCallback(
     (
@@ -821,8 +668,43 @@ function AdvancedFilterGridInner({
     setSearchInput("");
     router.push(pathname, { scroll: false });
   }, [router, pathname]);
+  const applyPreset = useCallback(
+    (preset: PlanningPreset) => {
+      const next = preset.build(options, categoryId);
+      setSearchInput(next.query ?? "");
+      updateFilters({
+        query: "",
+        series: "all",
+        subcategory: [],
+        priceRange: [],
+        material: [],
+        ecoMin: null,
+        hasHeadrest: false,
+        isHeightAdjustable: false,
+        bifmaCertified: false,
+        isStackable: false,
+        ...next,
+        sort: next.sort ?? filters.sort,
+      });
+    },
+    [categoryId, filters.sort, options, updateFilters],
+  );
 
   const activeCount = countActiveFilters(effectiveFilters);
+
+  const sidebarOptions: FilterSidebarOptions = options;
+
+  const sidebarContent = (
+    <FilterSidebar
+      activeCount={activeCount}
+      filters={filters}
+      options={sidebarOptions}
+      showFeatureFilters={showFeatureFilters}
+      onClearAll={clearAll}
+      onUpdateFilters={updateFilters}
+      onToggleArray={toggleArray}
+    />
+  );
 
   useEffect(() => {
     if (!drawerOpen) {
@@ -877,193 +759,68 @@ function AdvancedFilterGridInner({
     };
   }, [drawerOpen]);
 
-  // â”€â”€ Sidebar content (shared between desktop + drawer) â”€â”€
-  const SidebarContent = (
-    <div className="bg-white border border-neutral-200 rounded-sm overflow-hidden">
-      {/* Header */}
-      <div className="px-4 py-3 border-b border-neutral-100 flex items-center justify-between">
-        <span className="typ-label text-neutral-500 flex items-center gap-2">
-          <Filter className="w-3.5 h-3.5" />
-          Filters
-          {activeCount > 0 && (
-            <span className="badge bg-neutral-900 text-white text-[9px] px-1.5 py-0.5 leading-none">
-              {activeCount}
-            </span>
-          )}
-        </span>
-        {activeCount > 0 && (
-          <button
-            onClick={clearAll}
-            className="typ-label text-primary hover:text-primary-hover transition-colors"
-          >
-            Clear all
-          </button>
-        )}
+  return (
+    <section
+      className="w-full bg-white"
+      aria-label={`${category.name} product catalog`}
+    >
+      <div className="border-b border-neutral-200 bg-white">
+        <div className="container-wide py-6">
+          <div className="overflow-hidden rounded-[28px] border border-neutral-200 bg-[linear-gradient(135deg,#fbfcfe_0%,#f5f7fb_55%,#eef2f8_100%)] px-5 py-5 text-neutral-950 shadow-[0_28px_70px_-50px_rgba(15,23,42,0.22)] md:px-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div className="max-w-2xl">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-neutral-500">
+                  Planning entry
+                </p>
+                <h2 className="mt-2 text-2xl font-light tracking-tight text-neutral-950">
+                  {CATEGORY_ROUTE_COPY.plannerEntry.title}
+                </h2>
+                <p className="mt-2 max-w-xl text-sm leading-relaxed text-neutral-700">
+                  {CATEGORY_ROUTE_COPY.plannerEntry.description}
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <Link href={plannerHref} className="btn-primary justify-center">
+                  {CATEGORY_ROUTE_COPY.plannerEntry.primaryCta}
+                </Link>
+                <Link href="/contact" className="btn-outline justify-center">
+                  {CATEGORY_ROUTE_COPY.plannerEntry.secondaryCta}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Series */}
-      {options.series.length > 1 && (
-        <AccordionSection
-          title="Series"
-          count={filters.series !== "all" ? 1 : 0}
-          defaultOpen
-        >
-          <div className="space-y-1.5">
-            <button
-              type="button"
-              onClick={() => updateFilters({ series: "all" })}
-              className={clsx(
-                "w-full text-left text-sm py-1.5 px-2 rounded-sm transition-colors",
-                filters.series === "all"
-                  ? "bg-accent1 text-neutral-900 font-normal"
-                  : "text-neutral-600 hover:bg-neutral-50",
-              )}
-            >
-              All Series
-            </button>
-            {options.series.map((seriesName) => (
+      {/* â”€â”€ Top Toolbar â”€â”€ */}
+      <div className="sticky top-16 z-20 w-full border-b border-neutral-200 bg-white/92 backdrop-blur">
+        <div className="container-wide py-4">
+          <div className="mb-4 flex flex-wrap gap-2">
+            {planningPresets.map((preset) => (
               <button
-                key={seriesName}
+                key={preset.id}
                 type="button"
-                onClick={() => updateFilters({ series: seriesName })}
-                className={clsx(
-                  "w-full text-left text-sm py-1.5 px-2 rounded-sm transition-colors",
-                  filters.series === seriesName
-                    ? "bg-accent1 text-neutral-900 font-normal"
-                    : "text-neutral-600 hover:bg-neutral-50",
-                )}
+                onClick={() => applyPreset(preset)}
+                className="rounded-full border border-neutral-300 bg-neutral-50 px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:border-neutral-500 hover:bg-neutral-100 hover:text-neutral-950"
+                title={preset.description}
               >
-                {seriesName}
+                {preset.label}
               </button>
             ))}
           </div>
-        </AccordionSection>
-      )}
-
-      {/* Subcategory */}
-      {options.subcategory.length > 1 && (
-        <AccordionSection
-          title="Type"
-          count={filters.subcategory.length}
-          defaultOpen={filters.subcategory.length > 0}
-        >
-          <CheckList
-            options={options.subcategory}
-            selected={filters.subcategory}
-            onToggle={(v) => toggleArray("subcategory", v)}
-          />
-        </AccordionSection>
-      )}
-
-      {/* Price Range */}
-      {options.priceRange.length > 1 && (
-        <AccordionSection
-          title="Price Range"
-          count={filters.priceRange.length}
-          defaultOpen={filters.priceRange.length > 0}
-        >
-          <PriceButtons
-            options={options.priceRange}
-            selected={filters.priceRange}
-            onToggle={(v) => toggleArray("priceRange", v)}
-          />
-        </AccordionSection>
-      )}
-
-      {/* Material */}
-      {options.material.length > 1 && (
-        <AccordionSection
-          title="Material"
-          count={filters.material.length}
-          defaultOpen={filters.material.length > 0}
-        >
-          <CheckList
-            options={options.material}
-            selected={filters.material}
-            onToggle={(v) => toggleArray("material", v)}
-          />
-        </AccordionSection>
-      )}
-
-      <AccordionSection
-        title="Sustainability"
-        count={typeof filters.ecoMin === "number" ? 1 : 0}
-        defaultOpen={typeof filters.ecoMin === "number"}
-      >
-        <SustainabilityButtons
-          selected={filters.ecoMin}
-          onSelect={(ecoMin) => updateFilters({ ecoMin })}
-        />
-      </AccordionSection>
-
-      {/* Feature Toggles */}
-      {showFeatureFilters && (
-        <AccordionSection
-          title="Features"
-          count={
-            (filters.hasHeadrest ? 1 : 0) +
-            (filters.isHeightAdjustable ? 1 : 0) +
-            (filters.bifmaCertified ? 1 : 0) +
-            (filters.isStackable ? 1 : 0)
-          }
-        >
-          <div className="space-y-1">
-            {options.featureAvailability.hasHeadrest && (
-              <Toggle
-                label="With Headrest"
-                checked={filters.hasHeadrest}
-                onChange={(v) => updateFilters({ hasHeadrest: v })}
-              />
-            )}
-            {options.featureAvailability.isHeightAdjustable && (
-              <Toggle
-                label="Height Adjustable"
-                checked={filters.isHeightAdjustable}
-                onChange={(v) => updateFilters({ isHeightAdjustable: v })}
-              />
-            )}
-            {options.featureAvailability.bifmaCertified && (
-              <Toggle
-                label="BIFMA Certified"
-                checked={filters.bifmaCertified}
-                onChange={(v) => updateFilters({ bifmaCertified: v })}
-              />
-            )}
-            {options.featureAvailability.isStackable && (
-              <Toggle
-                label="Stackable"
-                checked={filters.isStackable}
-                onChange={(v) => updateFilters({ isStackable: v })}
-              />
-            )}
-          </div>
-        </AccordionSection>
-      )}
-
-    </div>
-  );
-
-  return (
-    <section
-      className="w-full bg-neutral-50"
-      aria-label={`${category.name} product catalog`}
-    >
-      {/* â”€â”€ Top Toolbar â”€â”€ */}
-      <div className="w-full bg-white border-b border-neutral-200 sticky top-16 z-20">
-        <div className="container-wide py-4">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             {/* Mobile filter button */}
             <button
               ref={drawerOpenButtonRef}
               type="button"
               onClick={() => setDrawerOpen(true)}
-              className="lg:hidden flex items-center gap-2 h-10 px-3 bg-white border border-neutral-200 rounded-sm text-sm text-neutral-700 hover:border-neutral-400 transition-colors shrink-0"
+              className="flex h-10 shrink-0 items-center gap-2 rounded-full border border-neutral-200 bg-white px-3 text-sm text-neutral-700 transition-colors hover:border-neutral-400 lg:hidden"
               aria-label="Open filters"
               aria-expanded={drawerOpen}
               aria-controls="mobile-filter-drawer"
             >
               <SlidersHorizontal className="w-4 h-4" />
-              Filters
+              {CATEGORY_ROUTE_COPY.filterLabels.filters}
               {activeCount > 0 && (
                 <span className="bg-neutral-900 text-white text-[9px] font-normal rounded-full px-1.5 py-0.5 leading-none">
                   {activeCount}
@@ -1078,7 +835,7 @@ function AdvancedFilterGridInner({
                 type="text"
                 placeholder={`Search ${category.name.toLowerCase()}...`}
                 aria-label={`Search ${category.name}`}
-                className="w-full h-10 pl-9 pr-8 bg-white border border-neutral-200 rounded-sm text-sm focus:outline-none focus:border-primary transition-colors"
+                className="h-10 w-full rounded-full border border-neutral-200 bg-white pl-9 pr-8 text-sm transition-colors focus:border-primary focus:outline-none"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
               />
@@ -1107,22 +864,22 @@ function AdvancedFilterGridInner({
               </span>
               <select
                 aria-label="Sort products"
-                className="h-10 px-3 bg-white border border-neutral-200 rounded-sm text-sm text-neutral-700 focus:outline-none focus:border-neutral-800"
+                className="h-10 rounded-full border border-neutral-200 bg-white px-3 text-sm text-neutral-700 focus:border-neutral-800 focus:outline-none"
                 value={filters.sort}
                 onChange={(e) =>
                   updateFilters({ sort: e.target.value as SortOption })
                 }
               >
-                <option value="az">Name A-Z</option>
-                <option value="za">Name Z-A</option>
-                <option value="ecoDesc">Eco Score High-Low</option>
-                <option value="ecoAsc">Eco Score Low-High</option>
+                <option value="az">{CATEGORY_ROUTE_COPY.filterLabels.sortAz}</option>
+                <option value="za">{CATEGORY_ROUTE_COPY.filterLabels.sortZa}</option>
+                <option value="ecoDesc">{CATEGORY_ROUTE_COPY.filterLabels.sortEcoDesc}</option>
+                <option value="ecoAsc">{CATEGORY_ROUTE_COPY.filterLabels.sortEcoAsc}</option>
               </select>
             </div>
           </div>
 
           {/* Active filter chips */}
-          <ActiveChips
+          <ActiveFilterChips
             filters={effectiveFilters}
             onRemove={removeChip}
             onClearAll={clearAll}
@@ -1140,10 +897,10 @@ function AdvancedFilterGridInner({
       </div>
 
       {/* â”€â”€ Main layout â”€â”€ */}
-      <div className="container-wide py-8 flex gap-8">
+      <div className="container-wide flex gap-8 py-8">
         {/* Desktop sidebar */}
         <aside className="hidden lg:block w-64 shrink-0 self-start sticky top-32">
-          {SidebarContent}
+          {sidebarContent}
         </aside>
 
         {/* Grid */}
@@ -1158,25 +915,30 @@ function AdvancedFilterGridInner({
               ))}
             </div>
           ) : navigableProducts.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-24 text-center">
-              <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center mb-4">
+            <div className="flex flex-col items-center justify-center rounded-[28px] border border-neutral-200 bg-neutral-50 px-6 py-24 text-center">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm">
                 <SearchIcon className="w-5 h-5 text-neutral-400" />
               </div>
               <p className="mb-1 text-base font-normal text-neutral-700">
-                No products found
+                {CATEGORY_ROUTE_COPY.emptyState.title}
               </p>
               <p className="text-sm text-neutral-400 mb-4">
-                Try adjusting your filters or search query
+                {CATEGORY_ROUTE_COPY.emptyState.description}
               </p>
-              <button
-                onClick={clearAll}
-                className="text-sm underline text-neutral-600 hover:text-neutral-900 transition-colors"
-              >
-                Clear all filters
-              </button>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <button
+                  onClick={clearAll}
+                  className="btn-outline"
+                >
+                  {CATEGORY_ROUTE_COPY.emptyState.clearCta}
+                </button>
+                <Link href={plannerHref} className="btn-primary">
+                  {CATEGORY_ROUTE_COPY.emptyState.plannerCta}
+                </Link>
+              </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {navigableProducts.map((product) => (
                 <div
                   key={getProductRouteKey(product)}
@@ -1217,7 +979,7 @@ function AdvancedFilterGridInner({
             <div className="flex items-center justify-between px-4 py-4 border-b border-neutral-200 bg-white">
               <span className="text-sm font-normal text-neutral-900 flex items-center gap-2">
                 <Filter className="w-4 h-4" />
-                Filters
+                {CATEGORY_ROUTE_COPY.filterLabels.filters}
                 {activeCount > 0 && (
                   <span className="bg-neutral-900 text-white text-[9px] font-normal rounded-full px-1.5 py-0.5 leading-none">
                     {activeCount}
@@ -1233,7 +995,7 @@ function AdvancedFilterGridInner({
                 <X className="w-5 h-5 text-neutral-500 hover:text-neutral-900" />
               </button>
             </div>
-            <div className="p-4">{SidebarContent}</div>
+            <div className="p-4">{sidebarContent}</div>
             <div className="sticky bottom-0 bg-white border-t border-neutral-100 p-4 flex gap-2">
               {activeCount > 0 && (
                 <button

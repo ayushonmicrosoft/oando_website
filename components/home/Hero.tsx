@@ -104,8 +104,17 @@ export function Hero({
         )}
 
         {/* Overlays */}
-        <div className="absolute inset-0 bg-neutral-900/40" />
-        <div className="absolute inset-0 bg-linear-to-t from-neutral-900 via-transparent to-neutral-900/30" />
+        {isSmall ? (
+          <>
+            <div className="absolute inset-0 bg-white/42" />
+            <div className="absolute inset-0 bg-linear-to-b from-white/55 via-white/28 to-neutral-950/22" />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-neutral-900/40" />
+            <div className="absolute inset-0 bg-linear-to-t from-neutral-900 via-transparent to-neutral-900/30" />
+          </>
+        )}
       </motion.div>
 
       {/* Content Container */}
@@ -115,37 +124,44 @@ export function Hero({
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="max-w-4xl space-y-8"
+            className={isSmall
+              ? "max-w-3xl rounded-[28px] border border-white/70 bg-white/80 p-6 shadow-[0_32px_80px_-48px_rgba(15,23,42,0.35)] backdrop-blur md:p-8"
+              : "max-w-4xl space-y-8"}
           >
-            <motion.div variants={titleVariants} className="overflow-hidden">
+            <motion.div variants={titleVariants} className={isSmall ? "overflow-hidden space-y-4" : "overflow-hidden"}>
               <h1
-                className={`${isSmall ? "text-4xl md:text-6xl" : "text-[56px] sm:text-[72px] md:text-[96px]"} font-light text-white leading-[1.05] tracking-tight`}
+                className={`${isSmall ? "text-4xl md:text-6xl text-neutral-950" : "text-[56px] sm:text-[72px] md:text-[96px] text-white"} font-light leading-[1.05] tracking-tight`}
               >
                 {title || (
                   <>
                     Create your <br />
-                    <span className="text-white/80 italic font-light">
+                    <span className={`${isSmall ? "text-neutral-600" : "text-white/80"} italic font-light`}>
                       best work.
                     </span>
                   </>
                 )}
               </h1>
+              {isSmall ? (
+                <div className="h-px w-16 bg-neutral-300" />
+              ) : null}
             </motion.div>
 
             {subtitle && (
               <motion.p
                 variants={titleVariants}
-                className="text-lg md:text-xl lg:text-2xl text-neutral-300 max-w-2xl font-light leading-relaxed"
+                className={`${isSmall ? "max-w-2xl text-base text-neutral-700 md:text-lg" : "max-w-2xl text-lg text-neutral-300 md:text-xl lg:text-2xl"} font-light leading-relaxed`}
               >
                 {subtitle}
               </motion.p>
             )}
 
             {showButton && (
-              <motion.div variants={titleVariants} className="pt-8">
+              <motion.div variants={titleVariants} className={isSmall ? "pt-6" : "pt-8"}>
                 <Link
                   href={buttonLink}
-                  className="group inline-flex items-center justify-center gap-4 bg-primary px-10 py-5 text-white transition-all hover:bg-primary-hover hover:shadow-xl"
+                  className={isSmall
+                    ? "btn-primary group"
+                    : "group inline-flex items-center justify-center gap-4 bg-primary px-10 py-5 text-white transition-all hover:bg-primary-hover hover:shadow-xl"}
                 >
                   <span className="text-sm font-bold uppercase tracking-[0.2em]">
                     {buttonText}
@@ -159,23 +175,25 @@ export function Hero({
       </div>
 
       {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-10 right-10 hidden lg:flex flex-col items-center gap-4 z-20"
-      >
-        <div className="w-px h-20 bg-white/20 relative overflow-hidden">
-          <motion.div
-            animate={{ y: ["-100%", "100%"] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-0 w-full h-1/2 bg-primary"
-          />
-        </div>
-        <span className="text-[10px] uppercase tracking-[0.4em] text-white/50 origin-center rotate-90 translate-y-8">
-          Scroll
-        </span>
-      </motion.div>
+      {!isSmall ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+          className="absolute bottom-10 right-10 hidden lg:flex flex-col items-center gap-4 z-20"
+        >
+          <div className="w-px h-20 bg-white/20 relative overflow-hidden">
+            <motion.div
+              animate={{ y: ["-100%", "100%"] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0 w-full h-1/2 bg-primary"
+            />
+          </div>
+          <span className="text-[10px] uppercase tracking-[0.4em] text-white/50 origin-center rotate-90 translate-y-8">
+            Scroll
+          </span>
+        </motion.div>
+      ) : null}
     </section>
   );
 }

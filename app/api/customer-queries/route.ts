@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/db";
 import { rateLimit } from "@/lib/rateLimit";
+import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 
 type PreferredContact = "email" | "whatsapp" | "phone" | "any";
 
@@ -98,26 +98,44 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { data, error } = await supabase
-    .from("customer_queries")
-    .insert({
-      name,
-      company: company || null,
-      email: email || null,
-      phone: phone || null,
-      preferred_contact: preferredContact,
-      message,
-      requirement: requirement || null,
-      budget: budget || null,
-      timeline: timeline || null,
-      source,
-      source_path: sourcePath || null,
-    })
-    .select("id, created_at, email, phone")
-    .single();
+  let data:
+    | {
+        id: string;
+        created_at: string;
+        email: string | null;
+        phone: string | null;
+      }
+    | null = null;
+  let errorMessage = "unknown";
 
-  if (error || !data) {
-    console.error("customer_queries insert failed:", error?.message || "unknown");
+  try {
+    const supabaseAdmin = createSupabaseAdminClient();
+    const { data: insertData, error } = await supabaseAdmin
+      .from("customer_queries")
+      .insert({
+        name,
+        company: company || null,
+        email: email || null,
+        phone: phone || null,
+        preferred_contact: preferredContact,
+        message,
+        requirement: requirement || null,
+        budget: budget || null,
+        timeline: timeline || null,
+        source,
+        source_path: sourcePath || null,
+      })
+      .select("id, created_at, email, phone")
+      .single();
+
+    data = insertData;
+    errorMessage = error?.message || errorMessage;
+  } catch (error) {
+    errorMessage = error instanceof Error ? error.message : "unknown";
+  }
+
+  if (!data) {
+    console.error("customer_queries insert failed:", errorMessage);
     return NextResponse.json(
       { error: "Unable to save query right now." },
       { status: 500 },

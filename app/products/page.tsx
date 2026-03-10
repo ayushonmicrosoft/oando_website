@@ -91,7 +91,7 @@ export default function ProductsPage() {
               <Link href="/contact" className="btn-primary">
                 {PRODUCTS_PAGE_COPY.consultPrimaryCta}
               </Link>
-              <Link href="/configurator" className="btn-outline">
+              <Link href="/planning" className="btn-outline">
                 {PRODUCTS_PAGE_COPY.consultSecondaryCta}
               </Link>
               <Link href="/planning" className="btn-outline">

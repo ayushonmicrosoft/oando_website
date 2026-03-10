@@ -5,8 +5,8 @@ import { HOMEPAGE_SOLUTIONS_CONTENT } from "@/data/site/homepage";
 
 export function SolutionsGrid() {
   return (
-    <section className="w-full bg-white py-16 md:py-20" aria-labelledby="featured-products-heading">
-      <div className="container px-6 2xl:px-0">
+    <section className="home-section home-section--sand py-16 md:py-20" aria-labelledby="featured-products-heading">
+      <div className="home-shell">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-5 md:mb-12">
           <div>
             <p className="typ-label mb-4 text-neutral-700">{HOMEPAGE_SOLUTIONS_CONTENT.kicker}</p>
@@ -16,7 +16,7 @@ export function SolutionsGrid() {
           </div>
           <Link
             href="/compare"
-            className="link-arrow"
+            className="home-link-arrow"
           >
             {HOMEPAGE_SOLUTIONS_CONTENT.compareCta}
             <ArrowRight className="h-4 w-4" />
@@ -27,7 +27,7 @@ export function SolutionsGrid() {
           {HOMEPAGE_SOLUTIONS_CONTENT.capabilities.map((cap) => (
             <article
               key={cap.title}
-              className="group flex min-w-[84vw] snap-start flex-col overflow-hidden border border-neutral-200 bg-white sm:min-w-[70vw] lg:min-w-0"
+              className="group flex min-w-[84vw] snap-start flex-col overflow-hidden rounded-[1.75rem] border border-neutral-200 bg-white sm:min-w-[70vw] lg:min-w-0"
             >
               <Link
                 href={cap.href}
@@ -48,7 +48,7 @@ export function SolutionsGrid() {
                   href={cap.href}
                   className="w-fit"
                 >
-                  <h3 className="text-[1.3rem] tracking-tight text-neutral-950 transition-colors group-hover:text-primary">
+                  <h3 className="text-[1.3rem] tracking-tight text-neutral-950 transition-colors group-hover:text-neutral-600">
                     {cap.title}
                   </h3>
                 </Link>
@@ -60,7 +60,7 @@ export function SolutionsGrid() {
         </div>
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-          <Link href="/products" className="link-arrow">
+          <Link href="/products" className="home-link-arrow">
             {HOMEPAGE_SOLUTIONS_CONTENT.catalogCta}
             <ArrowRight className="h-4 w-4" />
           </Link>

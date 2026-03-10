@@ -1,26 +1,9 @@
 import Link from "next/link";
 import { ClientBadge, type ClientBadgeData } from "@/components/ClientBadge";
+import { HOMEPAGE_OUR_WORK_CONTENT } from "@/data/site/homepage";
 import { formatTrustedClientsFooter } from "@/lib/kpiFormat";
 
-// Featured 16 clients — sourced from full client list (ClientMarquee)
-const FEATURED_CLIENTS: ClientBadgeData[] = [
-  { name: "Titan", sector: "Manufacturing" },
-  { name: "Usha International", sector: "Manufacturing" },
-  { name: "DMRC", sector: "Government" },
-  { name: "Government of Bihar", sector: "Government" },
-  { name: "Tata Steel", sector: "Manufacturing" },
-  { name: "Tata Motors", sector: "Automotive" },
-  { name: "L&T", sector: "Manufacturing" },
-  { name: "HDFC", sector: "Finance" },
-  { name: "State Bank of India", sector: "Finance" },
-  { name: "NTPC", sector: "Energy" },
-  { name: "IndianOil", sector: "Energy" },
-  { name: "Maruti Suzuki", sector: "Automotive" },
-  { name: "Asian Paints", sector: "FMCG" },
-  { name: "ITC Limited", sector: "FMCG" },
-  { name: "Indian Army", sector: "Government" },
-  { name: "BHEL", sector: "Energy" },
-];
+const FEATURED_CLIENTS: ClientBadgeData[] = [...HOMEPAGE_OUR_WORK_CONTENT.featuredClients];
 
 interface OurWorkProps {
   clientCount: number;
@@ -28,35 +11,32 @@ interface OurWorkProps {
 
 export function OurWork({ clientCount }: OurWorkProps) {
   return (
-    <section className="w-full bg-neutral-50 py-20 md:py-28 border-t border-neutral-200">
+    <section className="w-full border-t border-neutral-200 bg-neutral-50 py-20 md:py-28">
       <div className="container-wide">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+        <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
-            <p className="text-xs font-bold tracking-[0.25em] uppercase text-neutral-400 mb-4">
-              Trusted Clients
+            <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-neutral-400">
+              {HOMEPAGE_OUR_WORK_CONTENT.kicker}
             </p>
-            <h2 className="text-3xl md:text-4xl text-neutral-900 tracking-tight leading-tight">
-              Trusted by India&apos;s most respected organisations.
+            <h2 className="text-3xl leading-tight tracking-tight text-neutral-900 md:text-4xl">
+              {HOMEPAGE_OUR_WORK_CONTENT.title}
             </h2>
           </div>
           <Link
             href="/projects"
-            className="shrink-0 text-xs font-bold tracking-[0.2em] uppercase text-neutral-500 hover:text-neutral-900 transition-colors border-b border-neutral-300 hover:border-neutral-900 pb-1"
+            className="shrink-0 border-b border-neutral-300 pb-1 text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 transition-colors hover:border-neutral-900 hover:text-neutral-900"
           >
-            View all clients →
+            {HOMEPAGE_OUR_WORK_CONTENT.cta} -
           </Link>
         </div>
 
-        {/* Badge grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {FEATURED_CLIENTS.map((client) => (
             <ClientBadge key={client.name} {...client} />
           ))}
         </div>
 
-        {/* Count footer */}
-        <p data-testid="kpi-clients-footer" className="mt-8 text-xs text-neutral-400 font-medium tracking-wide text-center">
+        <p data-testid="kpi-clients-footer" className="mt-8 text-center text-xs font-medium tracking-wide text-neutral-400">
           {formatTrustedClientsFooter(clientCount)}
         </p>
       </div>
