@@ -13,13 +13,9 @@ import { formatKpiValuePlus } from "@/lib/kpiFormat";
 export default async function PlanningPage({
   searchParams,
 }: {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+  searchParams?: { type?: string };
 }) {
-  const resolvedSearchParams = searchParams ? await searchParams : {};
-  const rawType = Array.isArray(resolvedSearchParams.type)
-    ? resolvedSearchParams.type[0]
-    : resolvedSearchParams.type;
-  const defaultType = rawType === "storages" ? "storages" : "workstations";
+  const rawType = searchParams?.type;
   const { stats } = await getBusinessStats();
 
   return (

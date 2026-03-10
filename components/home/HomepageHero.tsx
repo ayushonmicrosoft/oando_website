@@ -14,35 +14,32 @@ export function HomepageHero() {
   }
 
   return (
-    <section className="home-hero">
-      <div className="home-hero__media">
+    <section className="relative min-h-[85vh] w-full overflow-hidden bg-neutral-100 flex items-center">
+      <div className="absolute inset-0 z-0">
         <Image
           src="/images/hero/titan-patna-hq.webp"
           alt={HOMEPAGE_HERO_CONTENT.imageAlt}
           fill
           priority
           sizes="100vw"
-          className="object-cover object-center"
+          className="object-cover object-center grayscale-[20%] opacity-90 transition-all duration-[1.5s] ease-out"
         />
-        <div className="home-hero__overlay" />
-        <div className="home-hero__fade" />
       </div>
 
-      <div className="home-hero__shell flex w-full items-center">
-        <div className="home-hero__content max-w-4xl py-24 md:py-32">
+      <div className="home-shell relative z-10 w-full pt-16">
+        <div className="max-w-2xl bg-white/70 backdrop-blur-md p-10 md:p-14 rounded-3xl border border-white/40 shadow-[0_32px_80px_-40px_rgba(0,0,0,0.15)]">
           <Reveal y={28} delay={0.08}>
-            <h1 className="typ-display mb-6 md:mb-8 text-neutral-950 font-normal tracking-tight">
+            <h1 className="typ-display mb-6 text-neutral-950 font-normal leading-[1.1] tracking-tighter">
               {titleLines.map((line, index) => (
                 <span key={line} className="block">
                   {line}
-                  {index < titleLines.length - 1 ? <br /> : null}
                 </span>
               ))}
             </h1>
           </Reveal>
           {hasDescription ? (
             <Reveal y={18} delay={0.16}>
-              <p className="typ-lead mb-10 max-w-2xl text-neutral-700 md:mb-12">
+              <p className="text-lg md:text-xl font-light leading-relaxed text-neutral-800 mb-10 max-w-lg">
                 {HOMEPAGE_HERO_CONTENT.description}
               </p>
             </Reveal>
@@ -51,14 +48,14 @@ export function HomepageHero() {
             <div className="flex flex-wrap gap-4">
               <Link
                 href={HOMEPAGE_HERO_CONTENT.secondaryCta.href}
-                className="inline-flex min-h-12 items-center justify-center rounded-md bg-neutral-900 px-8 py-3 text-sm font-medium tracking-[0.03em] text-white transition-colors hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-neutral-950 px-10 py-3 text-sm font-medium tracking-wide text-white transition-all hover:bg-neutral-800 hover:scale-[1.02] active:scale-95"
               >
                 {HOMEPAGE_HERO_CONTENT.secondaryCta.label}
               </Link>
               <button
                 type="button"
                 onClick={openGuidedPlanner}
-                className="inline-flex min-h-12 items-center justify-center rounded-md bg-white border border-neutral-300 px-8 py-3 text-sm font-medium tracking-[0.03em] text-neutral-900 transition-colors hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-white/80 border border-neutral-200 px-10 py-3 text-sm font-medium tracking-wide text-neutral-900 backdrop-blur-sm transition-all hover:bg-white hover:border-neutral-400 hover:scale-[1.02] active:scale-95"
               >
                 {HOMEPAGE_HERO_CONTENT.primaryCta.label}
               </button>

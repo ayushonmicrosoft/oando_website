@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Mail } from "lucide-react";
 import { Hero } from "@/components/home/Hero";
 import { CustomerQueryForm } from "@/components/contact/CustomerQueryForm";
 import { SITE_CONTACT } from "@/data/site/contact";
@@ -15,19 +15,16 @@ export default function ContactPage() {
         backgroundImage="/images/hero/tvs-patna-enhanced.webp"
       />
       <section className="contact-shell">
-
-
-          <div className="contact-card">
-            <div className="contact-channel">
+        <div className="contact-summary">
+          <div className="contact-card border-none bg-transparent p-0 shadow-none">
+            <div className="contact-channel mb-6">
               <MapPin className="contact-channel__icon" />
               <div>
                 <p className="contact-channel__label">Service region</p>
                 <p className="contact-card__meta">{SITE_CONTACT.regionLine}</p>
               </div>
             </div>
-                </a>
-              </div>
-            </div>
+            
             <div className="contact-channel">
               <Mail className="contact-channel__icon" />
               <div>

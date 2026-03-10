@@ -814,7 +814,7 @@ function AdvancedFilterGridInner({
               onClick={() => setDrawerOpen(true)}
               className="flex h-10 shrink-0 items-center gap-2 rounded-full border border-neutral-200 bg-white px-3 text-sm text-neutral-700 transition-colors hover:border-neutral-400 lg:hidden"
               aria-label="Open filters"
-              aria-expanded={drawerOpen}
+              aria-expanded={drawerOpen ? "true" : "false"}
               aria-controls="mobile-filter-drawer"
             >
               <SlidersHorizontal className="w-4 h-4" />
