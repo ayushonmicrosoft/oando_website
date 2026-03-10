@@ -1,0 +1,457 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e3]:
+    - generic [ref=e5]:
+      - link "One and Only Furniture - home" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img "One and Only Furniture" [ref=e8]
+      - button "Open menu" [ref=e10]:
+        - img [ref=e11]
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - img "Hero Background" [ref=e16]
+        - generic [ref=e21]:
+          - heading "Workstations" [level=1] [ref=e23]
+          - paragraph [ref=e24]: Height-adjustable, panel and desking workstation systems.
+      - region "Workstations product catalog" [ref=e25]:
+        - generic [ref=e29]:
+          - generic [ref=e30]:
+            - paragraph [ref=e31]: Planning entry
+            - heading "Need help narrowing the shortlist?" [level=2] [ref=e32]
+            - paragraph [ref=e33]: "Use the planning configurator when you need a better answer than filters alone: fit, capacity, and budget direction."
+          - generic [ref=e34]:
+            - link "Open planning configurator" [ref=e35] [cursor=pointer]:
+              - /url: /planning/?type=workstations&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450
+            - link "Request product advice" [ref=e36] [cursor=pointer]:
+              - /url: /contact/
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - button "High density" [ref=e40]
+            - button "Privacy led" [ref=e41]
+            - button "Premium ergonomic" [ref=e42]
+            - button "Sustainable picks" [ref=e43]
+            - button "Budget conscious" [ref=e44]
+          - generic [ref=e45]:
+            - button "Open filters" [ref=e46]:
+              - img [ref=e47]
+              - text: Planning filters
+            - generic [ref=e48]:
+              - img [ref=e49]
+              - textbox "Search Workstations" [ref=e52]:
+                - /placeholder: Search workstations...
+            - generic [ref=e53]:
+              - generic [ref=e54]: 8 / 8 products
+              - combobox "Sort products" [ref=e55]:
+                - option "Name A-Z" [selected]
+                - option "Name Z-A"
+                - option "Eco score high-low"
+                - option "Eco score low-high"
+          - paragraph [ref=e56]: Refreshing products...
+        - generic [ref=e59]:
+          - article [ref=e61]:
+            - button "Add to compare" [ref=e62]:
+              - img [ref=e63]
+              - text: Compare
+            - link "Adaptable office workstation desk system BIFMA Eco 5/10 Height Adjustable Series Adaptable Adaptable modular office furniture designed for flexible workstations, modern offices, and collaborative spaces. Ideal for office furniture, modular office furniture, and workspace solutions. Workstations Series Starting from Rs. 14,999 Dimensions W600 D600 H900-1000mm (adj.) Materials Steel frame, powder-coated, Melamine-finish MDF work surface View Product Plan this system" [ref=e70] [cursor=pointer]:
+              - /url: /products/workstations/oando-workstations--adaptable/
+              - generic [ref=e71]:
+                - img "Adaptable office workstation desk system" [ref=e72]
+                - generic [ref=e73]:
+                  - generic [ref=e74]: BIFMA
+                  - generic [ref=e75]: Eco 5/10
+              - generic [ref=e76]:
+                - generic [ref=e77]:
+                  - paragraph [ref=e78]: Height Adjustable Series
+                  - heading "Adaptable" [level=3] [ref=e79]
+                  - paragraph [ref=e80]: Adaptable modular office furniture designed for flexible workstations, modern offices, and collaborative spaces. Ideal for office furniture, modular office furniture, and workspace solutions.
+                - generic [ref=e81]:
+                  - paragraph [ref=e82]: Workstations Series
+                  - paragraph [ref=e83]: Starting from Rs. 14,999
+                - generic [ref=e84]:
+                  - paragraph [ref=e85]:
+                    - generic [ref=e86]: Dimensions
+                    - generic [ref=e87]: W600 D600 H900-1000mm (adj.)
+                  - paragraph [ref=e88]:
+                    - generic [ref=e89]: Materials
+                    - generic [ref=e90]: Steel frame, powder-coated, Melamine-finish MDF work surface
+                - generic [ref=e92]:
+                  - generic [ref=e93]: View Product
+                  - generic [ref=e94]: Plan this system
+            - generic [ref=e95]:
+              - link "Plan this system" [ref=e96] [cursor=pointer]:
+                - /url: /planning/?type=workstations&series=Desking+Series&layout=double-bank&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450
+              - button "Add to Quote" [ref=e97]:
+                - img [ref=e98]
+                - text: Add to Quote
+          - article [ref=e103]:
+            - button "Add to compare" [ref=e104]:
+              - img [ref=e105]
+              - text: Compare
+            - link "Curvivo office workstation desk system BIFMA Eco 5/10 Desking Series Curvivo A dynamic and innovative workstation that is adaptable to different workspaces. Curvivo office solution for enhanced efficiency, embracing fluidity and harmony. Workstations Series Starting from Rs. 34,999 Dimensions W600 D600 H900-1000mm (adj.) Materials Steel frame, powder-coated, Melamine-finish MDF work surface View Product Plan this system" [ref=e112] [cursor=pointer]:
+              - /url: /products/workstations/oando-workstations--curvivo/
+              - generic [ref=e113]:
+                - img "Curvivo office workstation desk system" [ref=e114]
+                - generic [ref=e115]:
+                  - generic [ref=e116]: BIFMA
+                  - generic [ref=e117]: Eco 5/10
+              - generic [ref=e118]:
+                - generic [ref=e119]:
+                  - paragraph [ref=e120]: Desking Series
+                  - heading "Curvivo" [level=3] [ref=e121]
+                  - paragraph [ref=e122]: A dynamic and innovative workstation that is adaptable to different workspaces. Curvivo office solution for enhanced efficiency, embracing fluidity and harmony.
+                - generic [ref=e123]:
+                  - paragraph [ref=e124]: Workstations Series
+                  - paragraph [ref=e125]: Starting from Rs. 34,999
+                - generic [ref=e126]:
+                  - paragraph [ref=e127]:
+                    - generic [ref=e128]: Dimensions
+                    - generic [ref=e129]: W600 D600 H900-1000mm (adj.)
+                  - paragraph [ref=e130]:
+                    - generic [ref=e131]: Materials
+                    - generic [ref=e132]: Steel frame, powder-coated, Melamine-finish MDF work surface
+                - generic [ref=e134]:
+                  - generic [ref=e135]: View Product
+                  - generic [ref=e136]: Plan this system
+            - generic [ref=e137]:
+              - link "Plan this system" [ref=e138] [cursor=pointer]:
+                - /url: /planning/?type=workstations&series=Desking+Series&layout=double-bank&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450
+              - button "Add to Quote" [ref=e139]:
+                - img [ref=e140]
+                - text: Add to Quote
+          - article [ref=e145]:
+            - button "Add to compare" [ref=e146]:
+              - img [ref=e147]
+              - text: Compare
+            - link "DeskPro office workstation desk system BIFMA Eco 5/10 Desking Series DeskPro DeskPro office workstations for efficient layouts. Discover modular desks for modern workspaces. Workstations Series Starting from Rs. 14,999 Dimensions W600 D600 H900-1000mm (adj.) Materials Steel frame, powder-coated, Melamine-finish MDF work surface View Product Plan this system" [ref=e154] [cursor=pointer]:
+              - /url: /products/workstations/oando-workstations--deskpro/
+              - generic [ref=e155]:
+                - img "DeskPro office workstation desk system" [ref=e156]
+                - generic [ref=e157]:
+                  - generic [ref=e158]: BIFMA
+                  - generic [ref=e159]: Eco 5/10
+              - generic [ref=e160]:
+                - generic [ref=e161]:
+                  - paragraph [ref=e162]: Desking Series
+                  - heading "DeskPro" [level=3] [ref=e163]
+                  - paragraph [ref=e164]: DeskPro office workstations for efficient layouts. Discover modular desks for modern workspaces.
+                - generic [ref=e165]:
+                  - paragraph [ref=e166]: Workstations Series
+                  - paragraph [ref=e167]: Starting from Rs. 14,999
+                - generic [ref=e168]:
+                  - paragraph [ref=e169]:
+                    - generic [ref=e170]: Dimensions
+                    - generic [ref=e171]: W600 D600 H900-1000mm (adj.)
+                  - paragraph [ref=e172]:
+                    - generic [ref=e173]: Materials
+                    - generic [ref=e174]: Steel frame, powder-coated, Melamine-finish MDF work surface
+                - generic [ref=e176]:
+                  - generic [ref=e177]: View Product
+                  - generic [ref=e178]: Plan this system
+            - generic [ref=e179]:
+              - link "Plan this system" [ref=e180] [cursor=pointer]:
+                - /url: /planning/?type=workstations&series=Desking+Series&layout=double-bank&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450
+              - button "Add to Quote" [ref=e181]:
+                - img [ref=e182]
+                - text: Add to Quote
+          - article [ref=e187]:
+            - button "Add to compare" [ref=e188]:
+              - img [ref=e189]
+              - text: Compare
+            - link "Fenix office workstation desk system BIFMA Eco 5/10 Desking Series Fenix Workstation featuring a strong 40x40 leg framework that pairs durability with a sleek, minimal profile. Modular adaptability supports the changing needs of contemporary teams. Workstations Series Dimensions W600 D600 H900-1000mm (adj.) Materials Steel frame, powder-coated, Melamine-finish MDF work surface View Product Plan this system" [ref=e196] [cursor=pointer]:
+              - /url: /products/workstations/oando-workstations--fenix/
+              - generic [ref=e197]:
+                - img "Fenix office workstation desk system" [ref=e198]
+                - generic [ref=e199]:
+                  - generic [ref=e200]: BIFMA
+                  - generic [ref=e201]: Eco 5/10
+              - generic [ref=e202]:
+                - generic [ref=e203]:
+                  - paragraph [ref=e204]: Desking Series
+                  - heading "Fenix" [level=3] [ref=e205]
+                  - paragraph [ref=e206]: Workstation featuring a strong 40x40 leg framework that pairs durability with a sleek, minimal profile. Modular adaptability supports the changing needs of contemporary teams.
+                - paragraph [ref=e208]: Workstations Series
+                - generic [ref=e209]:
+                  - paragraph [ref=e210]:
+                    - generic [ref=e211]: Dimensions
+                    - generic [ref=e212]: W600 D600 H900-1000mm (adj.)
+                  - paragraph [ref=e213]:
+                    - generic [ref=e214]: Materials
+                    - generic [ref=e215]: Steel frame, powder-coated, Melamine-finish MDF work surface
+                - generic [ref=e217]:
+                  - generic [ref=e218]: View Product
+                  - generic [ref=e219]: Plan this system
+            - generic [ref=e220]:
+              - link "Plan this system" [ref=e221] [cursor=pointer]:
+                - /url: /planning/?type=workstations&series=Desking+Series&layout=cluster-6&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450
+              - button "Add to Quote" [ref=e222]:
+                - img [ref=e223]
+                - text: Add to Quote
+          - article [ref=e228]:
+            - button "Add to compare" [ref=e229]:
+              - img [ref=e230]
+              - text: Compare
+            - link "Panel Pro office workstation desk system BIFMA Eco 5/10 Panel Series Panel Pro Panel Pro office partition systems for modular layouts and space division. Discover solutions for modern workspaces. Workstations Series Dimensions W600 D600 H900-1000mm (adj.) Materials Steel frame, powder-coated, Melamine-finish MDF work surface View Product Plan this system" [ref=e237] [cursor=pointer]:
+              - /url: /products/workstations/oando-workstations--panel-pro/
+              - generic [ref=e238]:
+                - img "Panel Pro office workstation desk system" [ref=e239]
+                - generic [ref=e240]:
+                  - generic [ref=e241]: BIFMA
+                  - generic [ref=e242]: Eco 5/10
+              - generic [ref=e243]:
+                - generic [ref=e244]:
+                  - paragraph [ref=e245]: Panel Series
+                  - heading "Panel Pro" [level=3] [ref=e246]
+                  - paragraph [ref=e247]: Panel Pro office partition systems for modular layouts and space division. Discover solutions for modern workspaces.
+                - paragraph [ref=e249]: Workstations Series
+                - generic [ref=e250]:
+                  - paragraph [ref=e251]:
+                    - generic [ref=e252]: Dimensions
+                    - generic [ref=e253]: W600 D600 H900-1000mm (adj.)
+                  - paragraph [ref=e254]:
+                    - generic [ref=e255]: Materials
+                    - generic [ref=e256]: Steel frame, powder-coated, Melamine-finish MDF work surface
+                - generic [ref=e258]:
+                  - generic [ref=e259]: View Product
+                  - generic [ref=e260]: Plan this system
+            - generic [ref=e261]:
+              - link "Plan this system" [ref=e262] [cursor=pointer]:
+                - /url: /planning/?type=workstations&series=Panel+Series&layout=double-bank&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450
+              - button "Add to Quote" [ref=e263]:
+                - img [ref=e264]
+                - text: Add to Quote
+          - article [ref=e269]:
+            - button "Add to compare" [ref=e270]:
+              - img [ref=e271]
+              - text: Compare
+            - link "Sleek office workstation desk system BIFMA Eco 5/10 Desking Series Sleek Sleek modern office furniture for stylish and functional workspaces. Explore solutions for modern workspaces. Workstations Series Starting from Rs. 4,999 Dimensions W600 D600 H900-1000mm (adj.) Materials Steel frame, powder-coated, Melamine-finish MDF work surface View Product Plan this system" [ref=e278] [cursor=pointer]:
+              - /url: /products/workstations/oando-workstations--sleek/
+              - generic [ref=e279]:
+                - img "Sleek office workstation desk system" [ref=e280]
+                - generic [ref=e281]:
+                  - generic [ref=e282]: BIFMA
+                  - generic [ref=e283]: Eco 5/10
+              - generic [ref=e284]:
+                - generic [ref=e285]:
+                  - paragraph [ref=e286]: Desking Series
+                  - heading "Sleek" [level=3] [ref=e287]
+                  - paragraph [ref=e288]: Sleek modern office furniture for stylish and functional workspaces. Explore solutions for modern workspaces.
+                - generic [ref=e289]:
+                  - paragraph [ref=e290]: Workstations Series
+                  - paragraph [ref=e291]: Starting from Rs. 4,999
+                - generic [ref=e292]:
+                  - paragraph [ref=e293]:
+                    - generic [ref=e294]: Dimensions
+                    - generic [ref=e295]: W600 D600 H900-1000mm (adj.)
+                  - paragraph [ref=e296]:
+                    - generic [ref=e297]: Materials
+                    - generic [ref=e298]: Steel frame, powder-coated, Melamine-finish MDF work surface
+                - generic [ref=e300]:
+                  - generic [ref=e301]: View Product
+                  - generic [ref=e302]: Plan this system
+            - generic [ref=e303]:
+              - link "Plan this system" [ref=e304] [cursor=pointer]:
+                - /url: /planning/?type=workstations&series=Desking+Series&layout=double-bank&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450
+              - button "Add to Quote" [ref=e305]:
+                - img [ref=e306]
+                - text: Add to Quote
+          - article [ref=e311]:
+            - button "Add to compare" [ref=e312]:
+              - img [ref=e313]
+              - text: Compare
+            - link "Trio office workstation desk system BIFMA Eco 5/10 Desking Series Trio A workstation system built for open spaces, crafted to bring flow and flexibility. Modular and adaptable solution designed to shape every kind of workstyle. Workstations Series Dimensions W600 D600 H900-1000mm (adj.) Materials Steel frame, powder-coated, Melamine-finish MDF work surface View Product Plan this system" [ref=e320] [cursor=pointer]:
+              - /url: /products/workstations/oando-workstations--trio-2/
+              - generic [ref=e321]:
+                - img "Trio office workstation desk system" [ref=e322]
+                - generic [ref=e323]:
+                  - generic [ref=e324]: BIFMA
+                  - generic [ref=e325]: Eco 5/10
+              - generic [ref=e326]:
+                - generic [ref=e327]:
+                  - paragraph [ref=e328]: Desking Series
+                  - heading "Trio" [level=3] [ref=e329]
+                  - paragraph [ref=e330]: A workstation system built for open spaces, crafted to bring flow and flexibility. Modular and adaptable solution designed to shape every kind of workstyle.
+                - paragraph [ref=e332]: Workstations Series
+                - generic [ref=e333]:
+                  - paragraph [ref=e334]:
+                    - generic [ref=e335]: Dimensions
+                    - generic [ref=e336]: W600 D600 H900-1000mm (adj.)
+                  - paragraph [ref=e337]:
+                    - generic [ref=e338]: Materials
+                    - generic [ref=e339]: Steel frame, powder-coated, Melamine-finish MDF work surface
+                - generic [ref=e341]:
+                  - generic [ref=e342]: View Product
+                  - generic [ref=e343]: Plan this system
+            - generic [ref=e344]:
+              - link "Plan this system" [ref=e345] [cursor=pointer]:
+                - /url: /planning/?type=workstations&series=Desking+Series&layout=double-bank&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450
+              - button "Add to Quote" [ref=e346]:
+                - img [ref=e347]
+                - text: Add to Quote
+          - article [ref=e352]:
+            - button "Add to compare" [ref=e353]:
+              - img [ref=e354]
+              - text: Compare
+            - link "X Bench office workstation desk system BIFMA Eco 5/10 Desking Series X Bench X-Bench workstation system for collaborative offices. Discover modular benching for modern workspaces. Workstations Series Dimensions W600 D600 H900-1000mm (adj.) Materials Steel frame, powder-coated, Melamine-finish MDF work surface View Product Plan this system" [ref=e361] [cursor=pointer]:
+              - /url: /products/workstations/oando-workstations--x-bench/
+              - generic [ref=e362]:
+                - img "X Bench office workstation desk system" [ref=e363]
+                - generic [ref=e364]:
+                  - generic [ref=e365]: BIFMA
+                  - generic [ref=e366]: Eco 5/10
+              - generic [ref=e367]:
+                - generic [ref=e368]:
+                  - paragraph [ref=e369]: Desking Series
+                  - heading "X Bench" [level=3] [ref=e370]
+                  - paragraph [ref=e371]: X-Bench workstation system for collaborative offices. Discover modular benching for modern workspaces.
+                - paragraph [ref=e373]: Workstations Series
+                - generic [ref=e374]:
+                  - paragraph [ref=e375]:
+                    - generic [ref=e376]: Dimensions
+                    - generic [ref=e377]: W600 D600 H900-1000mm (adj.)
+                  - paragraph [ref=e378]:
+                    - generic [ref=e379]: Materials
+                    - generic [ref=e380]: Steel frame, powder-coated, Melamine-finish MDF work surface
+                - generic [ref=e382]:
+                  - generic [ref=e383]: View Product
+                  - generic [ref=e384]: Plan this system
+            - generic [ref=e385]:
+              - link "Plan this system" [ref=e386] [cursor=pointer]:
+                - /url: /planning/?type=workstations&series=Desking+Series&layout=cluster-6&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450
+              - button "Add to Quote" [ref=e387]:
+                - img [ref=e388]
+                - text: Add to Quote
+  - contentinfo [ref=e392]:
+    - generic [ref=e394]:
+      - generic [ref=e395]:
+        - link "One and Only Furniture" [ref=e396] [cursor=pointer]:
+          - /url: /
+          - img "One and Only Furniture" [ref=e398]
+        - generic [ref=e399]: Patna, Bihar and Jharkhand, India
+        - generic [ref=e400]:
+          - link "+91 90310 22875" [ref=e401] [cursor=pointer]:
+            - /url: tel:+919031022875
+          - link "sales@oando.co.in" [ref=e402] [cursor=pointer]:
+            - /url: mailto:sales@oando.co.in
+        - generic [ref=e403]:
+          - link "YouTube" [ref=e404] [cursor=pointer]:
+            - /url: https://www.youtube.com/channel/UCehXuPNAXkyfODPCwyAU1gQ
+            - img [ref=e405]
+          - link "Facebook" [ref=e407] [cursor=pointer]:
+            - /url: https://www.facebook.com/oandofurniture
+            - img [ref=e408]
+      - generic [ref=e410]:
+        - generic [ref=e411]:
+          - paragraph [ref=e412]: Products
+          - list [ref=e413]:
+            - listitem [ref=e414]:
+              - link "All Products" [ref=e415] [cursor=pointer]:
+                - /url: /products/
+            - listitem [ref=e416]:
+              - link "Seating" [ref=e417] [cursor=pointer]:
+                - /url: /products/seating/
+            - listitem [ref=e418]:
+              - link "Workstations" [ref=e419] [cursor=pointer]:
+                - /url: /products/workstations/
+            - listitem [ref=e420]:
+              - link "Tables" [ref=e421] [cursor=pointer]:
+                - /url: /products/tables/
+            - listitem [ref=e422]:
+              - link "Storage" [ref=e423] [cursor=pointer]:
+                - /url: /products/storages/
+            - listitem [ref=e424]:
+              - link "Soft Seating" [ref=e425] [cursor=pointer]:
+                - /url: /products/soft-seating/
+            - listitem [ref=e426]:
+              - link "Education" [ref=e427] [cursor=pointer]:
+                - /url: /products/education/
+        - generic [ref=e428]:
+          - paragraph [ref=e429]: Solutions
+          - list [ref=e430]:
+            - listitem [ref=e431]:
+              - link "All Solutions" [ref=e432] [cursor=pointer]:
+                - /url: /solutions/
+            - listitem [ref=e433]:
+              - link "Seating" [ref=e434] [cursor=pointer]:
+                - /url: /products/seating/
+            - listitem [ref=e435]:
+              - link "Workstations" [ref=e436] [cursor=pointer]:
+                - /url: /products/workstations/
+            - listitem [ref=e437]:
+              - link "Meeting Rooms" [ref=e438] [cursor=pointer]:
+                - /url: /products/tables/
+            - listitem [ref=e439]:
+              - link "Storage and Filing" [ref=e440] [cursor=pointer]:
+                - /url: /products/storages/
+            - listitem [ref=e441]:
+              - link "Space Planning" [ref=e442] [cursor=pointer]:
+                - /url: /solutions/
+        - generic [ref=e443]:
+          - paragraph [ref=e444]: Company
+          - list [ref=e445]:
+            - listitem [ref=e446]:
+              - link "About Us" [ref=e447] [cursor=pointer]:
+                - /url: /about/
+            - listitem [ref=e448]:
+              - link "Trusted By" [ref=e449] [cursor=pointer]:
+                - /url: /trusted-by/
+            - listitem [ref=e450]:
+              - link "Projects" [ref=e451] [cursor=pointer]:
+                - /url: /projects/
+            - listitem [ref=e452]:
+              - link "Portfolio" [ref=e453] [cursor=pointer]:
+                - /url: /portfolio/
+            - listitem [ref=e454]:
+              - link "Sustainability" [ref=e455] [cursor=pointer]:
+                - /url: /sustainability/
+            - listitem [ref=e456]:
+              - link "After Sales" [ref=e457] [cursor=pointer]:
+                - /url: /service/
+        - generic [ref=e458]:
+          - paragraph [ref=e459]: Support
+          - list [ref=e460]:
+            - listitem [ref=e461]:
+              - link "Contact Us" [ref=e462] [cursor=pointer]:
+                - /url: /contact/
+            - listitem [ref=e463]:
+              - link "Workspace Planner" [ref=e464] [cursor=pointer]:
+                - /url: /planning/
+            - listitem [ref=e465]:
+              - link "Get Quote" [ref=e466] [cursor=pointer]:
+                - /url: /contact/
+            - listitem [ref=e467]:
+              - link "Refund Policy" [ref=e468] [cursor=pointer]:
+                - /url: /refund-and-return-policy/
+            - listitem [ref=e469]:
+              - link "Privacy Policy" [ref=e470] [cursor=pointer]:
+                - /url: /privacy/
+    - generic [ref=e472]:
+      - generic [ref=e473]:
+        - link "Refund Policy" [ref=e474] [cursor=pointer]:
+          - /url: /refund-and-return-policy/
+        - link "Privacy Policy" [ref=e475] [cursor=pointer]:
+          - /url: /privacy/
+        - link "Terms" [ref=e476] [cursor=pointer]:
+          - /url: /terms/
+      - generic [ref=e477]: Copyright 2026 One and Only Furniture. All rights reserved.
+  - dialog "Cookie preferences" [ref=e478]:
+    - generic [ref=e480]:
+      - paragraph [ref=e481]:
+        - text: We use essential cookies and optional analytics & attribution cookies to improve discoverability and user journeys. See our
+        - link "Privacy Policy" [ref=e482] [cursor=pointer]:
+          - /url: /privacy/
+        - text: .
+      - generic [ref=e483]:
+        - button "Reject Optional" [ref=e484]
+        - button "Accept All" [ref=e485]
+  - button "Open Next.js Dev Tools" [ref=e491] [cursor=pointer]:
+    - generic [ref=e494]:
+      - text: Compiling
+      - generic [ref=e495]:
+        - generic [ref=e496]: .
+        - generic [ref=e497]: .
+        - generic [ref=e498]: .
+  - alert [ref=e499]
+  - button "Open WhatsApp quick contact" [ref=e500]:
+    - img [ref=e501]

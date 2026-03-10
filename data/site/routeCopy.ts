@@ -183,37 +183,37 @@ export const GALLERY_PROJECTS = [
   {
     title: "Titan Workspace",
     location: "Patna",
-    image: "/projects/Titan/27-06-2025 Image 05_edited_edited.webp",
+    image: "/images/clients/photos/Titan/titan-hero.jpg",
     category: "Corporate fit-out",
   },
   {
     title: "TVS Office",
     location: "Patna",
-    image: "/projects/TVS/27-06-2025 Image 03.webp",
+    image: "/images/clients/photos/TVS/27-06-2025 Image 03.jpeg",
     category: "Operations floor",
   },
   {
     title: "DMRC Facility",
     location: "New Delhi",
-    image: "/projects/DMRC/IMG_20200612_145931.webp",
+    image: "/images/clients/photos/DMRC/IMG_20200612_145931.jpg",
     category: "Institutional workspace",
   },
   {
     title: "Usha Setup",
     location: "Patna",
-    image: "/projects/Usha/DSC_0077_edited.webp",
+    image: "/images/clients/photos/Usha/DSC_0077_edited.jpg",
     category: "Workspace modernization",
   },
   {
     title: "Government Office",
     location: "Patna",
-    image: "/projects/Govenment/20140707_124458_compressed.webp",
+    image: "/images/clients/photos/Govenment/20140707_124458_compressed.jpg",
     category: "Public sector project",
   },
   {
     title: "Franklin Templeton",
     location: "India",
-    image: "/projects/FranklinTempleton/WhatsApp Image 2020-08-28 at 12.40.51.webp",
+    image: "/images/clients/photos/FranklinTempleton/WhatsApp Image 2020-08-28 at 12.40.51.jpeg",
     category: "Enterprise deployment",
   },
 ] as const;
@@ -780,9 +780,9 @@ export const CATEGORY_ROUTE_COPY = {
   offlineDescription:
     "Product data is temporarily unavailable while the catalog reconnects. Please try again shortly.",
   plannerEntry: {
-    title: "Need help narrowing the shortlist?",
+    title: "Need a product recommendation?",
     description:
-      "Use the planning configurator when you need a better answer than filters alone: fit, capacity, and budget direction.",
+      "Tell us your seat count, space type, and budget. We will suggest the right category mix and send a shortlist.",
     primaryCta: "Open planning configurator",
     secondaryCta: "Request product advice",
   },

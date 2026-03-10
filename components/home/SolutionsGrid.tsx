@@ -5,66 +5,62 @@ import { HOMEPAGE_SOLUTIONS_CONTENT } from "@/data/site/homepage";
 
 export function SolutionsGrid() {
   return (
-    <section className="home-section home-section--sand py-16 md:py-20" aria-labelledby="featured-products-heading">
+    <section className="home-section bg-white py-16 md:py-20" aria-labelledby="featured-products-heading">
       <div className="home-shell">
+        {/* Header row */}
         <div className="mb-10 flex flex-wrap items-end justify-between gap-5 md:mb-12">
           <div>
-            <p className="typ-label mb-4 text-neutral-700">{HOMEPAGE_SOLUTIONS_CONTENT.kicker}</p>
-            <h2 id="featured-products-heading" className="typ-section max-w-2xl text-neutral-950">
+            <p className="typ-label mb-3 text-neutral-500">{HOMEPAGE_SOLUTIONS_CONTENT.kicker}</p>
+            <h2 id="featured-products-heading" className="typ-section text-neutral-950">
               {HOMEPAGE_SOLUTIONS_CONTENT.title}
             </h2>
           </div>
-          <Link
-            href="/compare"
-            className="home-link-arrow"
-          >
+          <Link href="/compare" className="home-link-arrow">
             {HOMEPAGE_SOLUTIONS_CONTENT.compareCta}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
-        <div className="-mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-3 scrollbar-hide lg:mx-0 lg:grid lg:grid-cols-2 lg:gap-7 lg:overflow-visible lg:px-0 lg:pb-0">
+        {/* 4-column compact grid */}
+        <div className="grid grid-cols-2 gap-px border border-neutral-200 bg-neutral-200 lg:grid-cols-4">
           {HOMEPAGE_SOLUTIONS_CONTENT.capabilities.map((cap) => (
-            <article
+            <Link
               key={cap.title}
-              className="group flex min-w-[84vw] snap-start flex-col overflow-hidden rounded-[1.75rem] border border-neutral-200 bg-white sm:min-w-[70vw] lg:min-w-0"
+              href={cap.href}
+              className="group flex flex-col bg-white transition-colors duration-200 hover:bg-neutral-50"
             >
-              <Link
-                href={cap.href}
-                className="relative block aspect-16/10 w-full overflow-hidden bg-neutral-100"
-                aria-label={`Open ${cap.title}`}
-              >
+              {/* Image — square crop */}
+              <div className="relative aspect-square w-full overflow-hidden bg-neutral-100">
                 <Image
                   src={cap.image}
                   alt={cap.title}
                   fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 />
-              </Link>
-
-                <div className="flex flex-1 flex-col px-5 py-5 md:px-6 md:py-6">
-                <Link
-                  href={cap.href}
-                  className="w-fit"
-                >
-                  <h3 className="text-[1.3rem] tracking-tight text-neutral-950 transition-colors group-hover:text-neutral-600">
-                    {cap.title}
-                  </h3>
-                </Link>
-                <p className="mt-3 max-w-md text-sm leading-relaxed text-neutral-700">{cap.outcome}</p>
-                <div className="mt-5 text-sm text-neutral-900">Explore route</div>
               </div>
-            </article>
+
+              {/* Text */}
+              <div className="px-5 py-5">
+                <h3 className="text-base font-normal tracking-tight text-neutral-950 group-hover:text-neutral-600">
+                  {cap.title}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-neutral-500">{cap.outcome}</p>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-neutral-400 transition-colors group-hover:text-neutral-700">
+                  Explore <ArrowRight className="h-3 w-3" />
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+        {/* Footer */}
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
           <Link href="/products" className="home-link-arrow">
             {HOMEPAGE_SOLUTIONS_CONTENT.catalogCta}
             <ArrowRight className="h-4 w-4" />
           </Link>
-          <p className="block text-xs font-normal tracking-[0.04em] text-neutral-700 lg:hidden">
+          <p className="block text-xs text-neutral-400 lg:hidden">
             {HOMEPAGE_SOLUTIONS_CONTENT.mobileHint}
           </p>
         </div>

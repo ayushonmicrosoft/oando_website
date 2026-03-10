@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import type {
   CompatCategory as Category,
@@ -766,16 +766,14 @@ function AdvancedFilterGridInner({
     >
       <div className="border-b border-neutral-200 bg-white">
         <div className="container-wide py-6">
-          <div className="overflow-hidden rounded-[28px] border border-neutral-200 bg-[linear-gradient(135deg,#fbfcfe_0%,#f5f7fb_55%,#eef2f8_100%)] px-5 py-5 text-neutral-950 shadow-[0_28px_70px_-50px_rgba(15,23,42,0.22)] md:px-6">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="py-8">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-neutral-500">
-                  Planning entry
-                </p>
-                <h2 className="mt-2 text-2xl font-light tracking-tight text-neutral-950">
+                <p className="typ-eyebrow mb-2">Planning entry</p>
+                <h2 className="typ-section mb-2 text-neutral-950">
                   {CATEGORY_ROUTE_COPY.plannerEntry.title}
                 </h2>
-                <p className="mt-2 max-w-xl text-sm leading-relaxed text-neutral-700">
+                <p className="max-w-xl text-sm leading-relaxed text-neutral-600">
                   {CATEGORY_ROUTE_COPY.plannerEntry.description}
                 </p>
               </div>
@@ -910,7 +908,7 @@ function AdvancedFilterGridInner({
               {Array.from({ length: 6 }).map((_, index) => (
                 <div
                   key={`loading-${index}`}
-                  className="h-[24rem] rounded-sm border border-neutral-100 bg-white animate-pulse"
+                  className="h-96 rounded-sm border border-neutral-100 bg-white animate-pulse"
                 />
               ))}
             </div>
@@ -971,7 +969,7 @@ function AdvancedFilterGridInner({
             ref={drawerRef}
             id="mobile-filter-drawer"
             tabIndex={-1}
-            className="fixed inset-y-0 left-0 z-[65] flex w-[88vw] max-w-sm flex-col overflow-y-auto bg-neutral-50 shadow-2xl lg:hidden"
+            className="fixed inset-y-0 left-0 z-65 flex w-[88vw] max-w-sm flex-col overflow-y-auto bg-neutral-50 shadow-2xl lg:hidden"
             role="dialog"
             aria-modal="true"
             aria-label="Filter products"

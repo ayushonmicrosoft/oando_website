@@ -1,7 +1,8 @@
 import { Hero } from "@/components/home/Hero";
 import { ClientBadge } from "@/components/ClientBadge";
 import { KpiIntegrityMonitor } from "@/components/analytics/KpiIntegrityMonitor";
-import { PROJECTS_PAGE_CLIENTS, PROJECTS_PAGE_COPY } from "@/data/site/routeCopy";
+import Image from "next/image";
+import { GALLERY_PROJECTS, PROJECTS_PAGE_CLIENTS, PROJECTS_PAGE_COPY } from "@/data/site/routeCopy";
 import { getBusinessStats } from "@/lib/businessStats";
 import { formatKpiAsOf, formatKpiValuePlus } from "@/lib/kpiFormat";
 
@@ -45,6 +46,30 @@ export default async function ProjectsPage() {
         >
           {asOfLabel}
         </p>
+
+        {/* Photographed Projects / Showroom execution */}
+        <div className="mb-24">
+          <p className="typ-label mb-8 text-neutral-400">Featured Installations</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {GALLERY_PROJECTS.map((project) => (
+              <div key={project.title} className="group flex flex-col gap-3">
+                <div className="relative aspect-4/3 w-full overflow-hidden rounded-xl bg-neutral-100 border border-neutral-200">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium text-neutral-900 tracking-tight">{project.title}</h3>
+                  <p className="text-sm text-neutral-500">{project.category} &middot; {project.location}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         <div className="mb-12">
           <p className="typ-label mb-6 text-neutral-400">{PROJECTS_PAGE_COPY.featuredLabel}</p>

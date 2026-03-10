@@ -1,0 +1,62 @@
+@layer components {
+  /* Hero - White base with dark text */
+  .hero {
+    background-color: #FFFFFF;
+    color: #333333;
+    padding: calc(var(--spacing) * 12);
+    border-radius: var(--radius-default);
+  }
+
+  /* CTAs/Buttons - Green accents on white for calls-to-action */
+  .btn-primary {
+    background-color: #006594;
+    color: #FFFFFF;
+    padding: calc(var(--spacing) * 4) calc(var(--spacing) * 8);
+    border-radius: var(--radius-default);
+    transition: background 0.3s ease;
+    box-shadow: var(--shadow-soft);
+  }
+  .btn-primary:hover {
+    background-color: darken(#006594, 10%);
+  }
+  .btn-accent {
+    background-color: #00A651;
+    color: #FFFFFF;
+  }
+
+  /* Metrics/Clients - Light gray cards for lists */
+  .stats-block {
+    background-color: #F4F4F5;
+    color: #333333;
+    padding: calc(var(--spacing) * 4);
+    border-radius: var(--radius-default);
+  }
+
+  /* Processes/Steps - White with green highlights */
+  .step-card {
+    background-color: #FFFFFF;
+    border: 1px solid #F4F4F5;
+    padding: calc(var(--spacing) * 6);
+    box-shadow: var(--shadow-soft);
+  }
+  .step-highlight {
+    color: #00A651;
+  }
+
+  /* Chatbot - Light gray bubble with green button */
+  .chatbot-bubble {
+    background-color: #F4F4F5;
+    color: #333333;
+    padding: calc(var(--spacing) * 4);
+    border-radius: var(--radius-default);
+  }
+  .chatbot-button {
+    background-color: #00A651;
+    color: #FFFFFF;
+  }
+
+  /* Animations - Fade-in for loading elements */
+  .fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+}

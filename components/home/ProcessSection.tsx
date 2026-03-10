@@ -15,7 +15,7 @@ export function ProcessSection() {
             <h2 className="home-heading max-w-3xl">
               {HOMEPAGE_PROCESS_CONTENT.title}
             </h2>
-            <p className="mt-4 max-w-2xl text-lg leading-relaxed text-neutral-700">
+            <p className="typ-lead mt-4 max-w-2xl text-neutral-700">
               {HOMEPAGE_PROCESS_CONTENT.description}
             </p>
           </div>
@@ -35,7 +35,7 @@ export function ProcessSection() {
               className="home-step-card group"
             >
               <p className="home-step-card__step">Step {index + 1}</p>
-              <p className="mb-3 text-2xl font-light leading-tight tracking-tight text-neutral-950">
+              <p className="mb-2 text-xl font-normal leading-tight tracking-tight text-neutral-950">
                 {step.title}
               </p>
               <p className="text-base leading-relaxed text-neutral-700">{step.detail}</p>

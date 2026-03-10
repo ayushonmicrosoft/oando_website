@@ -34,7 +34,7 @@ export function TrustStrip({ stats, asOfLabel }: TrustStripProps) {
   return (
     <section className="home-section border-y border-neutral-200 bg-white py-12 md:py-14" aria-label="Trust indicators">
       <div className="home-shell">
-        <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+        <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
           <div className="max-w-lg">
             <p className="home-kicker text-neutral-700">{HOMEPAGE_TRUST_CONTENT.kicker}</p>
             <h2 className="home-heading mt-3">
@@ -67,12 +67,12 @@ export function TrustStrip({ stats, asOfLabel }: TrustStripProps) {
               {kpis.map(({ value, label, testId }) => (
                 <div
                   key={label}
-                  className="border-t border-neutral-300 pt-4"
+                  className="rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-8 text-center"
                 >
-                <span data-testid={testId} className="block text-[1.85rem] tracking-tight text-neutral-950 md:text-[2.1rem]">
-                  {value}
-                </span>
-                  <p className="mt-1 text-sm text-neutral-700">{label}</p>
+                  <span data-testid={testId} className="block text-[2rem] font-light tracking-tight text-neutral-950 md:text-[2.25rem]">
+                    {value}
+                  </span>
+                  <p className="mt-2 text-sm text-neutral-600 font-medium tracking-wide uppercase">{label}</p>
                 </div>
               ))}
             </div>

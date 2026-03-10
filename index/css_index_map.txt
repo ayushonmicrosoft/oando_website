@@ -1,0 +1,180 @@
+=== CSS FILES INDEX ===
+
+[FILE: app/website-theme.css] (Total Lines: 88)
+--------------------------------------------------
+Line 1 - 54 : @theme
+Line 57 - 69 : @layer
+
+
+[FILE: app/website-home.css] (Total Lines: 379)
+--------------------------------------------------
+Line 1 - 7 : @layer
+Line 9 - 12 : .home-link-arrow
+Line 14 - 16 : .home-link-arrow
+Line 18 - 22 : .home-btn-primary
+Line 24 - 26 : .home-btn-primary
+Line 28 - 33 : .home-btn-secondary
+Line 35 - 37 : .home-btn-secondary
+Line 39 - 41 : .page-hero
+Line 43 - 45 : .home-section
+Line 47 - 49 : .home-section--sand
+Line 51 - 53 : .home-section--soft
+Line 55 - 57 : .home-shell
+Line 59 - 64 : .home-kicker
+Line 66 - 72 : .home-heading
+Line 74 - 76 : .home-copy
+Line 78 - 80 : .home-actions
+Line 82 - 89 : .home-note-chip
+Line 91 - 93 : .hero-proof-row
+Line 95 - 97 : .home-chip
+Line 99 - 101 : .home-chip--light
+Line 103 - 108 : .home-chip--accent
+Line 110 - 112 : .home-proof-card
+Line 114 - 116 : .home-proof-card--dark
+Line 118 - 123 : .home-proof-card--glass
+Line 125 - 127 : .home-proof-card__label
+Line 129 - 131 : .home-proof-card__label--dark
+Line 133 - 135 : .home-proof-card__label--glass
+Line 137 - 139 : .home-proof-card__value
+Line 141 - 143 : .home-proof-card__value--dark
+Line 145 - 147 : .home-proof-card__value--glass
+Line 149 - 152 : .home-hero
+Line 154 - 157 : .home-hero__media
+Line 159 - 169 : .home-hero__overlay
+Line 171 - 173 : .home-hero__fade
+Line 175 - 177 : .home-hero__shell
+Line 179 - 187 : .home-hero__content
+Line 189 - 191 : .home-panel
+Line 193 - 195 : .home-panel--light
+Line 197 - 199 : .home-panel--dark
+Line 201 - 206 : .home-panel--glass
+Line 208 - 210 : .home-panel--elevated
+Line 212 - 214 : .home-panel__kicker
+Line 216 - 218 : .home-panel__kicker--dark
+Line 220 - 222 : .home-panel__kicker--muted
+Line 224 - 226 : .home-panel__copy--dark
+Line 228 - 230 : .home-panel__copy
+Line 232 - 235 : .home-stat-card
+Line 237 - 240 : .home-media-card
+Line 242 - 245 : .home-media-card__overlay
+Line 247 - 249 : .home-media-card__caption
+Line 251 - 253 : .home-media-card__eyebrow
+Line 255 - 260 : .home-step-card
+Line 262 - 265 : .home-step-card__step
+Line 267 - 271 : .home-step-card__meta
+Line 282 - 284 : .contact-shell
+Line 286 - 288 : .contact-summary
+Line 290 - 292 : .contact-summary__intro
+Line 294 - 300 : .contact-summary__eyebrow
+Line 302 - 304 : .contact-summary__copy
+Line 306 - 309 : .contact-card
+Line 311 - 317 : .contact-card__title
+Line 319 - 321 : .contact-card__value
+Line 323 - 325 : .contact-card__meta
+Line 327 - 329 : .contact-channel
+Line 331 - 333 : .contact-channel__icon
+Line 335 - 341 : .contact-channel__label
+Line 343 - 345 : .contact-channel__link
+Line 347 - 350 : .contact-form-panel
+Line 353 - 359 : .stats-block
+Line 361 - 368 : .stats-block__value
+Line 370 - 377 : .stats-block__label
+
+
+[FILE: app/website-catalog.css] (Total Lines: 115)
+--------------------------------------------------
+Line 1 - 20 : @layer
+Line 22 - 26 : .catalog-card
+Line 28 - 30 : .catalog-card__compare
+Line 32 - 34 : .catalog-card__compare--active
+Line 36 - 40 : .catalog-card__compare--idle
+Line 42 - 44 : .catalog-card__media
+Line 46 - 48 : .catalog-card__badge-row
+Line 50 - 54 : .catalog-card__badge
+Line 56 - 58 : .catalog-card__body
+Line 60 - 66 : .catalog-card__eyebrow
+Line 68 - 70 : .catalog-card__title
+Line 72 - 74 : .catalog-card__description
+Line 76 - 78 : .catalog-card__meta
+Line 80 - 82 : .catalog-card__meta-row
+Line 84 - 86 : .catalog-card__meta-label
+Line 88 - 90 : .catalog-card__actions
+Line 93 - 95 : .catalog-card__actions
+Line 103 - 105 : .badge
+Line 107 - 109 : .badge-primary
+Line 111 - 113 : .badge-outline
+
+
+[FILE: app/custom-components.css] (Total Lines: 358)
+--------------------------------------------------
+Line 1 - 7 : @utility
+Line 12 - 18 : @utility
+Line 23 - 25 : .container-wide
+Line 27 - 34 : @layer
+Line 36 - 38 : .btn
+Line 40 - 46 : .btn-primary
+Line 48 - 51 : .btn-primary
+Line 53 - 56 : .btn-accent
+Line 58 - 61 : .btn-outline
+Line 63 - 65 : .btn-pill
+Line 67 - 69 : .btn-pill-compact
+Line 71 - 75 : .btn-hero-primary
+Line 77 - 79 : .btn-hero-primary
+Line 81 - 85 : .btn-hero-secondary
+Line 87 - 90 : .btn-nav-primary
+Line 92 - 94 : .link-arrow
+Line 96 - 100 : .typ-h1
+Line 102 - 106 : .typ-h2
+Line 108 - 111 : .typ-h3
+Line 113 - 116 : .typ-eyebrow
+Line 118 - 121 : .typ-cta
+Line 123 - 125 : .typ-subtle
+Line 127 - 129 : .text-3xl
+Line 131 - 138 : .typ-display
+Line 140 - 146 : .typ-section
+Line 148 - 152 : .typ-lead
+Line 154 - 159 : .typ-label
+Line 161 - 166 : .typ-stat
+Line 168 - 172 : .surface-panel
+Line 174 - 178 : .surface-card
+Line 180 - 182 : .section-divider
+Line 184 - 191 : .section-divider
+Line 193 - 200 : .nav-shell
+Line 202 - 204 : .nav-pill
+Line 206 - 208 : .mega-card
+Line 210 - 213 : .mega-card
+Line 215 - 217 : .menu-chip
+Line 219 - 223 : .ai-search-shell
+Line 225 - 230 : .step-card
+Line 232 - 234 : .step-highlight
+Line 236 - 239 : .drawer-shell
+Line 241 - 246 : .drawer-search
+Line 248 - 250 : .drawer-link
+Line 252 - 254 : .drawer-subtle-link
+Line 256 - 258 : .drawer-subcategory-link
+Line 260 - 265 : .chatbot-bubble
+Line 267 - 270 : .chatbot-button
+Line 272 - 274 : .card-lift
+Line 276 - 279 : .card-lift
+Line 281 - 283 : .animate-fadein
+Line 285 - 287 : .fade-in
+Line 290 - 294 : @keyframes
+Line 302 - 305 : @keyframes
+Line 316 - 319 : .animate-marquee
+Line 321 - 324 : .animate-marquee-reverse
+Line 326 - 329 : @keyframes
+Line 336 - 339 : @keyframes
+Line 346 - 349 : .animate-hero-pan
+Line 351 - 353 : .hover
+Line 355 - 357 : .group
+
+
+[FILE: app/globals.css] (Total Lines: 65)
+--------------------------------------------------
+Line 7 - 11 : @layer
+Line 39 - 44 : @layer
+Line 46 - 48 : .scrollbar-hide
+Line 50 - 53 : .scrollbar-hide
+Line 56 - 59 : @keyframes
+
+

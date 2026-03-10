@@ -1,0 +1,17 @@
+@theme {
+  --color-background: #FFFFFF; /* white base */
+  --color-foreground: #333333; /* dark gray text */
+  --color-primary: #006594; /* logo blue */
+  --color-primary-hover: #004E89; /* Darker hover */
+  --color-accent-green: #00A651; /* green accent */
+  --color-neutral-light: #F4F4F5; /* light gray */
+  --font-sans: 'Geist', 'Helvetica Neue', Helvetica, sans-serif;
+  --radius-default: 0.5rem;
+  --spacing: 0.25rem;
+  --shadow-soft: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}

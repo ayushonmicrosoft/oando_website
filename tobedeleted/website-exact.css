@@ -1,0 +1,84 @@
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #333333;
+  --color-primary: #006594;
+  --color-accent-green: #00a651;
+  --color-neutral-light: #f4f4f5;
+  --font-sans: "Geist", "Helvetica Neue", Helvetica, sans-serif;
+  --radius-default: 0.5rem;
+  --spacing: 0.25rem;
+  --shadow-soft: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer components {
+  .hero {
+    background-color: #ffffff;
+    color: #333333;
+    padding: calc(var(--spacing) * 12);
+    border-radius: var(--radius-default);
+  }
+
+  .btn-primary {
+    background-color: #006594;
+    color: #ffffff;
+    padding: calc(var(--spacing) * 4) calc(var(--spacing) * 8);
+    border-radius: var(--radius-default);
+    transition: background 0.3s ease;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .btn-primary:hover {
+    background-color: #00527a;
+  }
+
+  .btn-accent {
+    background-color: #00a651;
+    color: #ffffff;
+  }
+
+  .stats-block {
+    background-color: #f4f4f5;
+    color: #333333;
+    padding: calc(var(--spacing) * 4);
+    border-radius: var(--radius-default);
+  }
+
+  .step-card {
+    background-color: #ffffff;
+    border: 1px solid #f4f4f5;
+    padding: calc(var(--spacing) * 6);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .step-highlight {
+    color: #00a651;
+  }
+
+  .chatbot-bubble {
+    background-color: #f4f4f5;
+    color: #333333;
+    padding: calc(var(--spacing) * 4);
+    border-radius: var(--radius-default);
+  }
+
+  .chatbot-button {
+    background-color: #00a651;
+    color: #ffffff;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+}

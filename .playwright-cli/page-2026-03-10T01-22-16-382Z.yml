@@ -1,0 +1,324 @@
+- generic [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e3]:
+    - generic [ref=e5]:
+      - link "One and Only Furniture - home" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img "One and Only Furniture" [ref=e8]
+      - button "Open menu" [ref=e10]:
+        - img [ref=e11]
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - img "Hero Background" [ref=e16]
+        - generic [ref=e21]:
+          - heading "Planning Service" [level=1] [ref=e23]
+          - paragraph [ref=e24]: Workspace planning that balances workflow, budget, and execution timelines.
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - paragraph [ref=e29]: 120+
+          - paragraph [ref=e30]: Client organizations served
+        - generic [ref=e31]:
+          - paragraph [ref=e32]: 259+
+          - paragraph [ref=e33]: Projects delivered
+        - generic [ref=e34]:
+          - paragraph [ref=e35]: 18+
+          - paragraph [ref=e36]: Sectors served
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - generic [ref=e41]:
+              - generic [ref=e42]:
+                - paragraph [ref=e43]: Planning-first configurator
+                - heading "Live workstation planning map" [level=2] [ref=e44]
+                - paragraph [ref=e45]: This configurator is designed for workspace decisions, not just options selection. Define intent, test fit, review layout tradeoffs, and send a cleaner project brief to our team.
+              - generic [ref=e46]: 24 seats
+            - img "Rough workstation drawing" [ref=e48]
+            - generic [ref=e98]:
+              - generic [ref=e99]:
+                - paragraph [ref=e100]: Capacity
+                - paragraph [ref=e101]: "24"
+              - generic [ref=e102]:
+                - paragraph [ref=e103]: Footprint
+                - paragraph [ref=e104]: 9m x 3m
+              - generic [ref=e105]:
+                - paragraph [ref=e106]: Fit verdict
+                - paragraph [ref=e107]: Fits within room
+                - paragraph [ref=e108]: Room 12m x 18m
+              - generic [ref=e109]:
+                - paragraph [ref=e110]: Budget band
+                - paragraph [ref=e111]: ₹5,20,560 - ₹6,47,808
+            - generic [ref=e112]:
+              - generic [ref=e113]: Fits within room
+              - generic [ref=e114]: Coverage 15%
+              - generic [ref=e115]: 9.00 sq m / seat
+              - generic [ref=e116]:
+                - img [ref=e117]
+                - text: High-density planning
+            - generic [ref=e121]:
+              - generic [ref=e122]:
+                - generic [ref=e123]:
+                  - paragraph [ref=e124]: Recommendation
+                  - paragraph [ref=e125]: Best for dense operations floors
+                - generic [ref=e126]: "Area efficiency: 9.00 sqm"
+              - paragraph [ref=e127]: "Desking Series with double bank is the strongest match for the current goal: high-density planning."
+              - paragraph [ref=e128]: Dense layouts improve seat count, but wider aisles and added storage improve long-term usability.
+              - paragraph [ref=e129]: The current plan fits within the usable room zone as configured.
+            - generic [ref=e130]:
+              - generic [ref=e131]:
+                - img [ref=e132]
+                - text: Acrylic screens
+              - generic [ref=e135]: Metal modesty panel
+              - generic [ref=e136]:
+                - img [ref=e137]
+                - text: Spine raceway
+            - generic [ref=e141]:
+              - paragraph [ref=e142]: Suggested workstation systems
+              - generic [ref=e143]:
+                - link "DeskPro DeskPro Modular desking for linear and cluster plans." [ref=e144] [cursor=pointer]:
+                  - /url: /products/workstations/
+                  - img "DeskPro" [ref=e146]
+                  - generic [ref=e147]:
+                    - paragraph [ref=e148]: DeskPro
+                    - paragraph [ref=e149]: Modular desking for linear and cluster plans.
+                - link "Linear Workstation Linear Workstation Benching-oriented plan for high seat density." [ref=e150] [cursor=pointer]:
+                  - /url: /products/workstations/
+                  - img "Linear Workstation" [ref=e152]
+                  - generic [ref=e153]:
+                    - paragraph [ref=e154]: Linear Workstation
+                    - paragraph [ref=e155]: Benching-oriented plan for high seat density.
+          - generic [ref=e157]:
+            - generic [ref=e158]:
+              - generic [ref=e159]:
+                - paragraph [ref=e160]: Planning-first configurator
+                - heading "A guided planning flow for fit, capacity, and budget confidence." [level=3] [ref=e161]
+                - paragraph [ref=e162]: Select planning intent, test room fit, tune system options, then send a quote-ready requirement.
+              - generic [ref=e163]: 6-step flow
+            - generic [ref=e164]:
+              - button "Step 1 Project type" [ref=e165]:
+                - paragraph [ref=e166]: Step 1
+                - paragraph [ref=e167]: Project type
+              - button "Step 2 Planning goal" [ref=e168]:
+                - paragraph [ref=e169]: Step 2
+                - paragraph [ref=e170]: Planning goal
+              - button "Step 3 Room and capacity" [ref=e171]:
+                - paragraph [ref=e172]: Step 3
+                - paragraph [ref=e173]: Room and capacity
+              - button "Step 4 System options" [ref=e174]:
+                - paragraph [ref=e175]: Step 4
+                - paragraph [ref=e176]: System options
+              - button "Step 5 Recommendation" [ref=e177]:
+                - paragraph [ref=e178]: Step 5
+                - paragraph [ref=e179]: Recommendation
+              - button "Step 6 Contact and submission" [ref=e180]:
+                - paragraph [ref=e181]: Step 6
+                - paragraph [ref=e182]: Contact and submission
+            - paragraph [ref=e183]: Progress is saved on this device until you submit the planning brief.
+            - generic [ref=e472]:
+              - paragraph [ref=e473]: "Step 6: contact and submission"
+              - generic [ref=e474]:
+                - textbox "End client (optional)" [ref=e475]
+                - textbox "Project name (optional)" [ref=e476]
+                - textbox "Site location (city/state)" [ref=e477]: Patna, Bihar
+                - textbox "Company (optional)" [ref=e478]
+                - textbox "Your name" [active] [ref=e479]: Codex QA
+                - textbox "Work email" [ref=e480]: codex@example.com
+                - textbox "Phone (optional)" [ref=e481]
+                - textbox "Notes (optional)" [ref=e482]
+            - generic [ref=e201]:
+              - generic [ref=e202]:
+                - button "Previous step" [ref=e203]
+                - button "Reset planner" [ref=e204]
+              - generic [ref=e205]:
+                - button "Send planning brief" [ref=e209]:
+                  - text: Send planning brief
+                  - img [ref=e210]
+                - link "View matching products" [ref=e212] [cursor=pointer]:
+                  - /url: /products/workstations/?series=Desking+Series
+        - generic [ref=e214]:
+          - generic [ref=e215]:
+            - paragraph [ref=e216]: Planner summary
+            - paragraph [ref=e217]: Best for dense operations floors. Dense layouts improve seat count, but wider aisles and added storage improve long-term usability.
+          - button "View live brief" [ref=e218]
+      - generic [ref=e220]:
+        - generic [ref=e221]:
+          - paragraph [ref=e222]: Planning workflow
+          - heading "From intent to implementation-ready plans." [level=2] [ref=e223]
+        - generic [ref=e224]:
+          - article [ref=e225]:
+            - heading "Discovery and brief alignment" [level=3] [ref=e226]
+            - paragraph [ref=e227]: We map team structure, workflow patterns, budget constraints, and approval checkpoints before design begins.
+          - article [ref=e228]:
+            - heading "Layout and specification" [level=3] [ref=e229]
+            - paragraph [ref=e230]: Our team develops 2D/3D concepts and furniture specifications tailored to headcount, zoning, and performance targets.
+          - article [ref=e231]:
+            - heading "Execution readiness" [level=3] [ref=e232]
+            - paragraph [ref=e233]: You receive BOQ-ready documentation, phased implementation options, and a clear handover plan for procurement and fit-out teams.
+      - generic [ref=e236]:
+        - generic [ref=e237]:
+          - paragraph [ref=e238]: What you receive
+          - heading "Clear deliverables your team can execute." [level=2] [ref=e239]
+          - list [ref=e240]:
+            - listitem [ref=e241]: Workplace planning workshop
+            - listitem [ref=e242]: Space zoning and furniture layout
+            - listitem [ref=e243]: Category-wise furniture recommendations
+            - listitem [ref=e244]: Budget-aligned BOQ draft
+            - listitem [ref=e245]: Implementation roadmap
+        - generic [ref=e246]:
+          - paragraph [ref=e247]: Best for
+          - paragraph [ref=e248]: New offices, floor expansions, workspace modernization, and enterprise fit-outs where planning quality directly impacts cost and timeline.
+          - generic [ref=e249]:
+            - link "Request planning call" [ref=e250] [cursor=pointer]:
+              - /url: "#planner"
+            - link "View products" [ref=e251] [cursor=pointer]:
+              - /url: /products/
+      - generic [ref=e255]:
+        - generic [ref=e256]:
+          - paragraph [ref=e257]: Get in touch
+          - heading "Start with one clear brief." [level=2] [ref=e258]
+          - paragraph [ref=e259]: Use the guided planner, or speak to the team directly.
+          - generic [ref=e260]:
+            - button "Open guided planner" [ref=e261]:
+              - img [ref=e262]
+              - text: Open planner
+            - button "Open AI chatbot" [ref=e264]:
+              - img [ref=e265]
+              - text: Open chatbot
+        - generic [ref=e268]:
+          - paragraph [ref=e269]: Get in touch
+          - heading "Need a human response?" [level=3] [ref=e270]
+          - paragraph [ref=e271]: Call, WhatsApp, or email the team directly.
+          - generic [ref=e272]:
+            - generic [ref=e273]:
+              - generic [ref=e274]:
+                - img [ref=e275]
+                - text: Call or WhatsApp
+              - paragraph [ref=e277]: +91 90310 22875
+            - generic [ref=e278]:
+              - generic [ref=e279]:
+                - img [ref=e280]
+                - text: Email
+              - link "sales@oando.co.in" [ref=e282] [cursor=pointer]:
+                - /url: mailto:sales@oando.co.in
+  - contentinfo [ref=e283]:
+    - generic [ref=e285]:
+      - generic [ref=e286]:
+        - link "One and Only Furniture" [ref=e287] [cursor=pointer]:
+          - /url: /
+          - img "One and Only Furniture" [ref=e289]
+        - generic [ref=e290]: Patna, Bihar and Jharkhand, India
+        - generic [ref=e291]:
+          - link "+91 90310 22875" [ref=e292] [cursor=pointer]:
+            - /url: tel:+919031022875
+          - link "sales@oando.co.in" [ref=e293] [cursor=pointer]:
+            - /url: mailto:sales@oando.co.in
+        - generic [ref=e294]:
+          - link "YouTube" [ref=e295] [cursor=pointer]:
+            - /url: https://www.youtube.com/channel/UCehXuPNAXkyfODPCwyAU1gQ
+            - img [ref=e296]
+          - link "Facebook" [ref=e298] [cursor=pointer]:
+            - /url: https://www.facebook.com/oandofurniture
+            - img [ref=e299]
+      - generic [ref=e301]:
+        - generic [ref=e302]:
+          - paragraph [ref=e303]: Products
+          - list [ref=e304]:
+            - listitem [ref=e305]:
+              - link "All Products" [ref=e306] [cursor=pointer]:
+                - /url: /products/
+            - listitem [ref=e307]:
+              - link "Seating" [ref=e308] [cursor=pointer]:
+                - /url: /products/seating/
+            - listitem [ref=e309]:
+              - link "Workstations" [ref=e310] [cursor=pointer]:
+                - /url: /products/workstations/
+            - listitem [ref=e311]:
+              - link "Tables" [ref=e312] [cursor=pointer]:
+                - /url: /products/tables/
+            - listitem [ref=e313]:
+              - link "Storage" [ref=e314] [cursor=pointer]:
+                - /url: /products/storages/
+            - listitem [ref=e315]:
+              - link "Soft Seating" [ref=e316] [cursor=pointer]:
+                - /url: /products/soft-seating/
+            - listitem [ref=e317]:
+              - link "Education" [ref=e318] [cursor=pointer]:
+                - /url: /products/education/
+        - generic [ref=e319]:
+          - paragraph [ref=e320]: Solutions
+          - list [ref=e321]:
+            - listitem [ref=e322]:
+              - link "All Solutions" [ref=e323] [cursor=pointer]:
+                - /url: /solutions/
+            - listitem [ref=e324]:
+              - link "Seating" [ref=e325] [cursor=pointer]:
+                - /url: /products/seating/
+            - listitem [ref=e326]:
+              - link "Workstations" [ref=e327] [cursor=pointer]:
+                - /url: /products/workstations/
+            - listitem [ref=e328]:
+              - link "Meeting Rooms" [ref=e329] [cursor=pointer]:
+                - /url: /products/tables/
+            - listitem [ref=e330]:
+              - link "Storage and Filing" [ref=e331] [cursor=pointer]:
+                - /url: /products/storages/
+            - listitem [ref=e332]:
+              - link "Space Planning" [ref=e333] [cursor=pointer]:
+                - /url: /solutions/
+        - generic [ref=e334]:
+          - paragraph [ref=e335]: Company
+          - list [ref=e336]:
+            - listitem [ref=e337]:
+              - link "About Us" [ref=e338] [cursor=pointer]:
+                - /url: /about/
+            - listitem [ref=e339]:
+              - link "Trusted By" [ref=e340] [cursor=pointer]:
+                - /url: /trusted-by/
+            - listitem [ref=e341]:
+              - link "Projects" [ref=e342] [cursor=pointer]:
+                - /url: /projects/
+            - listitem [ref=e343]:
+              - link "Portfolio" [ref=e344] [cursor=pointer]:
+                - /url: /portfolio/
+            - listitem [ref=e345]:
+              - link "Sustainability" [ref=e346] [cursor=pointer]:
+                - /url: /sustainability/
+            - listitem [ref=e347]:
+              - link "After Sales" [ref=e348] [cursor=pointer]:
+                - /url: /service/
+        - generic [ref=e349]:
+          - paragraph [ref=e350]: Support
+          - list [ref=e351]:
+            - listitem [ref=e352]:
+              - link "Contact Us" [ref=e353] [cursor=pointer]:
+                - /url: /contact/
+            - listitem [ref=e354]:
+              - link "Workspace Planner" [ref=e355] [cursor=pointer]:
+                - /url: /planning/
+            - listitem [ref=e356]:
+              - link "Get Quote" [ref=e357] [cursor=pointer]:
+                - /url: /contact/
+            - listitem [ref=e358]:
+              - link "Refund Policy" [ref=e359] [cursor=pointer]:
+                - /url: /refund-and-return-policy/
+            - listitem [ref=e360]:
+              - link "Privacy Policy" [ref=e361] [cursor=pointer]:
+                - /url: /privacy/
+    - generic [ref=e363]:
+      - generic [ref=e364]:
+        - link "Refund Policy" [ref=e365] [cursor=pointer]:
+          - /url: /refund-and-return-policy/
+        - link "Privacy Policy" [ref=e366] [cursor=pointer]:
+          - /url: /privacy/
+        - link "Terms" [ref=e367] [cursor=pointer]:
+          - /url: /terms/
+      - generic [ref=e368]: Copyright 2026 One and Only Furniture. All rights reserved.
+  - button "Open Next.js Dev Tools" [ref=e382] [cursor=pointer]:
+    - img [ref=e383]
+  - alert [ref=e401]
+  - button "Open AI chatbot" [ref=e402]:
+    - img [ref=e403]
+    - generic [ref=e406]: AI Chatbot
+  - button "Open WhatsApp quick contact" [ref=e407]:
+    - img [ref=e408]

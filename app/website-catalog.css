@@ -1,0 +1,93 @@
+@layer components {
+  /* Product catalog card — HON-inspired: clean white, no borders, no shadows */
+  .catalog-card {
+    @apply relative flex h-full flex-col overflow-hidden bg-white transition-all duration-300;
+  }
+
+  .catalog-card:hover .catalog-card__media img,
+  .catalog-card:hover .catalog-card__media > span img {
+    transform: scale(1.04);
+  }
+
+  .catalog-card__compare {
+    @apply absolute right-3 top-3 z-10 inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] tracking-[0.02em] transition-all duration-200;
+  }
+
+  .catalog-card__compare--active {
+    @apply border-primary bg-primary text-white opacity-100;
+  }
+
+  .catalog-card__compare--idle {
+    @apply border-neutral-300 bg-white text-neutral-700 opacity-0 group-hover:opacity-100;
+  }
+
+  .catalog-card__media {
+    @apply relative aspect-square w-full overflow-hidden bg-neutral-50;
+  }
+
+  .catalog-card__media img {
+    transition: transform 0.5s ease;
+  }
+
+  .catalog-card__badge-row {
+    @apply absolute left-3 top-3 flex flex-wrap gap-2;
+  }
+
+  .catalog-card__badge {
+    @apply inline-flex items-center rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[10px] tracking-[0.02em] text-neutral-600;
+  }
+
+  .catalog-card__body {
+    @apply flex flex-1 flex-col gap-3 pt-4;
+  }
+
+  .catalog-card__eyebrow {
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: none;
+    color: var(--color-neutral-500);
+  }
+
+  .catalog-card__title {
+    @apply text-base font-medium leading-tight text-neutral-950 transition-colors group-hover:text-primary;
+  }
+
+  .catalog-card__description {
+    @apply text-sm leading-relaxed text-neutral-500;
+  }
+
+  .catalog-card__meta {
+    @apply grid gap-2 border-t border-neutral-100 pt-3 text-sm text-neutral-700;
+  }
+
+  .catalog-card__meta-row {
+    @apply grid grid-cols-[5.25rem_minmax(0,1fr)] gap-2;
+  }
+
+  .catalog-card__meta-label {
+    @apply text-neutral-400;
+  }
+
+  .catalog-card__actions {
+    @apply mt-auto flex flex-col gap-2 pt-1 sm:flex-row;
+  }
+
+  .catalog-card__actions .btn-primary,
+  .catalog-card__actions .btn-outline {
+    @apply min-h-11 flex-1;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center rounded-full bg-neutral-100 px-3 py-1 text-xs font-normal text-neutral-600;
+  }
+
+  .badge-primary {
+    @apply bg-primary/10 text-primary;
+  }
+
+  .badge-outline {
+    @apply border border-neutral-200 bg-transparent text-neutral-600;
+  }
+}

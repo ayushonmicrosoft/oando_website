@@ -69,7 +69,7 @@ export function OurExperience({ clientCount }: OurExperienceProps) {
                       <p className="home-media-card__eyebrow">
                         Project
                       </p>
-                      <p className="text-2xl font-light tracking-tight text-white">
+                      <p className="text-xl font-normal tracking-tight text-white">
                         {item.title}
                       </p>
                     </div>

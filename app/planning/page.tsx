@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Simple2DConfigurator } from "@/components/configurator/Simple2DConfigurator";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
 import {
   CONFIGURATOR_PAGE_COPY,
@@ -50,7 +49,7 @@ export default async function PlanningPage({
               alt="Workspace planning service"
               width={1400}
               height={900}
-              className="aspect-[16/10] w-full rounded-[24px] object-cover"
+              className="aspect-16/10 w-full rounded-[24px] object-cover"
             />
           </div>
         </div>
@@ -78,11 +77,22 @@ export default async function PlanningPage({
         </div>
       </section>
 
-      <section id="planner" className="container px-6 py-16 md:py-20 2xl:px-0">
-        <Simple2DConfigurator defaultType={defaultType} />
+      <section id="planner" className="w-full bg-white py-20 border-b border-neutral-200">
+        <div className="container px-6 2xl:px-0 text-center max-w-4xl mx-auto">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400 mb-6">Expert Space Planning</p>
+          <h2 className="text-4xl md:text-5xl font-light tracking-tight text-neutral-900 mb-6">
+            Stop guessing with generic layouts. Let our architects build a precise plan.
+          </h2>
+          <p className="text-lg text-neutral-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Every workspace is different. Tell us your headcount, team types, and available footprint, and our interior specialists will provide a custom 2D/3D layout recommendation within 48 hours.
+          </p>
+          <Link href="/contact" className="inline-flex min-h-12 items-center justify-center rounded-md bg-neutral-900 px-8 py-3 text-sm font-medium tracking-[0.03em] text-white transition-colors hover:bg-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2">
+            Request a custom space plan
+          </Link>
+        </div>
       </section>
 
-      <section className="w-full bg-white py-18 md:py-22">
+      <section className="w-full bg-neutral-50 py-18 md:py-22">
         <div className="container px-6 2xl:px-0">
           <div className="mb-12 max-w-3xl">
             <p className="typ-label mb-4 text-neutral-700">{PLANNING_PAGE_COPY.workflowKicker}</p>

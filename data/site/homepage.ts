@@ -1,27 +1,27 @@
 export const HOMEPAGE_HERO_CONTENT = {
   eyebrowPrimary: "Workspace planning for Bihar and beyond",
-  eyebrowSecondary: "Planning, supply, installation, after-sales",
+  eyebrowSecondary: "",
   imageAlt:
     "Ergonomic seating and workstations expertly installed at Titan Patna HQ by One and Only Furniture",
-  title: ["Workspaces built", "to perform", "and endure."],
+  title: ["Office projects", "handled clearly."],
   description:
-    "From planning and product selection to installation and after-sales, one team carries the project from brief to handover.",
-  primaryCta: { label: "Guided Planner", href: "/contact" },
-  secondaryCta: { label: "View Products", href: "/products" },
+    "One team handles planning, furniture, installation, and after-sales.",
+  primaryCta: { label: "Plan project", href: "/contact" },
+  secondaryCta: { label: "Browse products", href: "/products" },
   proofCards: [
-    { label: "Selected clients", value: "DMRC, Titan, Tata Steel" },
-    { label: "Delivery model", value: "Plan, supply, install, support" },
+    { label: "Clients", value: "DMRC, Titan, Tata Steel" },
+    { label: "Coverage", value: "Planning to after-sales" },
   ],
   deliverySummary: {
     kicker: "Delivery view",
-    title: "Clarity before procurement begins.",
+    title: "Procurement stays clear.",
     description:
-      "Planning outputs stay readable for leadership, procurement, and facilities teams.",
+      "Layout, BOQ, dispatch, and installation stay aligned.",
   },
   deliveryRows: [
     {
       label: "Plan",
-      value: "Scope, layout, and BOQ aligned early.",
+      value: "Scope and BOQ aligned early.",
     },
     {
       label: "Deliver",
@@ -29,7 +29,7 @@ export const HOMEPAGE_HERO_CONTENT = {
     },
     {
       label: "Support",
-      value: "Warranty and after-sales stay traceable.",
+      value: "Warranty and service stay traceable.",
     },
   ],
 } as const;
@@ -156,10 +156,12 @@ export const HOMEPAGE_TRUSTED_CLIENTS_CONTENT = {
   kicker: "Trusted by India's leading corporations",
   cta: "View all projects",
   clients: [
-    { name: "Titan Company", abbr: "TITAN" },
-    { name: "TVS Group", abbr: "TVS" },
-    { name: "Usha International", abbr: "USHA" },
-    { name: "DMRC", abbr: "DMRC" },
+    { name: "Titan Company", src: "/images/clients/logos/Titan.png" },
+    { name: "Larsen & Toubro", src: "/images/clients/logos/LandT.png" },
+    { name: "JSW Group", src: "/images/clients/logos/JSW.png" },
+    { name: "Tata Motors", src: "/images/clients/logos/TataMotors.jpg" },
+    { name: "Maruti Suzuki", src: "/images/clients/logos/MarutiSuzuki.png" },
+    { name: "HDFC Bank", src: "/images/clients/logos/HDFCLogo.jpg" },
   ],
 } as const;
 
@@ -249,29 +251,25 @@ export const HOMEPAGE_SOLUTIONS_CONTENT = {
   capabilities: [
     {
       title: "Ergonomic Seating",
-      outcome:
-        "Task and executive seating tuned for posture support, long-hour comfort, and dependable after-sales coverage.",
+      outcome: "Task, executive, and visitor chairs. Backed by warranty and on-site service.",
       href: "/products/seating",
       image: "/images/catalog/oando-seating--fluid-x/image-1.webp",
     },
     {
       title: "Scalable Workstations",
-      outcome:
-        "Modular systems that scale team by team with practical cable management and planning-friendly layouts.",
+      outcome: "Linear, cluster, and panel systems. Planned around your team size and floor.",
       href: "/products/workstations",
       image: "/images/catalog/oando-workstations--deskpro/image-1.webp",
     },
     {
-      title: "Secure Storage Systems",
-      outcome:
-        "Lockers, pedestals, and cabinets built for secure daily use with efficient footprint planning.",
+      title: "Storage Systems",
+      outcome: "Lockers, pedestals, and cabinets. Measured, specified, and installed.",
       href: "/products/storages",
       image: "/images/catalog/oando-storage--metal-storages/image-1.webp",
     },
     {
       title: "Collaboration Zones",
-      outcome:
-        "Flexible settings for huddles and client meetings without breaking operational flow.",
+      outcome: "Soft seating and lounge systems for meeting rooms, break zones, and reception.",
       href: "/products/soft-seating",
       image: "/images/products/imported/cocoon/image-1.webp",
     },

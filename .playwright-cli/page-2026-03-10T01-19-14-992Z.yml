@@ -1,0 +1,338 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e3]:
+    - generic [ref=e5]:
+      - link "One and Only Furniture - home" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img "One and Only Furniture" [ref=e8]
+      - button "Open menu" [ref=e10]:
+        - img [ref=e11]
+  - main [ref=e12]:
+    - generic [ref=e507]:
+      - generic [ref=e509]:
+        - link "Products" [ref=e510] [cursor=pointer]:
+          - /url: /products/
+        - img [ref=e511]
+        - link "Workstations" [ref=e513] [cursor=pointer]:
+          - /url: /products/workstations/
+        - img [ref=e514]
+        - generic [ref=e516]: DeskPro
+      - generic [ref=e517]:
+        - generic [ref=e520]:
+          - generic [ref=e521]:
+            - button "DeskPro thumbnail 1" [ref=e522]:
+              - img "DeskPro thumbnail 1" [ref=e523]
+            - button "DeskPro thumbnail 2" [ref=e524]:
+              - img "DeskPro thumbnail 2" [ref=e525]
+            - button "DeskPro thumbnail 3" [ref=e526]:
+              - img "DeskPro thumbnail 3" [ref=e527]
+            - button "DeskPro thumbnail 4" [ref=e528]:
+              - img "DeskPro thumbnail 4" [ref=e529]
+            - button "DeskPro thumbnail 5" [ref=e530]:
+              - img "DeskPro thumbnail 5" [ref=e531]
+            - button "DeskPro thumbnail 6" [ref=e532]:
+              - img "DeskPro thumbnail 6" [ref=e533]
+            - button "DeskPro thumbnail 7" [ref=e534]:
+              - img "DeskPro thumbnail 7" [ref=e535]
+          - generic [ref=e536]:
+            - img "DeskPro" [ref=e537]
+            - generic: 1 / 7
+        - generic [ref=e539]:
+          - generic [ref=e540]:
+            - paragraph [ref=e541]: Workstations
+            - heading "DeskPro" [level=1] [ref=e542]
+            - paragraph [ref=e543]: DeskPro office workstations for efficient layouts. Discover modular desks for modern workspaces.
+            - generic [ref=e544]:
+              - generic [ref=e545]: 5-Year Warranty
+              - generic [ref=e546]: BIFMA
+            - generic [ref=e547]:
+              - paragraph [ref=e548]: Get planning recommendation
+              - generic [ref=e549]:
+                - generic [ref=e550]:
+                  - paragraph [ref=e551]: Best for
+                  - paragraph [ref=e552]: Corner Office, Managerial
+                - generic [ref=e553]:
+                  - paragraph [ref=e554]: Planning role
+                  - paragraph [ref=e555]: Best explored as a desking series with room-fit and capacity checks.
+                - generic [ref=e556]:
+                  - paragraph [ref=e557]: Planner availability
+                  - paragraph [ref=e558]: Supports guided planning with room-fit checks, capacity logic, and budget guidance.
+            - generic [ref=e559]:
+              - button "Share on Twitter" [ref=e560]:
+                - img [ref=e561]
+              - button "Share on Facebook" [ref=e563]:
+                - img [ref=e564]
+              - button "Copy Link" [ref=e566]:
+                - img [ref=e567]
+                - text: Copy Link
+          - generic [ref=e573]:
+            - generic [ref=e574]:
+              - paragraph [ref=e575]: Configuration
+              - generic [ref=e576]: 1 options
+            - button "Standard Model" [ref=e578]:
+              - img "Standard Model" [ref=e579]
+            - paragraph [ref=e580]: "Selected: Standard Model"
+          - generic [ref=e581]:
+            - link "Plan this system" [ref=e582] [cursor=pointer]:
+              - /url: /planning/?type=workstations&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450&series=Desking+Series&layout=double-bank
+              - generic [ref=e583]: Plan this system
+              - img [ref=e584]
+            - link "Request Quote" [ref=e586] [cursor=pointer]:
+              - /url: /contact/
+              - generic [ref=e587]: Request Quote
+              - img [ref=e588]
+            - button "Add to Quote Cart" [ref=e590]:
+              - generic [ref=e591]: Add to Quote Cart
+              - img [ref=e592]
+            - button "Add To Compare" [ref=e596]:
+              - generic [ref=e597]: Add To Compare
+              - img [ref=e598]
+            - link "Book a Consultation" [ref=e605] [cursor=pointer]:
+              - /url: /contact/
+              - generic [ref=e606]: Book a Consultation
+              - img [ref=e607]
+          - generic [ref=e609]:
+            - generic [ref=e610]:
+              - img [ref=e611]
+              - generic [ref=e614]: 5-Year Warranty
+              - paragraph [ref=e615]: Guaranteed durability and performance.
+            - generic [ref=e616]:
+              - img [ref=e617]
+              - generic [ref=e620]: Made in India
+              - paragraph [ref=e621]: Engineered locally to global standards.
+            - generic [ref=e622]:
+              - img [ref=e623]
+              - generic [ref=e625]: BIFMA Certified
+              - paragraph [ref=e626]: Certified for extended use.
+          - generic [ref=e627]:
+            - paragraph [ref=e628]: Related planning paths
+            - generic [ref=e629]:
+              - generic [ref=e630]: Double-bank planning
+              - generic [ref=e631]: Cluster-4 module
+              - generic [ref=e632]: Linear benching
+            - generic [ref=e633]:
+              - paragraph [ref=e634]: "Recommended layout direction: Double-bank planning."
+              - paragraph [ref=e635]: Use the planner to compare density, privacy, and ergonomic tradeoffs before finalizing the system.
+            - generic [ref=e636]:
+              - link "Plan this system" [ref=e637] [cursor=pointer]:
+                - /url: /planning/?type=workstations&goal=density&roomWidth=12000&roomLength=18000&roomClearance=450&series=Desking+Series&layout=double-bank
+              - link "View related systems" [ref=e638] [cursor=pointer]:
+                - /url: /products/workstations/
+          - generic [ref=e639]:
+            - heading "Specifications" [level=2] [ref=e640]
+            - generic [ref=e641]:
+              - generic [ref=e642]:
+                - generic [ref=e643]: Dimensions
+                - generic [ref=e644]: W600 D600 H900-1000mm (adj.)
+              - generic [ref=e645]:
+                - generic [ref=e646]: Materials
+                - generic [ref=e647]: Steel frame, powder-coated, Melamine-finish MDF work surface, Adjustable levelling feet
+              - generic [ref=e648]:
+                - generic [ref=e649]: Warranty
+                - generic [ref=e650]: 5-Year Warranty
+              - generic [ref=e651]:
+                - generic [ref=e652]: Certification
+                - generic [ref=e653]: BIFMA Certified
+              - generic [ref=e654]:
+                - generic [ref=e655]: Configuration
+                - generic [ref=e656]: Desking Series
+              - generic [ref=e657]:
+                - generic [ref=e658]: Use Case
+                - generic [ref=e659]: Corner Office, Managerial
+              - generic [ref=e660]:
+                - generic [ref=e661]: Sustainability
+                - generic [ref=e662]: Sustainability details on request
+            - generic [ref=e663]:
+              - paragraph [ref=e664]: Key Features
+              - list [ref=e665]:
+                - listitem [ref=e666]:
+                  - generic [ref=e667]: "-"
+                  - generic [ref=e668]: Manufacturing
+            - generic [ref=e669]:
+              - heading "Technical Details" [level=3] [ref=e670]
+              - generic [ref=e671]:
+                - generic [ref=e672]:
+                  - generic [ref=e673]: Source
+                  - generic [ref=e674]: oando.co.in
+                - generic [ref=e675]:
+                  - generic [ref=e676]: Category
+                  - generic [ref=e677]: Workstations
+                - generic [ref=e678]:
+                  - generic [ref=e679]: Use Case
+                  - generic [ref=e680]: Corner Office, Managerial
+                - generic [ref=e681]:
+                  - generic [ref=e682]: Price Range
+                  - generic [ref=e683]: mid
+                - generic [ref=e684]:
+                  - generic [ref=e685]: Subcategory
+                  - generic [ref=e686]: Desking Series
+                - generic [ref=e687]:
+                  - generic [ref=e688]: Warranty Years
+                  - generic [ref=e689]: "5"
+                - generic [ref=e690]:
+                  - generic [ref=e691]: Bifma Certified
+                  - generic [ref=e692]: "true"
+                - generic [ref=e693]:
+                  - generic [ref=e694]: Material Options
+                  - generic [ref=e695]: Metal, Laminate
+            - generic [ref=e696]:
+              - heading "Material Options" [level=3] [ref=e697]
+              - generic [ref=e698]:
+                - generic [ref=e699]: Steel frame, powder-coated
+                - generic [ref=e700]: Melamine-finish MDF work surface
+                - generic [ref=e701]: Adjustable levelling feet
+      - generic [ref=e703]:
+        - generic [ref=e704]:
+          - heading "Customer Reviews" [level=3] [ref=e705]
+          - generic [ref=e706]:
+            - generic [ref=e707]:
+              - img [ref=e708]
+              - img [ref=e710]
+              - img [ref=e712]
+              - img [ref=e714]
+              - img [ref=e716]
+            - generic [ref=e718]: 0.0/5.0 (0 Reviews)
+        - generic [ref=e719]:
+          - paragraph [ref=e721]: No reviews yet. Be the first to review!
+          - generic [ref=e722]:
+            - heading "Write a Review" [level=4] [ref=e723]
+            - generic [ref=e724]:
+              - generic [ref=e725]:
+                - generic [ref=e726]: Rating
+                - generic [ref=e727]:
+                  - button "Rate 1 stars" [ref=e728]:
+                    - img [ref=e729]
+                  - button "Rate 2 stars" [ref=e731]:
+                    - img [ref=e732]
+                  - button "Rate 3 stars" [ref=e734]:
+                    - img [ref=e735]
+                  - button "Rate 4 stars" [ref=e737]:
+                    - img [ref=e738]
+                  - button "Rate 5 stars" [ref=e740]:
+                    - img [ref=e741]
+              - generic [ref=e743]:
+                - generic [ref=e744]: Name
+                - textbox "Name" [ref=e745]
+              - generic [ref=e746]:
+                - generic [ref=e747]: Review
+                - textbox "Review" [ref=e748]
+              - button "Submit Review" [ref=e749]
+  - contentinfo [ref=e392]:
+    - generic [ref=e394]:
+      - generic [ref=e395]:
+        - link "One and Only Furniture" [ref=e396] [cursor=pointer]:
+          - /url: /
+          - img "One and Only Furniture" [ref=e398]
+        - generic [ref=e399]: Patna, Bihar and Jharkhand, India
+        - generic [ref=e400]:
+          - link "+91 90310 22875" [ref=e401] [cursor=pointer]:
+            - /url: tel:+919031022875
+          - link "sales@oando.co.in" [ref=e402] [cursor=pointer]:
+            - /url: mailto:sales@oando.co.in
+        - generic [ref=e403]:
+          - link "YouTube" [ref=e404] [cursor=pointer]:
+            - /url: https://www.youtube.com/channel/UCehXuPNAXkyfODPCwyAU1gQ
+            - img [ref=e405]
+          - link "Facebook" [ref=e407] [cursor=pointer]:
+            - /url: https://www.facebook.com/oandofurniture
+            - img [ref=e408]
+      - generic [ref=e410]:
+        - generic [ref=e411]:
+          - paragraph [ref=e412]: Products
+          - list [ref=e413]:
+            - listitem [ref=e414]:
+              - link "All Products" [ref=e415] [cursor=pointer]:
+                - /url: /products/
+            - listitem [ref=e416]:
+              - link "Seating" [ref=e417] [cursor=pointer]:
+                - /url: /products/seating/
+            - listitem [ref=e418]:
+              - link "Workstations" [ref=e419] [cursor=pointer]:
+                - /url: /products/workstations/
+            - listitem [ref=e420]:
+              - link "Tables" [ref=e421] [cursor=pointer]:
+                - /url: /products/tables/
+            - listitem [ref=e422]:
+              - link "Storage" [ref=e423] [cursor=pointer]:
+                - /url: /products/storages/
+            - listitem [ref=e424]:
+              - link "Soft Seating" [ref=e425] [cursor=pointer]:
+                - /url: /products/soft-seating/
+            - listitem [ref=e426]:
+              - link "Education" [ref=e427] [cursor=pointer]:
+                - /url: /products/education/
+        - generic [ref=e428]:
+          - paragraph [ref=e429]: Solutions
+          - list [ref=e430]:
+            - listitem [ref=e431]:
+              - link "All Solutions" [ref=e432] [cursor=pointer]:
+                - /url: /solutions/
+            - listitem [ref=e433]:
+              - link "Seating" [ref=e434] [cursor=pointer]:
+                - /url: /products/seating/
+            - listitem [ref=e435]:
+              - link "Workstations" [ref=e436] [cursor=pointer]:
+                - /url: /products/workstations/
+            - listitem [ref=e437]:
+              - link "Meeting Rooms" [ref=e438] [cursor=pointer]:
+                - /url: /products/tables/
+            - listitem [ref=e439]:
+              - link "Storage and Filing" [ref=e440] [cursor=pointer]:
+                - /url: /products/storages/
+            - listitem [ref=e441]:
+              - link "Space Planning" [ref=e442] [cursor=pointer]:
+                - /url: /solutions/
+        - generic [ref=e443]:
+          - paragraph [ref=e444]: Company
+          - list [ref=e445]:
+            - listitem [ref=e446]:
+              - link "About Us" [ref=e447] [cursor=pointer]:
+                - /url: /about/
+            - listitem [ref=e448]:
+              - link "Trusted By" [ref=e449] [cursor=pointer]:
+                - /url: /trusted-by/
+            - listitem [ref=e450]:
+              - link "Projects" [ref=e451] [cursor=pointer]:
+                - /url: /projects/
+            - listitem [ref=e452]:
+              - link "Portfolio" [ref=e453] [cursor=pointer]:
+                - /url: /portfolio/
+            - listitem [ref=e454]:
+              - link "Sustainability" [ref=e455] [cursor=pointer]:
+                - /url: /sustainability/
+            - listitem [ref=e456]:
+              - link "After Sales" [ref=e457] [cursor=pointer]:
+                - /url: /service/
+        - generic [ref=e458]:
+          - paragraph [ref=e459]: Support
+          - list [ref=e460]:
+            - listitem [ref=e461]:
+              - link "Contact Us" [ref=e462] [cursor=pointer]:
+                - /url: /contact/
+            - listitem [ref=e463]:
+              - link "Workspace Planner" [ref=e464] [cursor=pointer]:
+                - /url: /planning/
+            - listitem [ref=e465]:
+              - link "Get Quote" [ref=e466] [cursor=pointer]:
+                - /url: /contact/
+            - listitem [ref=e467]:
+              - link "Refund Policy" [ref=e468] [cursor=pointer]:
+                - /url: /refund-and-return-policy/
+            - listitem [ref=e469]:
+              - link "Privacy Policy" [ref=e470] [cursor=pointer]:
+                - /url: /privacy/
+    - generic [ref=e472]:
+      - generic [ref=e473]:
+        - link "Refund Policy" [ref=e474] [cursor=pointer]:
+          - /url: /refund-and-return-policy/
+        - link "Privacy Policy" [ref=e475] [cursor=pointer]:
+          - /url: /privacy/
+        - link "Terms" [ref=e476] [cursor=pointer]:
+          - /url: /terms/
+      - generic [ref=e477]: Copyright 2026 One and Only Furniture. All rights reserved.
+  - button "Open Next.js Dev Tools" [ref=e503] [cursor=pointer]:
+    - img [ref=e504]
+  - alert [ref=e499]
+  - button "Open WhatsApp quick contact" [ref=e500]:
+    - img [ref=e501]

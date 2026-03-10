@@ -1,22 +1,29 @@
 import Link from "next/link";
+import Image from "next/image";
 import { HOMEPAGE_TRUSTED_CLIENTS_CONTENT } from "@/data/site/homepage";
 
 export function TrustedClients() {
   return (
-    <section className="w-full border-t border-neutral-100 bg-white py-16 md:py-20">
+    <section className="w-full border-t border-neutral-100 bg-white py-16 md:py-24">
       <div className="container px-6 2xl:px-0">
-        <p className="mb-10 text-center text-xs uppercase tracking-[0.3em] text-neutral-400">
+        <p className="mb-12 text-center text-xs uppercase tracking-[0.3em] font-medium text-neutral-400">
           {HOMEPAGE_TRUSTED_CLIENTS_CONTENT.kicker}
         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-8">
+        <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-10 md:gap-x-20">
           {HOMEPAGE_TRUSTED_CLIENTS_CONTENT.clients.map((client) => (
             <div
               key={client.name}
               title={client.name}
-              className="select-none text-2xl font-bold tracking-tight text-neutral-200 transition-colors duration-300 hover:text-neutral-400 md:text-3xl"
+              className="relative h-12 w-32 md:h-16 md:w-36 transition-all duration-300 opacity-60 grayscale hover:opacity-100 hover:grayscale-0"
             >
-              {client.abbr}
+              <Image
+                src={client.src}
+                alt={`${client.name} logo`}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 120px, 150px"
+              />
             </div>
           ))}
         </div>

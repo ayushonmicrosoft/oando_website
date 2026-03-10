@@ -1,0 +1,401 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic "Utility navigation" [ref=e5]:
+        - paragraph [ref=e6]: Workspace Furniture Specialist
+        - generic [ref=e7]:
+          - link "Service" [ref=e8] [cursor=pointer]:
+            - /url: /service/
+          - link "Showrooms" [ref=e9] [cursor=pointer]:
+            - /url: /showrooms/
+          - link "Contact" [ref=e10] [cursor=pointer]:
+            - /url: /contact/
+      - generic [ref=e11]:
+        - link "One and Only Furniture - home" [ref=e12] [cursor=pointer]:
+          - /url: /
+          - img "One and Only Furniture" [ref=e14]
+        - navigation "Primary navigation" [ref=e15]:
+          - button "Products" [ref=e17]:
+            - text: Products
+            - img [ref=e18]
+          - link "Configurator" [ref=e20] [cursor=pointer]:
+            - /url: /planning/
+          - link "Solutions" [ref=e21] [cursor=pointer]:
+            - /url: /solutions/
+          - link "Projects" [ref=e22] [cursor=pointer]:
+            - /url: /projects/
+          - link "Portfolio" [ref=e23] [cursor=pointer]:
+            - /url: /portfolio/
+          - link "Trusted by" [ref=e24] [cursor=pointer]:
+            - /url: /trusted-by/
+          - link "About" [ref=e25] [cursor=pointer]:
+            - /url: /about/
+          - link "Sustainability" [ref=e26] [cursor=pointer]:
+            - /url: /sustainability/
+        - generic [ref=e27]:
+          - generic [ref=e29]:
+            - img [ref=e30]
+            - textbox "Search products with AI" [ref=e33]:
+              - /placeholder: AI search products...
+            - img [ref=e34]
+          - button "Guided Planner" [ref=e37]
+  - main [ref=e38]:
+    - generic [ref=e39]:
+      - generic [ref=e40]:
+        - img "Ergonomic seating and workstations expertly installed at Titan Patna HQ by One and Only Furniture" [ref=e42]
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - generic [ref=e51]: Workspace planning for Bihar and beyond
+            - generic [ref=e54]: Planning, supply, installation, after-sales
+            - heading "Workspaces built to perform and endure." [level=1] [ref=e57]:
+              - generic [ref=e58]: Workspaces built
+              - generic [ref=e59]: to perform
+              - generic [ref=e60]: and endure.
+            - paragraph [ref=e63]: From planning and product selection to installation and after-sales, one team carries the project from brief to handover.
+            - generic [ref=e66]:
+              - button "Guided Planner" [ref=e67]
+              - link "View Products" [ref=e68] [cursor=pointer]:
+                - /url: /products/
+            - generic [ref=e71]:
+              - generic [ref=e72]:
+                - paragraph [ref=e73]: Selected clients
+                - paragraph [ref=e74]: DMRC, Titan, Tata Steel
+              - generic [ref=e75]:
+                - paragraph [ref=e76]: Delivery model
+                - paragraph [ref=e77]: Plan, supply, install, support
+          - complementary [ref=e80]:
+            - paragraph [ref=e81]: Delivery view
+            - heading "Clarity before procurement begins." [level=2] [ref=e82]
+            - paragraph [ref=e83]: Planning outputs stay readable for leadership, procurement, and facilities teams.
+            - generic [ref=e84]:
+              - generic [ref=e85]:
+                - paragraph [ref=e86]: Plan
+                - paragraph [ref=e87]: Scope, layout, and BOQ aligned early.
+              - generic [ref=e88]:
+                - paragraph [ref=e89]: Deliver
+                - paragraph [ref=e90]: Dispatch and installation managed together.
+              - generic [ref=e91]:
+                - paragraph [ref=e92]: Support
+                - paragraph [ref=e93]: Warranty and after-sales stay traceable.
+      - region "Trust indicators" [ref=e95]:
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - paragraph [ref=e99]: Execution credibility
+            - heading "Trusted by teams that value clarity and dependable execution." [level=2] [ref=e100]
+            - paragraph [ref=e101]: Furniture, planning, and installation handled with one accountable flow.
+            - generic [ref=e102]:
+              - generic [ref=e103]: DMRC /
+              - generic [ref=e104]: Tata Steel /
+              - generic [ref=e105]: Titan
+          - generic [ref=e106]:
+            - generic [ref=e107]:
+              - paragraph [ref=e108]: Selected clients and current execution scale
+              - paragraph [ref=e109]: As of 01 Mar 2026
+            - generic [ref=e110]:
+              - generic [ref=e111]:
+                - generic [ref=e112]: 120+
+                - paragraph [ref=e113]: Organisations served
+              - generic [ref=e114]:
+                - generic [ref=e115]: 259+
+                - paragraph [ref=e116]: Projects delivered
+              - generic [ref=e117]:
+                - generic [ref=e118]: 15+
+                - paragraph [ref=e119]: Years experience
+              - generic [ref=e120]:
+                - generic [ref=e121]: 18+
+                - paragraph [ref=e122]: Sectors served
+      - region "Browse by workspace need." [ref=e124]:
+        - generic [ref=e125]:
+          - generic [ref=e126]:
+            - generic [ref=e127]:
+              - paragraph [ref=e128]: Workspace routes
+              - heading "Browse by workspace need." [level=2] [ref=e129]
+            - link "Compare product options" [ref=e130] [cursor=pointer]:
+              - /url: /compare/
+              - text: Compare product options
+              - img [ref=e131]
+          - generic [ref=e133]:
+            - article [ref=e134]:
+              - link "Open Ergonomic Seating" [ref=e135] [cursor=pointer]:
+                - /url: /products/seating/
+                - img "Ergonomic Seating" [ref=e136]
+              - generic [ref=e137]:
+                - link "Ergonomic Seating" [ref=e138] [cursor=pointer]:
+                  - /url: /products/seating/
+                  - heading "Ergonomic Seating" [level=3] [ref=e139]
+                - paragraph [ref=e140]: Task and executive seating tuned for posture support, long-hour comfort, and dependable after-sales coverage.
+                - generic [ref=e141]: Explore route
+            - article [ref=e142]:
+              - link "Open Scalable Workstations" [ref=e143] [cursor=pointer]:
+                - /url: /products/workstations/
+                - img "Scalable Workstations" [ref=e144]
+              - generic [ref=e145]:
+                - link "Scalable Workstations" [ref=e146] [cursor=pointer]:
+                  - /url: /products/workstations/
+                  - heading "Scalable Workstations" [level=3] [ref=e147]
+                - paragraph [ref=e148]: Modular systems that scale team by team with practical cable management and planning-friendly layouts.
+                - generic [ref=e149]: Explore route
+            - article [ref=e150]:
+              - link "Open Secure Storage Systems" [ref=e151] [cursor=pointer]:
+                - /url: /products/storages/
+                - img "Secure Storage Systems" [ref=e152]
+              - generic [ref=e153]:
+                - link "Secure Storage Systems" [ref=e154] [cursor=pointer]:
+                  - /url: /products/storages/
+                  - heading "Secure Storage Systems" [level=3] [ref=e155]
+                - paragraph [ref=e156]: Lockers, pedestals, and cabinets built for secure daily use with efficient footprint planning.
+                - generic [ref=e157]: Explore route
+            - article [ref=e158]:
+              - link "Open Collaboration Zones" [ref=e159] [cursor=pointer]:
+                - /url: /products/soft-seating/
+                - img "Collaboration Zones" [ref=e160]
+              - generic [ref=e161]:
+                - link "Collaboration Zones" [ref=e162] [cursor=pointer]:
+                  - /url: /products/soft-seating/
+                  - heading "Collaboration Zones" [level=3] [ref=e163]
+                - paragraph [ref=e164]: Flexible settings for huddles and client meetings without breaking operational flow.
+                - generic [ref=e165]: Explore route
+          - link "Browse full catalog" [ref=e167] [cursor=pointer]:
+            - /url: /products/
+            - text: Browse full catalog
+            - img [ref=e168]
+      - generic [ref=e172]:
+        - generic [ref=e175]:
+          - paragraph [ref=e176]: Execution proof
+          - heading "Execution strength at scale." [level=2] [ref=e177]
+          - paragraph [ref=e178]: Trusted by 120+ across public, private, and institutional projects.
+        - generic [ref=e179]:
+          - generic [ref=e182]:
+            - paragraph [ref=e183]: Trusted by
+            - generic [ref=e184]:
+              - paragraph [ref=e185]: DMRC
+              - paragraph [ref=e186]: Tata Steel
+              - paragraph [ref=e187]: HDFC
+              - paragraph [ref=e188]: IndianOil
+              - paragraph [ref=e189]: L&T
+              - paragraph [ref=e190]: NTPC
+            - link "View all clients" [ref=e191] [cursor=pointer]:
+              - /url: /trusted-by/
+          - generic [ref=e192]:
+            - paragraph [ref=e193]: Recent deliveries
+            - generic [ref=e194]:
+              - link "Delhi Metro Rail Corporation Project DMRC" [ref=e197] [cursor=pointer]:
+                - /url: /gallery/
+                - img "Delhi Metro Rail Corporation" [ref=e198]
+                - generic [ref=e200]:
+                  - paragraph [ref=e201]: Project
+                  - paragraph [ref=e202]: DMRC
+              - link "Titan Company Limited Project Titan" [ref=e205] [cursor=pointer]:
+                - /url: /gallery/
+                - img "Titan Company Limited" [ref=e206]
+                - generic [ref=e208]:
+                  - paragraph [ref=e209]: Project
+                  - paragraph [ref=e210]: Titan
+            - link "View portfolio" [ref=e211] [cursor=pointer]:
+              - /url: /portfolio/
+      - generic [ref=e214]:
+        - generic [ref=e215]:
+          - generic [ref=e216]:
+            - paragraph [ref=e217]: How we work
+            - heading "A clear four-step delivery system." [level=2] [ref=e218]
+            - paragraph [ref=e219]: Each project follows a transparent sequence so procurement, facilities, and leadership teams stay aligned from day one.
+          - link "Start your project brief" [ref=e220] [cursor=pointer]:
+            - /url: /contact/
+            - text: Start your project brief
+            - img [ref=e221]
+        - generic [ref=e223]:
+          - generic [ref=e224]:
+            - paragraph [ref=e225]: Step 1
+            - paragraph [ref=e226]: Scope and align
+            - paragraph [ref=e227]: Capture requirement scope, budget range, timeline, and approval checkpoints before design starts.
+            - generic [ref=e228]:
+              - generic [ref=e229]: Day 1-2
+              - generic [ref=e230]: Signed scope brief
+          - generic [ref=e231]:
+            - paragraph [ref=e232]: Step 2
+            - paragraph [ref=e233]: Design and validate
+            - paragraph [ref=e234]: Study the layout and BOQ, then suggest the best options to ensure a client-friendly outcome.
+            - generic [ref=e235]:
+              - generic [ref=e236]: Day 3-7
+              - generic [ref=e237]: Approved layout and BOQ options
+          - generic [ref=e238]:
+            - paragraph [ref=e239]: Step 3
+            - paragraph [ref=e240]: Supply and install
+            - paragraph [ref=e241]: Coordinate production windows, dispatch schedules, and on-site installation with minimum disruption.
+            - generic [ref=e242]:
+              - generic [ref=e243]: As per approved schedule
+              - generic [ref=e244]: Installed and handed-over workspace
+          - generic [ref=e245]:
+            - paragraph [ref=e246]: Step 4
+            - paragraph [ref=e247]: Support after handover
+            - paragraph [ref=e248]: Manage warranty registration, issue response, and after-sales support through one accountable team.
+            - generic [ref=e249]:
+              - generic [ref=e250]: Ongoing
+              - generic [ref=e251]: Warranty and service response support
+      - generic [ref=e255]:
+        - img "AFC - Authorized Franchise Partner" [ref=e257]
+        - generic [ref=e258]:
+          - generic [ref=e259]: Official Strategic Partnership
+          - heading "Authorized Franchise Partner" [level=2] [ref=e260]:
+            - text: Authorized Franchise
+            - text: Partner
+          - paragraph [ref=e261]: Access a stronger manufacturing backbone without losing local planning, installation, and support accountability.
+          - link "Partner Profile" [ref=e262] [cursor=pointer]:
+            - /url: /about/
+            - text: Partner Profile
+            - img [ref=e263]
+      - generic [ref=e269]:
+        - generic [ref=e270]:
+          - paragraph [ref=e271]: Get in touch
+          - heading "Start with one clear brief." [level=2] [ref=e272]
+          - paragraph [ref=e273]: Use the guided planner, or speak to the team directly.
+          - generic [ref=e274]:
+            - button "Open guided planner" [ref=e275]:
+              - img [ref=e276]
+              - text: Open planner
+            - button "Open AI chatbot" [ref=e278]:
+              - img [ref=e279]
+              - text: Open chatbot
+        - generic [ref=e282]:
+          - paragraph [ref=e283]: Get in touch
+          - heading "Need a human response?" [level=3] [ref=e284]
+          - paragraph [ref=e285]: Call, WhatsApp, or email the team directly.
+          - generic [ref=e286]:
+            - generic [ref=e287]:
+              - generic [ref=e288]:
+                - img [ref=e289]
+                - text: Call or WhatsApp
+              - paragraph [ref=e291]: +91 90310 22875
+            - generic [ref=e292]:
+              - generic [ref=e293]:
+                - img [ref=e294]
+                - text: Email
+              - link "sales@oando.co.in" [ref=e296] [cursor=pointer]:
+                - /url: mailto:sales@oando.co.in
+  - contentinfo [ref=e297]:
+    - generic [ref=e299]:
+      - generic [ref=e300]:
+        - link "One and Only Furniture" [ref=e301] [cursor=pointer]:
+          - /url: /
+          - img "One and Only Furniture" [ref=e303]
+        - generic [ref=e304]: Patna, Bihar and Jharkhand, India
+        - generic [ref=e305]:
+          - link "+91 90310 22875" [ref=e306] [cursor=pointer]:
+            - /url: tel:+919031022875
+          - link "sales@oando.co.in" [ref=e307] [cursor=pointer]:
+            - /url: mailto:sales@oando.co.in
+        - generic [ref=e308]:
+          - link "YouTube" [ref=e309] [cursor=pointer]:
+            - /url: https://www.youtube.com/channel/UCehXuPNAXkyfODPCwyAU1gQ
+            - img [ref=e310]
+          - link "Facebook" [ref=e312] [cursor=pointer]:
+            - /url: https://www.facebook.com/oandofurniture
+            - img [ref=e313]
+      - generic [ref=e315]:
+        - generic [ref=e316]:
+          - paragraph [ref=e317]: Products
+          - list [ref=e318]:
+            - listitem [ref=e319]:
+              - link "All Products" [ref=e320] [cursor=pointer]:
+                - /url: /products/
+            - listitem [ref=e321]:
+              - link "Seating" [ref=e322] [cursor=pointer]:
+                - /url: /products/seating/
+            - listitem [ref=e323]:
+              - link "Workstations" [ref=e324] [cursor=pointer]:
+                - /url: /products/workstations/
+            - listitem [ref=e325]:
+              - link "Tables" [ref=e326] [cursor=pointer]:
+                - /url: /products/tables/
+            - listitem [ref=e327]:
+              - link "Storage" [ref=e328] [cursor=pointer]:
+                - /url: /products/storages/
+            - listitem [ref=e329]:
+              - link "Soft Seating" [ref=e330] [cursor=pointer]:
+                - /url: /products/soft-seating/
+            - listitem [ref=e331]:
+              - link "Education" [ref=e332] [cursor=pointer]:
+                - /url: /products/education/
+        - generic [ref=e333]:
+          - paragraph [ref=e334]: Solutions
+          - list [ref=e335]:
+            - listitem [ref=e336]:
+              - link "All Solutions" [ref=e337] [cursor=pointer]:
+                - /url: /solutions/
+            - listitem [ref=e338]:
+              - link "Seating" [ref=e339] [cursor=pointer]:
+                - /url: /products/seating/
+            - listitem [ref=e340]:
+              - link "Workstations" [ref=e341] [cursor=pointer]:
+                - /url: /products/workstations/
+            - listitem [ref=e342]:
+              - link "Meeting Rooms" [ref=e343] [cursor=pointer]:
+                - /url: /products/tables/
+            - listitem [ref=e344]:
+              - link "Storage and Filing" [ref=e345] [cursor=pointer]:
+                - /url: /products/storages/
+            - listitem [ref=e346]:
+              - link "Space Planning" [ref=e347] [cursor=pointer]:
+                - /url: /solutions/
+        - generic [ref=e348]:
+          - paragraph [ref=e349]: Company
+          - list [ref=e350]:
+            - listitem [ref=e351]:
+              - link "About Us" [ref=e352] [cursor=pointer]:
+                - /url: /about/
+            - listitem [ref=e353]:
+              - link "Trusted By" [ref=e354] [cursor=pointer]:
+                - /url: /trusted-by/
+            - listitem [ref=e355]:
+              - link "Projects" [ref=e356] [cursor=pointer]:
+                - /url: /projects/
+            - listitem [ref=e357]:
+              - link "Portfolio" [ref=e358] [cursor=pointer]:
+                - /url: /portfolio/
+            - listitem [ref=e359]:
+              - link "Sustainability" [ref=e360] [cursor=pointer]:
+                - /url: /sustainability/
+            - listitem [ref=e361]:
+              - link "After Sales" [ref=e362] [cursor=pointer]:
+                - /url: /service/
+        - generic [ref=e363]:
+          - paragraph [ref=e364]: Support
+          - list [ref=e365]:
+            - listitem [ref=e366]:
+              - link "Contact Us" [ref=e367] [cursor=pointer]:
+                - /url: /contact/
+            - listitem [ref=e368]:
+              - link "Workspace Planner" [ref=e369] [cursor=pointer]:
+                - /url: /planning/
+            - listitem [ref=e370]:
+              - link "Get Quote" [ref=e371] [cursor=pointer]:
+                - /url: /contact/
+            - listitem [ref=e372]:
+              - link "Refund Policy" [ref=e373] [cursor=pointer]:
+                - /url: /refund-and-return-policy/
+            - listitem [ref=e374]:
+              - link "Privacy Policy" [ref=e375] [cursor=pointer]:
+                - /url: /privacy/
+    - generic [ref=e377]:
+      - generic [ref=e378]:
+        - link "Refund Policy" [ref=e379] [cursor=pointer]:
+          - /url: /refund-and-return-policy/
+        - link "Privacy Policy" [ref=e380] [cursor=pointer]:
+          - /url: /privacy/
+        - link "Terms" [ref=e381] [cursor=pointer]:
+          - /url: /terms/
+      - generic [ref=e382]: Copyright 2026 One and Only Furniture. All rights reserved.
+  - dialog "Cookie preferences" [ref=e383]:
+    - generic [ref=e385]:
+      - paragraph [ref=e386]:
+        - text: We use essential cookies and optional analytics & attribution cookies to improve discoverability and user journeys. See our
+        - link "Privacy Policy" [ref=e387] [cursor=pointer]:
+          - /url: /privacy/
+        - text: .
+      - generic [ref=e388]:
+        - button "Reject Optional" [ref=e389]
+        - button "Accept All" [ref=e390]
+  - button "Open Next.js Dev Tools" [ref=e396] [cursor=pointer]:
+    - img [ref=e397]
