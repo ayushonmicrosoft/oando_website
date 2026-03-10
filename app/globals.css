@@ -60,19 +60,18 @@
   :root {
     --font-display: var(--font-cisco), -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, sans-serif;
 
-    /* Type scale — 5 sizes, 1 exception */
-    --fs-xs:      0.75rem;                          /* 12px — chips, eyebrows  */
-    --fs-sm:      0.875rem;                         /* 14px — labels, meta     */
-    --fs-base:    1rem;                             /* 16px — body copy        */
-    --fs-heading: clamp(2rem, 3.5vw, 3.125rem);     /* 32–50px — section titles */
-    --fs-display: clamp(3.5rem, 6.5vw, 5.5rem);     /* 56–88px — hero/display  */
-    --fs-stat:    clamp(3rem, 5vw, 4.5rem);         /* exception — big numbers */
+    /* Tight Type Scale — 4 strictly enforced tiers */
+    --fs-xs:      0.75rem;                          /* 12px — labels    */
+    --fs-base:    1rem;                             /* 16px — body      */
+    --fs-heading: clamp(1.75rem, 3.5vw, 2.75rem);   /* 28–44px — titles */
+    --fs-display: clamp(3rem, 6.5vw, 5rem);         /* 48–80px — hero   */
 
-    /* Aliases kept for backward compat */
+    /* Retrofit aliases */
     --fs-100: var(--fs-xs);
     --fs-200: var(--fs-base);
     --fs-300: var(--fs-heading);
     --fs-400: var(--fs-display);
+    --fs-stat: var(--fs-display);
 
     /* Shadows */
     --shadow-soft:  0 4px 6px rgba(0, 0, 0, 0.1);

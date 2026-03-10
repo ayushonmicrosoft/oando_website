@@ -25,16 +25,6 @@ export const CONTACT_PAGE_COPY = {
       title: "Corporate office",
       lines: ["401, Jagat Trade Centre", "Frazer Road", "Patna - 800 013", "India"],
     },
-    {
-      title: "Showroom",
-      lines: [
-        "One and Only Furniture Pvt Ltd",
-        "Opp Patliputra Telephone Exchange",
-        "North Industrial Estate Road",
-        "Patna - 800 010",
-        "India",
-      ],
-    },
   ],
 } as const;
 
