@@ -1,3 +1,5 @@
+import Image from "next/image";
+import Link from "next/link";
 import type { BusinessStats } from "@/lib/types/businessStats";
 import { formatKpiValuePlus } from "@/lib/kpiFormat";
 import { HOMEPAGE_TRUST_CONTENT } from "@/data/site/homepage";
@@ -63,15 +65,39 @@ export function TrustStrip({ stats, asOfLabel }: TrustStripProps) {
               {kpis.map(({ value, label, testId }) => (
                 <div
                   key={label}
-                  className="border-t border-neutral-300 pt-4"
+                  className="rounded-xl border border-neutral-200 bg-neutral-50 p-5 text-center"
                 >
-                <span data-testid={testId} className="block text-[1.85rem] tracking-tight text-neutral-950 md:text-[2.1rem]">
-                  {value}
-                </span>
-                  <p className="mt-1 text-sm text-neutral-700">{label}</p>
+                  <span data-testid={testId} className="block text-[1.85rem] tracking-tight text-neutral-950 md:text-[2.1rem]">
+                    {value}
+                  </span>
+                  <p className="stats-block__label mt-2">{label}</p>
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+
+        <div className="mt-12 border-t border-neutral-200 pt-12">
+          <p className="text-center text-xs font-medium uppercase tracking-[0.25em] text-neutral-400">
+            {HOMEPAGE_TRUST_CONTENT.logoLabel}
+          </p>
+          <div className="mt-8 grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-6">
+            {HOMEPAGE_TRUST_CONTENT.logos.map((logo) => (
+              <div key={logo.name} className="flex min-h-12 items-center justify-center">
+                <Image
+                  src={logo.src}
+                  alt={logo.name}
+                  width={140}
+                  height={46}
+                  className="h-9 w-auto object-contain opacity-65 grayscale transition hover:opacity-90"
+                />
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link href="/projects" className="link-arrow typ-label">
+              {HOMEPAGE_TRUST_CONTENT.projectsCta}
+            </Link>
           </div>
         </div>
       </div>

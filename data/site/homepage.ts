@@ -37,6 +37,75 @@ export const HOMEPAGE_TRUST_CONTENT = {
     "Furniture, planning, and installation handled with one accountable flow.",
   brands: ["DMRC", "Tata Steel", "Titan"],
   summary: "Selected clients and current execution scale",
+  logoLabel: "Trusted by India's leading corporations",
+  logos: [
+    { name: "Titan", src: "/images/home/client-logos/titan.png" },
+    { name: "L&T", src: "/images/home/client-logos/lt.png" },
+    { name: "JSW", src: "/images/home/client-logos/jsw.png" },
+    { name: "Tata Motors", src: "/images/home/client-logos/tata-motors.jpg" },
+    { name: "Maruti Suzuki", src: "/images/home/client-logos/maruti-suzuki.png" },
+    { name: "HDFC", src: "/images/home/client-logos/hdfc.jpg" },
+  ],
+  projectsCta: "View all projects",
+} as const;
+
+export const HOMEPAGE_WORKSPACES_CONTENT = {
+  titlePrimary: "Workspaces we have",
+  titleAccent: "transformed.",
+  cta: { label: "View Full Gallery", href: "/gallery" },
+  cards: [
+    {
+      sector: "Showroom",
+      title: "Experience Centre",
+      location: "Patna",
+      image: "/images/home/workspaces/showroom-hero.jpg",
+    },
+    {
+      sector: "Corporate",
+      title: "Titan Office",
+      location: "Patna, Bihar",
+      image: "/images/home/workspaces/titan-hero.jpg",
+    },
+    {
+      sector: "Automobile",
+      title: "TVS Motors",
+      location: "Patna",
+      image: "/images/home/workspaces/tvs-hero.jpg",
+    },
+    {
+      sector: "Government",
+      title: "Registry Office",
+      location: "Government Sector",
+      image: "/images/home/workspaces/government-hero.jpg",
+    },
+  ],
+} as const;
+
+export const HOMEPAGE_CLIENT_STORIES_CONTENT = {
+  kicker: "Client stories",
+  titleLead: "Trusted by",
+  titleEmphasis: "Industry Leaders",
+  description: "See what our clients have to say about their experience working with us.",
+  cards: [
+    {
+      quote:
+        "One and Only Furniture transformed our entire office. The modular workstations are not just beautiful but incredibly functional.",
+      client: "TechStart Solutions",
+      sector: "IT & Banking",
+    },
+    {
+      quote:
+        "Excellent quality and service. They delivered 500+ workstations on time and the installation was seamless for our team.",
+      client: "GovTech India",
+      sector: "Government",
+    },
+    {
+      quote:
+        "The ergonomic chairs have made a real difference for our employees. Great product quality and support.",
+      client: "AutoCorp",
+      sector: "Automobile",
+    },
+  ],
 } as const;
 
 export const HOMEPAGE_CONTACT_CONTENT = {

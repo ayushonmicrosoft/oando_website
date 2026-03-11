@@ -4,6 +4,8 @@ import { SolutionsGrid } from "@/components/home/SolutionsGrid";
 import { OurExperience } from "@/components/home/OurExperience";
 import { ProcessSection } from "@/components/home/ProcessSection";
 import { PartnershipBanner } from "@/components/home/PartnershipBanner";
+import { WorkspaceShowcase } from "@/components/home/WorkspaceShowcase";
+import { ClientStories } from "@/components/home/ClientStories";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
 import { SectionReveal } from "@/components/shared/SectionReveal";
 import { getBusinessStats } from "@/lib/businessStats";
@@ -19,6 +21,14 @@ export default async function Home() {
 
       <SectionReveal>
         <TrustStrip stats={stats} asOfLabel={asOfLabel} />
+      </SectionReveal>
+
+      <SectionReveal>
+        <WorkspaceShowcase />
+      </SectionReveal>
+
+      <SectionReveal>
+        <ClientStories />
       </SectionReveal>
 
       <SectionReveal>

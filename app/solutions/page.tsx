@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Hero } from "@/components/home/Hero";
+import { PartnershipBanner } from "@/components/home/PartnershipBanner";
 import { ContactTeaser } from "@/components/shared/ContactTeaser";
 import { SOLUTIONS_DELIVERY_STEPS, SOLUTIONS_PAGE_COPY } from "@/data/site/routeCopy";
 
@@ -20,6 +21,8 @@ export default function SolutionsPage() {
         showButton={false}
         backgroundImage="/images/hero/hero-2.webp"
       />
+
+      <PartnershipBanner />
 
       <section className="container px-6 py-18 md:py-22 2xl:px-0">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_1fr]">
